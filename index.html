@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VLX — Post-Migration SEO Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brand: #FF5722; --brand-dark: #E64A19; --brand-light: #FF8A65;
+  --surface-dark: #1E293B; --surface-darker: #0F172A;
+  --slide-w: 1280px; --slide-h: 720px;
+}
+body { font-family:'Rubik',system-ui,sans-serif; background:#0a0f1a; display:flex; flex-direction:column; align-items:center; gap:4px; padding:20px 0; }
+.slide { width:var(--slide-w); height:var(--slide-h); position:relative; overflow:hidden; flex-shrink:0; }
+.accent-bar { position:absolute; top:0; left:0; right:0; height:4px; background:var(--brand); }
+.grid-bg { position:absolute; inset:0; background-image:linear-gradient(rgba(255,87,34,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,87,34,.04) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; }
+.overline { font-size:11px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:#fff; }
+
+/* ── Cover ── */
+.slide-cover { background:var(--surface-darker); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; text-align:center; }
+.slide-cover h1 { font-size:52px; font-weight:700; color:#fff; line-height:1.1; }
+.slide-cover h1 span { color:var(--brand); }
+.slide-cover .subtitle { font-size:20px; color:#94A3B8; }
+.slide-cover .meta { display:flex; gap:32px; margin-top:8px; }
+.meta-item { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.meta-item span:first-child { font-size:13px; color:#64748B; text-transform:uppercase; letter-spacing:.06em; }
+.meta-item span:last-child { font-size:16px; color:#CBD5E1; font-weight:500; }
+.tagline { font-size:13px; color:#475569; font-style:italic; position:absolute; bottom:28px; }
+
+/* ── Status ── */
+.slide-status { background:var(--surface-darker); padding:52px 64px; display:flex; flex-direction:column; gap:36px; }
+.slide-status .sh { display:flex; justify-content:space-between; align-items:flex-start; }
+.slide-status h2 { font-size:38px; font-weight:700; color:#fff; }
+.score-badge { display:flex; flex-direction:column; align-items:center; background:rgba(255,87,34,.12); border:1px solid rgba(255,87,34,.3); border-radius:16px; padding:16px 28px; gap:4px; }
+.score-num { font-size:48px; font-weight:700; color:var(--brand); line-height:1; }
+.score-label { font-size:12px; color:#fff; text-transform:uppercase; letter-spacing:.08em; }
+.score-verdict { font-size:13px; color:#EF4444; font-weight:600; }
+.status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.status-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:20px 24px; }
+.s-label { font-size:11px; color:#fff; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+.s-value { font-size:22px; font-weight:600; color:#fff; }
+.s-sub { font-size:13px; color:#fff; margin-top:4px; }
+.status-card.orange { border-color:rgba(255,87,34,.3); } .status-card.orange .s-value { color:var(--brand); }
+.status-card.red .s-value { color:#EF4444; }
+.status-card.green .s-value { color:#22C55E; }
+
+/* ── Blocker slide ── */
+.slide-blockers { background:var(--surface-darker); padding:40px 64px; display:flex; flex-direction:column; gap:20px; }
+.slide-blockers h2 { font-size:34px; font-weight:700; color:#fff; }
+.deck-sub { font-size:14px; color:#fff; margin-top:4px; }
+.blockers-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; flex:1; }
+.blocker-card { background:rgba(255,255,255,.03); border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; gap:6px; border-left:3px solid var(--brand); }
+.blocker-card.high { border-left-color:#F59E0B; }
+.blocker-card.done { opacity:.55; }
+.blocker-card.done .b-title { text-decoration:line-through; color:#4ADE80; }
+.b-id { font-size:11px; font-weight:600; color:var(--brand); text-transform:uppercase; letter-spacing:.05em; }
+.blocker-card.high .b-id { color:#F59E0B; }
+.b-title { font-size:13px; font-weight:600; color:#fff; line-height:1.3; }
+.b-fix { font-size:11px; color:#fff; line-height:1.4; }
+.b-footer { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:6px; }
+.b-pill { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:4px; }
+.pill-effort { background:rgba(255,255,255,.07); color:#fff; }
+.blocker-note { background:rgba(34,197,94,.08); border:1px solid rgba(34,197,94,.2); border-radius:8px; padding:10px 16px; font-size:13px; color:#4ADE80; }
+
+/* ── Phase slides ── */
+.slide-phase { background:var(--surface-darker); padding:40px 64px; display:flex; flex-direction:column; gap:20px; }
+.phase-header { display:flex; justify-content:space-between; align-items:flex-end; }
+.ph-left h2 { font-size:34px; font-weight:700; color:#fff; }
+.ph-left .ph-left .ph-sub { font-size:13px; color:#fff; margin-top:4px; }
+.phase-badge { background:rgba(255,87,34,.1); border:1px solid rgba(255,87,34,.25); border-radius:8px; padding:8px 16px; text-align:center; }
+.pb-label { font-size:10px; color:#fff; text-transform:uppercase; letter-spacing:.08em; }
+.pb-value { font-size:16px; font-weight:600; color:var(--brand); }
+.progress-counter { font-size:12px; color:#fff; margin-top:2px; }
+.progress-counter .done-count { color:#22C55E; font-weight:600; }
+
+/* ── Task table ── */
+.task-table { width:100%; border-collapse:collapse; }
+.task-table th { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:#475569; padding:0 10px 8px; text-align:left; border-bottom:1px solid rgba(255,255,255,.06); }
+.task-table td { font-size:12.5px; color:#fff; padding:6px 10px; border-bottom:1px solid rgba(255,255,255,.04); vertical-align:middle; font-weight:400; }
+.td-initiative { font-weight:700; color:#fff; user-select:text; }
+.td-initiative .task-desc, .td-initiative .task-desc * { font-weight:400 !important; user-select:text; }
+.task-row td { user-select:text; }
+.task-row { user-select:text; }
+.task-row.done td { opacity:.5; }
+.task-row.done .td-initiative { text-decoration:line-through; color:#4ADE80; }
+.qw-badge { display:inline-flex; align-items:center; font-size:10px; font-weight:600; color:#22C55E; background:rgba(34,197,94,.1); border-radius:4px; padding:1px 5px; margin-left:4px; }
+.impact-critical { color:#EF4444 !important; font-weight:600; font-size:11px; }
+.impact-high { color:#F59E0B !important; font-weight:600; font-size:11px; }
+/* ── Time-based classification ── */
+.time-hoy     { color:#EF4444 !important; font-weight:700; font-size:11px; }
+.time-semana1 { color:#F97316 !important; font-weight:600; font-size:11px; }
+.time-mes1    { color:#EAB308 !important; font-weight:600; font-size:11px; }
+.time-mes2    { color:#22C55E !important; font-weight:600; font-size:11px; }
+.time-mes3  { color:#84CC16 !important; font-weight:600; font-size:11px; }
+.time-continuo{ color:#94A3B8 !important; font-weight:500; font-size:11px; }
+.effort-xs { color:#22C55E; font-size:11px; }
+.effort-s  { color:#84CC16; font-size:11px; }
+.effort-m  { color:#F59E0B; font-size:11px; }
+.owner-lau  { color:#fff; font-size:11px; }
+.owner-lau-abe { color:#fff; font-size:11px; }
+
+/* ── Interactive controls ── */
+.td-controls { white-space:nowrap; }
+.done-btn {
+  width:22px; height:22px; border-radius:50%; border:1.5px solid #334155; background:transparent;
+  color:#475569; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+  transition:all .15s; vertical-align:middle; margin-right:6px;
+}
+.done-btn:hover { border-color:#22C55E; color:#22C55E; }
+.done-btn.is-done { border-color:#22C55E; background:rgba(34,197,94,.15); color:#22C55E; }
+.b-done-btn {
+  width:20px; height:20px; border-radius:50%; border:1.5px solid #334155; background:transparent;
+  color:#475569; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+  transition:all .15s;
+}
+.b-done-btn:hover { border-color:#22C55E; color:#22C55E; }
+.b-done-btn.is-done { border-color:#22C55E; background:rgba(34,197,94,.15); color:#22C55E; }
+.owner-pills { display:inline-flex; gap:3px; vertical-align:middle; }
+.b-owner-pills { display:flex; gap:3px; }
+.owner-pill {
+  font-size:9px; font-weight:600; padding:2px 6px; border-radius:3px; border:1px solid rgba(255,255,255,.1);
+  background:transparent; color:#475569; cursor:pointer; transition:all .15s; text-transform:uppercase; letter-spacing:.04em;
+}
+.owner-pill:hover { border-color:var(--brand); color:var(--brand-light); }
+.owner-pill.active { background:rgba(255,87,34,.2); border-color:var(--brand); color:var(--brand-light); }
+
+/* ── Capacity slide ── */
+.slide-capacity { background:var(--surface-darker); padding:52px 64px; display:flex; gap:48px; align-items:stretch; }
+.capacity-left { flex:1; display:flex; flex-direction:column; gap:28px; justify-content:center; }
+.capacity-left h2 { font-size:36px; font-weight:700; color:#fff; }
+.cap-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.cap-item { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:16px 18px; }
+.ci-label { font-size:11px; color:#fff; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
+.ci-value { font-size:20px; font-weight:600; color:#fff; }
+.ci-sub { font-size:12px; color:#fff; margin-top:4px; }
+.capacity-right { width:340px; display:flex; flex-direction:column; gap:12px; justify-content:center; }
+.priority-row { display:flex; align-items:center; gap:14px; background:rgba(255,255,255,.03); border-radius:10px; padding:14px 18px; }
+.priority-icon { font-size:22px; flex-shrink:0; }
+.pr-text { font-size:13px; color:#fff; line-height:1.4; }
+.pr-text strong { color:var(--brand); }
+
+/* ── KPI slide ── */
+.slide-kpis { background:var(--surface-darker); padding:44px 64px; display:flex; flex-direction:column; gap:28px; }
+.slide-kpis h2 { font-size:34px; font-weight:700; color:#fff; }
+.kpi-table { width:100%; border-collapse:collapse; }
+.kpi-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:#fff; padding:10px 16px; text-align:left; background:rgba(255,255,255,.03); border-bottom:1px solid rgba(255,255,255,.08); }
+.kpi-table th.target { color:var(--brand-light); }
+.kpi-table td { font-size:14px; color:#fff; padding:11px 16px; border-bottom:1px solid rgba(255,255,255,.05); }
+.kpi-table td.mn { color:#fff; font-weight:600; }
+.kpi-table td.bl { color:#fff; }
+.kpi-table td.t30 { color:#84CC16; }
+.kpi-table td.t60 { color:#22C55E; }
+.kpi-table td.t90 { color:#4ADE80; font-weight:600; }
+
+/* ── Closing ── */
+.slide-close { background:var(--surface-darker); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:28px; }
+.next-title { font-size:13px; color:#fff; text-transform:uppercase; letter-spacing:.08em; }
+.next-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.next-list li { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,.03); border-radius:10px; padding:12px 20px; font-size:14px; color:#fff; width:600px; }
+.step-num { width:24px; height:24px; background:var(--brand); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+
+@media print {
+  body { background:#000; padding:0; gap:0; }
+  .slide { page-break-after:always; break-after:page; }
+  .done-btn, .b-done-btn, .owner-pills, .b-owner-pills, .b-owner-pills, .page-controls, .add-row-btn { display:none; }
+}
+
+/* ── Dependencies ── */
+.dep-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:500;color:#F59E0B;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:4px;padding:2px 7px;margin-top:4px;cursor:help;position:relative}
+.dep-badge::after{content:attr(data-dep-tip);position:absolute;bottom:calc(100% + 6px);left:0;background:#1E293B;border:1px solid rgba(245,158,11,.4);color:#E2E8F0;font-size:11px;font-weight:400;padding:6px 10px;border-radius:6px;width:220px;text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999}
+.dep-badge:hover::after{opacity:1}
+.dep-badge .dep-label{color:#94A3B8}
+
+/* ── Drag reorder ── */
+.drag-handle{cursor:grab;color:#334155;font-size:13px;padding:0 6px 0 2px;user-select:none;flex-shrink:0}
+.drag-handle:hover{color:var(--brand-light)}
+.task-row.dragging{opacity:.4;background:rgba(255,87,34,.05)}
+.task-row.drag-over{border-top:2px solid var(--brand)}
+
+/* ── Tooltips ── */
+.has-tip{position:relative;cursor:help}
+.has-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1E293B;border:1px solid rgba(255,87,34,.4);color:#E2E8F0;font-size:11px;font-weight:400;line-height:1.5;padding:10px 14px;border-radius:8px;width:260px;text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.has-tip:hover::after{opacity:1}
+.tip-icon{font-size:10px;color:#64748B;margin-left:4px;vertical-align:middle}
+
+/* ── Lang / Details / Sort / Modal ── */
+.t-es{display:none}
+body.es .t-en{display:none}
+body.es .t-es{display:inline}
+.task-desc{display:none;font-size:10.5px;color:#fff;font-weight:400;line-height:1.5;margin-top:5px;border-left:2px solid rgba(255,87,34,.4);padding-left:7px}
+body.show-details .task-desc{display:block}
+body.show-details .slide{height:auto;min-height:var(--slide-h)}
+.page-controls{position:fixed;top:14px;right:14px;z-index:9999;display:flex;gap:6px;background:rgba(15,23,42,.95);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;backdrop-filter:blur(8px)}
+.ctrl-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#94A3B8;font-family:'Rubik',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .15s}
+.ctrl-btn:hover,.ctrl-btn.active{border-color:var(--brand);color:var(--brand-light);background:rgba(255,87,34,.12)}
+.show-es{display:none}
+body.es .show-en{display:none}
+body.es .show-es{display:inline}
+.btn-d-off{display:inline}.btn-d-on{display:none}
+body.show-details .btn-d-off{display:none}
+body.show-details .btn-d-on{display:inline}
+.th-sort{cursor:pointer;user-select:none}.th-sort:hover{color:var(--brand-light)}
+.sort-icon{font-size:9px;color:#334155;margin-left:3px}
+.add-row-btn{background:none;border:none;color:#475569;font-size:11px;cursor:pointer;padding:6px 10px;transition:color .15s;font-family:'Rubik',sans-serif}
+.add-row-btn:hover{color:var(--brand-light)}
+.add-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;align-items:center;justify-content:center}
+.add-modal-overlay.open{display:flex}
+.add-modal{background:#1E293B;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:24px;width:460px;display:flex;flex-direction:column;gap:12px}
+.add-modal h3{font-size:15px;font-weight:600;color:#fff}
+.add-modal input,.add-modal select{background:#0F172A;border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#CBD5E1;font-family:'Rubik',sans-serif;font-size:12px;padding:7px 10px;width:100%}
+.add-modal-row{display:flex;gap:8px}
+.add-modal-row>*{flex:1}
+.add-modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.custom-task-id{font-size:11px;color:#8B5CF6;font-weight:600}
+.del-btn{background:none;border:none;color:#334155;cursor:pointer;font-size:13px;padding:0 4px;transition:color .15s}
+.del-btn:hover{color:#EF4444}
+</style>
+</head>
+<body>
+
+<!-- ── Floating Controls ── -->
+<div class="page-controls">
+  <button class="ctrl-btn" onclick="toggleLang()" id="lang-btn"><span class="show-en">ES</span><span class="show-es">EN</span></button>
+  <button class="ctrl-btn" onclick="toggleDetails()" id="details-btn"><span class="btn-d-off"><span class="t-en">+ Details</span><span class="t-es">+ Detalles</span></span><span class="btn-d-on"><span class="t-en">− Details</span><span class="t-es">− Detalles</span></span></button>
+  <button class="ctrl-btn" onclick="openAddModal()"><span class="t-en">+ Task</span><span class="t-es">+ Tarea</span></button>
+</div>
+
+<!-- ═══ SLIDE 1 — COVER ═══ -->
+<div class="slide slide-cover">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="520 440 680 210" style="height:56px;width:auto">
+      <defs><style>.o{fill:#ff5722}.w{fill:#fff}</style></defs>
+      <polygon class="w" points="846.4 628.15 840.53 614.3 838.24 614.3 845.32 630.67 847.49 630.67 854.68 614.3 852.4 614.3 846.4 628.15"/>
+      <polygon class="w" points="864.7 623.21 873.15 623.21 873.15 621.43 864.7 621.43 864.7 616.16 874.43 616.16 874.43 614.3 862.61 614.3 862.61 630.67 875 630.67 875 628.84 864.7 628.84 864.7 623.21"/>
+      <polygon class="w" points="888.97 549.61 872.59 511.43 857.95 477.33 822.22 477.33 837.93 511.43 872.78 587.07 904.46 587.07 958.68 477.33 923.14 477.33 888.97 549.61"/>
+      <path class="w" d="M1020.32,558.92c-7.23,0-13.12-5.89-13.12-13.12v-106.71h-33.46v107.54c0,22.3,18.14,40.44,40.44,40.44h2.73l24.01-28.15h-20.6Z"/>
+      <polygon class="w" points="1104.02 557.33 1129.09 587.07 1171.48 587.07 1124.95 532.51 1170.71 478.23 1129.39 478.23 1104.02 507.98 1077.88 477.33 1036.57 477.33 1083.09 532.51 1036.56 587.07 1078.95 587.07 1094.59 568.52 1104.02 557.33"/>
+      <path class="o" d="M706.42,527.32l-1.01,1.78-23.65,40.96c-5.05,8.75-14.47,14.19-24.58,14.19h-45.63l14.73-25.48,1.01-1.78,23.65-40.96c5.05-8.75,14.47-14.19,24.58-14.19h45.63l-14.73,25.48ZM763.99,501.83h-42.85l-21.48-37.23h-26.38c-22.07,0-42.64,11.88-53.67,31l-29.49,51.12-25.89-44.88h-43.08l47.55,82.42h42.84l21.49,37.23h26.38c22.07,0,42.63-11.88,53.66-31l29.15-50.51.36.61,25.17,43.66h43.8l-47.55-82.42Z"/>
+    </svg>
+  </div>
+  <div>
+    <h1><span class="t-en">Post-Migration <span>SEO Plan</span></span><span class="t-es">Plan SEO <span>Post-Migración</span></span></h1>
+    <div class="subtitle"><span class="t-en">Strategic SEO Roadmap · Phases 0–4+</span><span class="t-es">Roadmap SEO Estratégico · Fases 0–4+</span></div>
+  </div>
+  <div class="meta">
+    <div class="meta-item"><span>Site</span><span>vlx.ai</span></div>
+    <div class="meta-item"><span>Stack</span><span>Next.js 15 · Vercel</span></div>
+    <div class="meta-item"><span><span class="t-en">Launch</span><span class="t-es">Lanzamiento</span></span><span><span class="t-en">Early June 2026</span><span class="t-es">Inicio Junio 2026</span></span></div>
+    <div class="meta-item"><span><span class="t-en">Framework</span><span class="t-es">Marco</span></span><span>seo-orchestrator v2.0</span></div>
+  </div>
+  <div class="tagline"><span class="t-en">Verify, then Trust®</span><span class="t-es">Verificar, luego Confiar®</span></div>
+</div>
+
+<!-- ═══ SLIDE 2 — STATUS ═══ -->
+<div class="slide slide-status">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="sh">
+    <div><div class="overline"><span class="t-en">Current State · May 2026</span><span class="t-es">Estado Actual · Mayo 2026</span></div><h2><span class="t-en">Where We Stand</span><span class="t-es">Dónde Estamos</span></h2></div>
+    <div class="score-badge">
+      <div class="score-num">66</div>
+      <div class="score-label"><span class="t-en">Launch Readiness</span><span class="t-es">Preparación Lanzamiento</span></div>
+      <div class="score-verdict"><span class="t-en">NOT LAUNCH-READY</span><span class="t-es">NO LISTO PARA LANZAR</span></div>
+    </div>
+  </div>
+  <div class="status-grid">
+    <div class="status-card orange has-tip" data-tip-en="8 issues that require code changes before going live. All must be fixed in the Hans-review branch and validated before merging to main." data-tip-es="8 problemas que requieren cambios de código antes del lanzamiento. Todos deben resolverse en la rama Hans-review y validarse antes del merge a main."><div class="s-label"><span class="t-en">Critical Blockers</span><span class="t-es">Bloqueadores Críticos</span></div><div class="s-value">6 active</div><div class="s-sub"><span class="t-en">All code changes · ~6h total</span><span class="t-es">Todos cambios de código · ~6h total</span></div></div>
+    <div class="status-card green has-tip" data-tip-en="3 critical issues already fixed: internal hub links, pricing schema, and organization schema. Note: H1s are rendered correctly via SuperTemplate — not missing." data-tip-es="3 problemas críticos ya resueltos: links internos del hub, schema de pricing y schema de organización. Nota: Los H1 se renderizan correctamente via SuperTemplate — no están perdidos."><div class="s-label"><span class="t-en">Fixed Since Last Audit</span><span class="t-es">Resuelto desde Último Audit</span></div><div class="s-value">3 P0 items</div><div class="s-sub"><span class="t-en">Hub links · H1 · Schema pricing</span><span class="t-es">Hub links · H1 · Schema precios</span></div></div>
+    <div class="status-card red has-tip" data-tip-en="Abe uses an internal dev tracker (v5) with 37 migration tasks. As of April 2026, 36 are still open (red). This reflects dev scope, not SEO blockers." data-tip-es="Abe usa un tracker interno de desarrollo (v5) con 37 tareas de migración. A abril 2026, 36 siguen abiertas (rojo). Refleja el alcance dev, no los bloqueadores SEO."><div class="s-label"><span class="t-en">Dev Migration Tracker</span><span class="t-es">Tracker de Migración Dev</span></div><div class="s-value">36 / 37 RED</div><div class="s-sub"><span class="t-en">Abe's internal dev task tracker · Apr 2026</span><span class="t-es">Tracker interno de tareas dev de Abe · Abr 2026</span></div></div>
+    <div class="status-card has-tip" data-tip-en="Due to a truncation bug in BlogListFallback (SSR), Googlebot only sees 12 of the 116 blog posts. The other 104 are invisible to search engines. Fixed by Blocker B2." data-tip-es="Por un bug de truncación en BlogListFallback (SSR), Googlebot solo ve 12 de los 116 posts del blog. Los otros 104 son invisibles para los buscadores. Corregido por Bloqueador B2."><div class="s-label"><span class="t-en">Blog Risk</span><span class="t-es">Riesgo Blog</span></div><div class="s-value">104 / 116 posts</div><div class="s-sub"><span class="t-en">Invisible to Googlebot (SSR truncation)</span><span class="t-es">Invisible para Googlebot (truncación SSR)</span></div></div>
+    <div class="status-card has-tip" data-tip-en="~100 organic clicks/week from blog category URLs will 404 if B4 is not fixed. Organic traffic today: 91 clicks/28d USA (down from ~470 in April). Position for digital inspection software: 11.9 avg (volatile 6–21)." data-tip-es="~100 clics orgánicos/semana de URLs de categorías del blog darán 404 si B4 no se corrige. Tráfico orgánico hoy: 91 clics/28d USA (bajó de ~470 en abril). Posición para digital inspection software: 11.9 promedio (volátil 6–21)."><div class="s-label"><span class="t-en">Weekly Traffic at Risk</span><span class="t-es">Tráfico Semanal en Riesgo</span></div><div class="s-value">~100 clicks</div><div class="s-sub"><span class="t-en">Blog category URLs → 404 post-launch</span><span class="t-es">URLs de categorías → 404 post-lanzamiento</span></div></div>
+    <div class="status-card red has-tip" data-tip-en="GSC sitemap_index.xml shows 0 pages indexed from the Next.js build. Current production runs WordPress. 286 redirects emit 308 instead of 301. Both are fixed by B1 + launch day actions." data-tip-es="El sitemap_index.xml en GSC muestra 0 páginas indexadas del build Next.js. La producción actual corre en WordPress. 286 redirects emiten 308 en vez de 301. Ambos se corrigen con B1 + acciones del día de lanzamiento."><div class="s-label"><span class="t-en">Indexing Status</span><span class="t-es">Estado de Indexación</span></div><div class="s-value">0 indexed</div><div class="s-sub"><span class="t-en">Next.js sitemap not yet in GSC · 286 × 308</span><span class="t-es">Sitemap Next.js aún no en GSC · 286 × 308</span></div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 — BLOCKERS ═══ -->
+<div class="slide slide-blockers">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div>
+    <div class="overline"><span class="t-en">Before Go-Live</span><span class="t-es">Antes del Lanzamiento</span></div>
+    <h2><span class="t-en">Pre-Launch Blockers</span><span class="t-es">Bloqueadores Pre-Lanzamiento</span> <span id="blockers-counter" style="font-size:16px;color:#475569;font-weight:400;margin-left:12px"><span class="done-count">2</span>/<span class="total-count">8</span> <span class="t-en">done</span><span class="t-es">hechos</span></span></h2>
+    <div class="deck-sub"><span class="t-en">All code changes · ~4h total · Lau or Abe · Must pass validation before launch</span><span class="t-es">Todos cambios de código · ~4h total · Lau o Abe · Deben pasar validación antes del lanzamiento</span></div>
+  </div>
+  <div class="blockers-grid">
+    <!-- B1 -->
+    <div id="task-B1" class="blocker-card task-row">
+      <div class="b-id">⛔ B1 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">308 → 301 Redirects</span><span class="t-es">Redirects 308 → 301</span></div>
+      <div class="b-fix"><span class="t-en">Change <code style="color:#FF8A65;font-size:10px">permanent: true</code> in all 286 rules in next.config.ts. Bing and crawl logs require 301.</span><span class="t-es">Cambiar <code style="color:#FF8A65;font-size:10px">permanent: true</code> en las 286 reglas de next.config.ts. Bing y los crawlers requieren 301.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B1')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B1','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B1','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B1','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B2 -->
+    <div id="task-B2" class="blocker-card task-row">
+      <div class="b-id">⛔ B2 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">BlogListFallback: 12 → 116 Posts</span><span class="t-es">BlogListFallback: 12 → 116 Posts (truncación SSR)</span></div>
+      <div class="b-fix"><span class="t-en">Remove <code style="color:#FF8A65;font-size:10px">.slice(0, POSTS_PER_PAGE)</code>. 104 posts invisible to Googlebot. Blog = 8 of top 12 traffic pages.</span><span class="t-es">Eliminar <code style="color:#FF8A65;font-size:10px">.slice(0, POSTS_PER_PAGE)</code>. 104 posts invisibles para Googlebot. El blog es 8 de las top 12 páginas de tráfico.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B2')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B2','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B2','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B2','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B3 -->
+    <div id="task-B3" class="blocker-card task-row">
+      <div class="b-id">⛔ B3 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">13 Paid LPs Without Redirects</span><span class="t-es">13 Landing Pages de Pago Sin Redirects</span></div>
+      <div class="b-fix"><span class="t-en">Map all 13 paid LPs to target URLs. Day-1 404s on active ad campaigns = wasted spend + backlink equity loss.</span><span class="t-es">Mapear las 13 LPs de pago a URLs destino. 404s el día 1 en campañas activas = gasto perdido + pérdida de link equity.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">S · 1–2h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B3')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B3','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B3','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B3','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B4 -->
+    <div id="task-B4" class="blocker-card task-row">
+      <div class="b-id">⛔ B4 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">/blog/:cat/:slug → /blog/:slug</span><span class="t-es">Redireccionamiento de categorías del blog</span></div>
+      <div class="b-fix"><span class="t-en">Add wildcard redirect. ~100 clicks/week + 15K impressions/week via old category URLs in GSC.</span><span class="t-es">Agregar redirect wildcard. ~100 clics/semana + 15K impresiones/semana en URLs antiguas de categoría en GSC.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B4')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B4','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B4','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B4','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B5 -->
+    <div id="task-B5" class="blocker-card high task-row">
+      <div class="b-id">⛔ B5 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">oil-gas slug mismatch — redirect inverted (308 not 301)</span><span class="t-es">Slug oil-gas mal redireccionado — dirección invertida (308 en vez de 301)</span></div>
+      <div class="b-fix"><span class="t-en">Production canonical = /oil-and-gas/ (has traffic + GSC data). Dev redirects oil-and-gas → oil-gas via 308 — WRONG direction, WRONG code. Fix: rename dev folder oil-gas → oil-and-gas (Option A, recommended) so slugs match production. No redirect needed. Do NOT leave the 308 — it destroys accumulated SEO equity.</span><span class="t-es">Canónica de producción = /oil-and-gas/ (tiene tráfico + datos GSC). El dev redirige oil-and-gas → oil-gas con 308 — dirección INCORRECTA, código INCORRECTO. Fix: renombrar carpeta dev oil-gas → oil-and-gas para que coincida con producción. Sin redirect necesario. No dejar el 308 — destruye el equity SEO acumulado.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B5')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B5','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B5','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B5','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B6 -->
+    <div id="task-B6" class="blocker-card high task-row done">
+      <div class="b-id">⚠️ B6 · <span class="t-en">High</span><span class="t-es">Alto</span></div>
+      <div class="b-title"><span class="t-en">Remove /checklists → /blog Redirect</span><span class="t-es">Eliminar redirect /checklists → /blog</span></div>
+      <div class="b-fix"><span class="t-en">In dev /checklists/ returns 200 (redirect appears removed). Validate this is intentional and confirm it stays 200 after merge to main before removing this blocker.</span><span class="t-es">En dev /checklists/ devuelve 200 (el redirect parece eliminado). Validar que es intencional y confirmar que se mantiene 200 después del merge antes de cerrar este bloqueador.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B6')">✓</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B6','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B6','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B6','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B7 -->
+    <div id="task-B7" class="blocker-card task-row done">
+      <div class="b-id">⛔ B7 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
+      <div class="b-title"><span class="t-en">BlogFilterBar: router.push → &lt;Link&gt;</span><span class="t-es">BlogFilterBar: router.push → &lt;Link&gt; (sin rastro en DOM)</span></div>
+      <div class="b-fix"><span class="t-en">Category nav uses <code style="color:#FF8A65;font-size:10px">router.push()</code> — Google sees zero category links in DOM. Replace with <code style="color:#FF8A65;font-size:10px">&lt;Link href&gt;</code> in BlogFilterBar.tsx.</span><span class="t-es">La nav de categorías usa <code style="color:#FF8A65;font-size:10px">router.push()</code> — Google no ve ningún link de categoría en el DOM. Reemplazar con <code style="color:#FF8A65;font-size:10px">&lt;Link href&gt;</code> en BlogFilterBar.tsx.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 1h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B7')">✓</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B7','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B7','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B7','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- B8 -->
+    <div id="task-B8" class="blocker-card high task-row">
+      <div class="b-id">⚠️ B8 · <span class="t-en">High</span><span class="t-es">Alto</span></div>
+      <div class="b-title"><span class="t-en">/real-estate Top-Level Redirect Missing</span><span class="t-es">Falta redirect top-level /real-estate</span></div>
+      <div class="b-fix"><span class="t-en">/real-estate/ → 308 → /digital-inspections-software/real-estate/ (confirmed dev). Redirect exists but emits 308 — fixed by B1 (permanent:true → 301 across all rules). Add <code style="color:#FF8A65;font-size:10px">source: &apos;/real-estate&apos;</code> → <code style="color:#FF8A65;font-size:10px">statusCode: 301</code>.</span><span class="t-es">/real-estate/ → 308 → /digital-inspections-software/real-estate/ (confirmado dev). El redirect existe pero emite 308 — corregido por B1. Agregar <code style="color:#FF8A65;font-size:10px">source: &apos;/real-estate&apos;</code> → <code style="color:#FF8A65;font-size:10px">statusCode: 301</code>.</span></div>
+      <div class="b-footer">
+        <span class="b-pill pill-effort">XS · 0.5h</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="b-done-btn" onclick="toggleDone('B8')">○</button>
+          <div class="b-owner-pills">
+            <button class="owner-pill" data-owner="Lau" onclick="setOwner('B8','Lau')">Lau</button>
+            <button class="owner-pill" data-owner="Hans" onclick="setOwner('B8','Hans')">Hans</button>
+            <button class="owner-pill" data-owner="Abe" onclick="setOwner('B8','Abe')">Abe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="blocker-note"><span class="t-en">✅ Gate: 6 remaining — do not launch until all pass curl</span><span class="t-es" style="display:none">✅ Gate: 6 restantes — no lanzar hasta que todos pasen validación curl</span><span class="t-en">/browser validation in staging</div>
+</div>
+
+<!-- ═══ SLIDE 4 — LAUNCH WEEK ═══ -->
+<div class="slide slide-phase" id="slide-phase0">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="phase-header">
+    <div class="ph-left">
+      <div class="overline"><span class="t-en">Phase 0</span><span class="t-es">Fase 0</span></div>
+      <h2><span class="t-en">Launch Week · Day 0–7</span><span class="t-es">Semana de Lanzamiento · Día 0–7</span></h2>
+      <div class="ph-sub"><span class="t-en">Nothing breaks. Indexation open. Baselines captured.</span><span class="t-es">Nada se rompe. Indexación abierta. Baselines capturados.</span></div>
+    </div>
+    <div class="phase-badge">
+      <div class="pb-label"><span class="t-en">Lau effort</span><span class="t-es">Esfuerzo Lau</span></div>
+      <div class="pb-value">~8–9h total</div>
+      <div class="progress-counter"><span class="done-count">0</span>/<span class="total-count">10</span> <span class="t-en">done</span><span class="t-es">hechos</span></div>
+    </div>
+  </div>
+  <table class="task-table">
+    <thead><tr><th>ID</th><th><span class="t-en">Initiative</span><span class="t-es">Iniciativa</span></th><th class="th-sort" onclick="sortPhase(this,'impact')" data-sort="impact"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="sort-icon">↕</span></th><th class="th-sort" onclick="sortPhase(this,'effort')" data-sort="effort"><span class="t-en">Effort</span><span class="t-es">Esfuerzo</span><span class="sort-icon">↕</span></th><th><span class="t-en">Owner</span><span class="t-es">Responsable</span></th><th><span class="t-en">Done</span><span class="t-es">Hecho</span></th></tr></thead>
+        <tbody>
+      <tr id="task-L1" class="task-row"><td>L1</td><td class="td-initiative"><span class="t-en">Verify robots.txt allows Googlebot + Bingbot + Applebot <span class="qw-badge">⚡ QW</span></span><span class="t-es">Verificar robots.txt: acceso a Googlebot + Bingbot + Applebot <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Open vlx.ai/robots.txt — confirm no Disallow: / block exists for any bot.</span><span class="t-es">Abrir vlx.ai/robots.txt — confirmar que no hay Disallow: / para ningún bot.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·15m</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L1')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L1','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L1','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L1','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L2" class="task-row"><td>L2</td><td class="td-initiative"><span class="t-en">Confirm VERCEL_ENV=production → noindex off <span class="qw-badge">⚡ QW</span></span><span class="t-es">Confirmar VERCEL_ENV=production → noindex desactivado <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Vercel dashboard → Environment Variables → confirm VERCEL_ENV=production. Without this, all pages stay blocked from Google indexing.</span><span class="t-es">Vercel dashboard → Environment Variables → confirmar VERCEL_ENV=production. Sin esto, Google no indexa ninguna página.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·15m</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L2')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L2','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L2','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L2','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L3" class="task-row"><td>L3</td><td class="td-initiative"><span class="t-en">Submit sitemap to GSC immediately after launch <span class="qw-badge">⚡ QW</span></span><span class="t-es">Enviar sitemap a GSC inmediatamente después del lanzamiento <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">GSC → Sitemaps → Add new sitemap → vlx.ai/sitemap.xml. Do on launch day so Google starts recrawling the new URL structure.</span><span class="t-es">GSC → Sitemaps → Agregar sitemap → vlx.ai/sitemap.xml. Hacer el día del lanzamiento para que Google rastree la nueva estructura de URLs.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·15m</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L3')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L3','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L4" class="task-row"><td>L4</td><td class="td-initiative"><span class="t-en">Submit all new URLs via IndexNow (Bing) day 0 <span class="qw-badge">⚡ QW</span></span><span class="t-es">Enviar todas las URLs nuevas via IndexNow (Bing) día 0 <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Bing Webmaster Tools → URLs → Submit URLs. Notifies Bing and Yandex instantly — speeds up indexation.</span><span class="t-es">Bing Webmaster Tools → URLs → Submit URLs. Notifica a Bing y Yandex al instante y acelera la indexación.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·15m</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L4')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L4','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L4','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L4','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L5" class="task-row"><td>L5</td><td class="td-initiative"><span class="t-en">Capture GSC baseline via Claude MCP on launch day <span class="qw-badge">⚡ QW</span></span><span class="t-es">Capturar baseline GSC via MCP de Claude el día del lanzamiento <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Claude pulls clicks, impressions, and position data directly via GSC API on launch day. No manual export needed — Claude tracks recovery automatically each session.</span><span class="t-es">Claude jala clics, impresiones y posición directamente via API de GSC el día del lanzamiento. Sin export manual — Claude hace seguimiento automático en cada sesión.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·30m</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L5')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L5','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L5','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L5','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L8" class="task-row"><td>L8</td><td class="td-initiative"><span class="t-en">Monitor GSC Coverage daily — watch 404 spikes on checklist URLs <span class="qw-badge">⚡ QW</span></span><span class="t-es">Monitorear GSC Coverage diario — vigilar picos de 404 en URLs del checklist <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">GSC → Indexing → Pages → Not found (404). Check daily. If count rises sharply, cross-reference with redirect checklist in next.config.js.</span><span class="t-es">GSC → Indexing → Pages → Not found (404). Revisar diariamente. Si el conteo sube, cruzar con el checklist de redirects en next.config.js.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-xs">XS·30m/d</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L8')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L8','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L8','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L8','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L6" class="task-row"><td>L6</td><td class="td-initiative"><span class="t-en">Run PageSpeed: homepage, hub, top industry, blog hub, pricing <span class="qw-badge">⚡ QW</span></span><span class="t-es">Correr PageSpeed: homepage, hub, industria principal, blog hub, pricing <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Run PageSpeed Insights on 5 URLs. Record LCP, INP, CLS as post-migration baseline. Flag scores below 50.</span><span class="t-es">Correr PageSpeed Insights en 5 URLs. Registrar LCP, INP, CLS como baseline post-migración. Marcar scores por debajo de 50.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-s">S·1h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L6')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L6','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L6','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L6','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L7" class="task-row"><td>L7</td><td class="td-initiative"><span class="t-en">Verify hreflang 6 variants live <span class="qw-badge">⚡ QW</span></span><span class="t-es">Verificar hreflang: 6 variantes en vivo <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">View source on homepage — confirm 6 hreflang tags: en, en-US, en-CA, en-AU, en-GB, en-NZ. Check all href URLs return 200.</span><span class="t-es">Ver fuente HTML en homepage — confirmar 6 etiquetas hreflang: en, en-US, en-CA, en-AU, en-GB, en-NZ. Verificar que todas las URLs devuelven 200.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-s">S·1h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L7')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L7','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L7','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L7','Abe')">Abe</button></div></td></tr>
+      <tr id="task-L9" class="task-row"><td>L9</td><td class="td-initiative"><span class="t-en">Re-run compare_gsc.py with fresh export → validate redirect coverage <span class="qw-badge">⚡ QW</span></span><span class="t-es">Re-ejecutar compare_gsc.py con export fresco → validar cobertura de redirects <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Run the Python script using the launch-day GSC export. It flags old URLs that got clicks but have no redirect mapped in next.config.js.</span><span class="t-es">Ejecutar el script Python con el export GSC del día de lanzamiento. Marca URLs antiguas con clics que no tienen redirect en next.config.js.</span></div></td><td class="td-impact time-hoy"><span class="t-en">P1</span><span class="t-es">P1</span></td><td class="td-effort effort-s">S·1h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('L9')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('L9','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('L9','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('L9','Abe')">Abe</button></div></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SLIDE 5 — STABILIZATION ═══ -->
+<div class="slide slide-phase" id="slide-phase1">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="phase-header">
+    <div class="ph-left">
+      <div class="overline"><span class="t-en">Phase 1</span><span class="t-es">Fase 1</span></div>
+      <h2><span class="t-en">Stabilization · Week 1–4</span><span class="t-es">Estabilización · Semanas 1–4</span></h2>
+      <div class="ph-sub"><span class="t-en">Quick wins + dev tasks + outreach. Assign owner per task and execute in parallel.</span><span class="t-es">Quick wins + tareas dev + outreach. Asigna responsable por tarea y ejecuta en paralelo.</span></div>
+    </div>
+    <div class="phase-badge">
+      <div class="pb-label"><span class="t-en">Lau effort</span><span class="t-es">Esfuerzo Lau</span></div>
+      <div class="pb-value">~10–14h</div>
+      <div class="progress-counter"><span class="done-count">0</span>/<span class="total-count">10</span> <span class="t-en">done</span><span class="t-es">hechos</span></div>
+    </div>
+  </div>
+  <table class="task-table">
+    <thead><tr><th>ID</th><th><span class="t-en">Initiative</span><span class="t-es">Iniciativa</span></th><th class="th-sort" onclick="sortPhase(this,'impact')" data-sort="impact"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="sort-icon">↕</span></th><th class="th-sort" onclick="sortPhase(this,'effort')" data-sort="effort"><span class="t-en">Effort</span><span class="t-es">Esfuerzo</span><span class="sort-icon">↕</span></th><th><span class="t-en">Owner</span><span class="t-es">Responsable</span></th><th><span class="t-en">Done</span><span class="t-es">Hecho</span></th></tr></thead>
+            <tbody>
+      <tr id="task-S1" class="task-row"><td>S1</td><td class="td-initiative"><span class="t-en">ASO: optimize App Store + Google Play listings — keywords, screenshots, description <span class="qw-badge">⚡ QW</span></span><span class="t-es">ASO: optimizar fichas de App Store + Google Play — keywords, capturas, descripción <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">VLX has mobile + desktop apps. Optimize App Store and Google Play: keyword-rich title/subtitle, description with primary terms, updated screenshots showing key features (KYPiT, CountIt). Ranks independently from web SEO.</span><span class="t-es">VLX tiene apps móvil y desktop. Optimizar App Store y Google Play: título/subtítulo con keywords, descripción con términos principales, capturas de pantalla actualizadas mostrando features clave. Rankea independientemente del SEO web.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S1')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S1','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S1','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S1','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S2" class="task-row"><td>S2</td><td class="td-initiative"><span class="t-en">CRO: optimize checklist pages → free trial conversion <span class="qw-badge">⚡ QW</span></span><span class="t-es">CRO: optimizar páginas de checklist → conversión a free trial <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Checklist pages already get traffic (mobile home, vehicle, house insurance). Add: free trial CTA above the fold, contextual VLX value prop ("use this checklist in VLX for free"), sticky download/try button. These pages have intent — capitalize on it.</span><span class="t-es">Las páginas de checklist ya reciben tráfico. Agregar: CTA de free trial visible, propuesta de valor contextual ("usa este checklist en VLX gratis"), botón sticky de descarga/prueba. Tienen intención — hay que capitalizarla.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S2')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S2','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S2','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S2','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S7" class="task-row"><td>S7</td><td class="td-initiative"><span class="t-en">Add meta description CTAs — 22 pages missing them <span class="qw-badge">⚡ QW</span></span><span class="t-es">Agregar meta descriptions con CTA — 22 páginas sin ellas <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">22 pages have no meta description. Write 150–160 char descriptions with primary keyword + action CTA. Export page list from GSC or Screaming Frog.</span><span class="t-es">22 páginas no tienen meta description. Escribir descripciones de 150–160 caracteres con keyword principal + CTA de acción. Exportar lista desde GSC o Screaming Frog.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S7')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S7','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S7','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S7','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S9" class="task-row"><td>S9</td><td class="td-initiative"><span class="t-en">AI Mentions test: ChatGPT, Perplexity, Gemini, Bing Copilot — 5-platform baseline <span class="qw-badge">⚡ QW</span></span><span class="t-es">Test de menciones en IA: ChatGPT, Perplexity, Gemini, Bing Copilot — baseline 5 plataformas <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Ask each AI: "What is the best digital inspection software?" and "Tell me about VLX inspection software." Record: is VLX mentioned, is it accurate, which competitors are named.</span><span class="t-es">Preguntar a cada IA: "What is the best digital inspection software?" y "Tell me about VLX inspection software." Registrar: ¿se menciona VLX, es correcto, qué competidores se nombran.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S9')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S9','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S9','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S9','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S10" class="task-row"><td>S10</td><td class="td-initiative"><span class="t-en">Backlinks cleanup: disavow.txt from ~120 spam links → submit GSC <span class="qw-badge">⚡ QW</span></span><span class="t-es">Limpieza de backlinks: disavow.txt con ~120 links spam → enviar a GSC <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Export backlink list from Ahrefs or DataForSEO. Filter by spam score above 50. Build disavow.txt (domain:spammydomain.com per line). Submit via GSC Disavow Tool.</span><span class="t-es">Exportar lista de backlinks desde Ahrefs o DataForSEO. Filtrar por spam score mayor a 50. Construir disavow.txt (domain:spammydomain.com por línea). Enviar via GSC Disavow Tool.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S10')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S10','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S10','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S10','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S11" class="task-row"><td>S11</td><td class="td-initiative"><span class="t-en">Create llms-full.txt: extended product content + integrations + VLX differentiators (KYPiT, CountIt, SOC 2) <span class="qw-badge">⚡ QW</span></span><span class="t-es">Crear llms-full.txt: contenido extendido del producto + integraciones + diferenciadores VLX <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Create /llms-full.txt (denser than llms.txt). Include: full product description, all integrations, differentiators (KYPiT AI detection, CountIt computer counting, SOC 2 Type II, offline mode). AI models read this file.</span><span class="t-es">Crear /llms-full.txt (más denso que llms.txt). Incluir: descripción completa, todas las integraciones, diferenciadores (KYPiT AI, CountIt, SOC 2 Tipo II, modo offline). Los modelos de IA leen este archivo.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S11')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S11','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S11','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S11','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S12" class="task-row"><td>S12</td><td class="td-initiative"><span class="t-en">Local SEO: Google Business Profile audit + local pack optimization <span class="qw-badge">⚡ QW</span></span><span class="t-es">SEO Local: auditoría Google Business Profile + optimización local pack <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Audit GBP profile: completeness, categories, services, photos, posts. Optimize for local pack visibility in target cities. Align NAP across directories. Local rankings complement web SEO for location-based searches.</span><span class="t-es">Auditar perfil GBP: completitud, categorías, servicios, fotos, posts. Optimizar visibilidad en local pack en ciudades objetivo. Alinear NAP en directorios. Rankings locales complementan el SEO web.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S12')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S12','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S12','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S12','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S13" class="task-row"><td>S13</td><td class="td-initiative"><span class="t-en">Test VLX visibility in Google AI Overviews for core category terms <span class="qw-badge">⚡ QW</span></span><span class="t-es">Testear visibilidad de VLX en Google AI Overviews para términos de categoría <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Search "digital inspection software", "inspection management software", "field inspection app" in Google (US IP/VPN). Screenshot AI Overview results. Log: is VLX cited? Date + query + result.</span><span class="t-es">Buscar "digital inspection software", "inspection management software", "field inspection app" en Google (IP USA/VPN). Screenshot de AI Overview. Registrar: ¿se cita VLX? Fecha + query + resultado.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S13')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S13','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S13','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S13','Abe')">Abe</button></div></td></tr>
+    
+      <tr id="task-S3" class="task-row"><td>S3</td><td class="td-initiative"><span class="t-en">Image: re-encode 2 blog images >1MB to WebP <span class="qw-badge">⚡ QW</span></span><span class="t-es">Imágenes: re-codificar 2 imágenes de blog >1MB a WebP <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Two blog images exceed 1MB (flagged in LCP audit). Convert to WebP with Squoosh or Sharp. Target: under 150KB each. Re-upload and update src.</span><span class="t-es">Dos imágenes de blog superan 1MB (detectadas en auditoría LCP). Convertir a WebP con Squoosh o Sharp. Target: menos de 150KB. Re-subir y actualizar src.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-xs">XS·1h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S3')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S3','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S4" class="task-row"><td>S4</td><td class="td-initiative"><span class="t-en">Schema: add slogan to Organization schema <span class="qw-badge">⚡ QW</span></span><span class="t-es">Schema: agregar slogan al schema de Organization <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Add slogan: "Verify, then Trust®" to organizationSchema() in lib/schema.ts. One line change.</span><span class="t-es">Agregar slogan: "Verify, then Trust®" en organizationSchema() en lib/schema.ts. Un cambio de una línea.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-xs">XS·1h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S4')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S4','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S4','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S4','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S5" class="task-row"><td>S5</td><td class="td-initiative"><span class="t-en">Fix generic alt text on trust logos → company names <span class="qw-badge">⚡ QW</span></span><span class="t-es">Corregir alt text genérico en logos de confianza → nombres de empresa <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Verify trust section logos in dev — if alt text is generic ("logo", "image"), replace with real company names. Google Rich Results Test may flag this. Confirm before implementing.</span><span class="t-es">Verificar logos de confianza en dev — si el alt text es genérico, reemplazar con nombres reales. Confirmar antes de implementar.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-xs">XS·30m</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S5')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S5','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S5','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S5','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S6" class="task-row"><td>S6</td><td class="td-initiative"><span class="t-en">Schema: CollectionPage + ItemList on hub <span class="qw-badge">⚡ QW</span></span><span class="t-es">Schema: CollectionPage + ItemList en el hub <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Add JSON-LD with @type:CollectionPage and ItemList pointing to each industry sub-page. Signals to Google the hub is a category page.</span><span class="t-es">Agregar JSON-LD con @type:CollectionPage e ItemList apuntando a cada sub-página de industria. Le indica a Google que el hub es una página de categoría.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S6')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S6','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S6','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S6','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S8" class="task-row"><td>S8</td><td class="td-initiative"><span class="t-en">Optimize H1s on industry pages where primary keyword is missing <span class="qw-badge">⚡ QW</span></span><span class="t-es">Optimizar H1 en páginas de industria donde falta la keyword principal <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">All industry pages have H1 via SuperTemplate (confirmed dev). Some H1s lack the primary keyword: home-inspectors ("Home Inspections, Completed Before You Leave...") and hospitality ("Digital Inspections That Protect Your Brand Standards"). Rewrite those H1s to lead with target keyword.</span><span class="t-es">Todas las páginas de industria tienen H1 via SuperTemplate (confirmado en dev). Algunos H1s no tienen la keyword principal: home-inspectors y hospitality. Reescribir esos H1s para que empiecen con la keyword objetivo.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S8')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S8','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S8','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S8','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S15" class="task-row"><td>S15</td><td class="td-initiative"><span class="t-en">Link building: outreach to wifitalents, gitnux, zipdo, xenia — not listed in any of 4 top-10 listicles</span><span class="t-es">Link building: outreach a wifitalents, gitnux, zipdo, xenia — ausente de listicles del top-10</span><div class="task-desc"><span class="t-en">These 4 sites publish "best inspection software" listicles in the top 10 but don't mention VLX. Contact editors asking to be included. Provide product summary + G2 profile link.</span><span class="t-es">Estos 4 sitios publican listicles de "mejor software de inspección" en el top 10 pero no mencionan a VLX. Contactar editores pidiendo ser incluidos. Proporcionar resumen del producto + link del perfil de G2.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-m">M·5–8h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S15')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S15','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S15','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S15','Abe')">Abe</button></div></td></tr>
+      <tr id="task-S16" class="task-row"><td>S16</td><td class="td-initiative"><span class="t-en">Schema: BlogPosting + BreadcrumbList on all blog posts</span><span class="t-es">Schema: BlogPosting + BreadcrumbList en todos los posts del blog</span><div class="task-desc"><span class="t-en">Every blog post needs BlogPosting schema (datePublished, author, image) + BreadcrumbList. Generate JSON-LD template, inject via layout component to apply to all posts at once.</span><span class="t-es">Cada post necesita schema BlogPosting (datePublished, author, image) + BreadcrumbList. Generar template JSON-LD e inyectar via layout component para aplicar a todos los posts.</span></div></td><td class="td-impact time-semana1"><span class="t-en">P2</span><span class="t-es">P2</span></td><td class="td-effort effort-m">S·2h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('S16')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('S16','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('S16','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('S16','Abe')">Abe</button></div></td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══ SLIDE 6 — OPTIMIZATION ═══ -->
+<div class="slide slide-phase" id="slide-phase2">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="phase-header">
+    <div class="ph-left">
+      <div class="overline"><span class="t-en">Phase 2</span><span class="t-es">Fase 2</span></div>
+      <h2><span class="t-en">Optimization · Day 30–60</span><span class="t-es">Optimización · Día 30–60</span></h2>
+      <div class="ph-sub"><span class="t-en">Move core terms from page 2 to page 1. Optimize every URL with impressions but low CTR.</span><span class="t-es">Mover términos core de página 2 a página 1. Optimizar URLs con impresiones pero CTR bajo.</span></div>
+    </div>
+    <div class="phase-badge">
+      <div class="pb-label"><span class="t-en">Lau effort</span><span class="t-es">Esfuerzo Lau</span></div>
+      <div class="pb-value">~35–40h</div>
+      <div class="progress-counter"><span class="done-count">0</span>/<span class="total-count">11</span> <span class="t-en">done</span><span class="t-es">hechos</span></div>
+    </div>
+  </div>
+  <table class="task-table">
+    <thead><tr><th>ID</th><th><span class="t-en">Initiative</span><span class="t-es">Iniciativa</span></th><th class="th-sort" onclick="sortPhase(this,'impact')" data-sort="impact"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="sort-icon">↕</span></th><th class="th-sort" onclick="sortPhase(this,'effort')" data-sort="effort"><span class="t-en">Effort</span><span class="t-es">Esfuerzo</span><span class="sort-icon">↕</span></th><th><span class="t-en">Owner</span><span class="t-es">Responsable</span></th><th><span class="t-en">Done</span><span class="t-es">Hecho</span></th></tr></thead>
+        <tbody>
+      <tr id="task-O1" class="task-row"><td>O1</td><td class="td-initiative"><span class="t-en">Content rebuild: home insurance checklist — pos 29 (needs major work) · 1,399 impr <span class="qw-badge">⚡ QW</span></span><span class="t-es">Reconstrucción contenido: home insurance checklist — pos 29 · 1,399 impr <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">At pos 29 with 1,399 impressions (USA 90d). Needs significant content rebuild. Add structured answer in first 300 words, restructure with keyword-rich H2s, add steps/checklist format.</span><span class="t-es">En pos 29 con 1,399 impresiones (USA 90d). Requiere reconstrucción de contenido. Agregar respuesta estructurada en las primeras 300 palabras y restructurar con H2s ricos en keyword.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-s">S·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O1')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O1','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O1','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O1','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O2" class="task-row"><td>O2</td><td class="td-initiative"><span class="t-en">Striking-distance: brc audit checklist — pos 10.2 · 127 impr (USA 90d) → featured snippet <span class="qw-badge">⚡ QW</span></span><span class="t-es">Striking-distance: checklist audit BRC — pos 10.2 · 127 impr (USA 90d) → featured snippet <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">At pos 10.2 (USA 90d), a featured snippet is achievable. Restructure the checklist as a numbered list in the first 300 words. Add a "What is a BRC audit?" answer block of 40–50 words.</span><span class="t-es">En pos 10.2 (USA 90d), un featured snippet es alcanzable. Reestructurar el checklist como lista numerada en las primeras 300 palabras. Agregar bloque "What is a BRC audit?" de 40–50 palabras.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O2')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O2','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O2','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O2','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O3" class="task-row"><td>O3</td><td class="td-initiative"><span class="t-en">Striking-distance: apartment inspection checklist cluster — pos 12–16 · 250 impr <span class="qw-badge">⚡ QW</span></span><span class="t-es">Cluster checklist apartamentos — pos 12–16 · 250 impr <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">3 queries ("apartment inspection checklist", "annual apartment inspection", "apartment annual inspection checklist") all pos 12–16, combined ~250 impressions. One content pass covers all three.</span><span class="t-es">3 queries en pos 12–16, ~250 impresiones combinadas. Un pase de contenido cubre las tres.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O3')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O3','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O4" class="task-row"><td>O4</td><td class="td-initiative"><span class="t-en">Striking-distance: homeowners insurance inspection checklist — pos 11 · 429 impr <span class="qw-badge">⚡ QW</span></span><span class="t-es">Checklist inspección seguro de hogar — pos 11 · 429 impr <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Highest-impression striking-distance page USA (90d). At pos 11 — one optimization push gets to page 1. Add structured answer block + checklist in first 300 words.</span><span class="t-es">Página de mayor striking-distance por impresiones USA (90d). En pos 11 — una optimización la lleva a página 1. Agregar bloque de respuesta + checklist en las primeras 300 palabras.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-s">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O4')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O4','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O4','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O4','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O5" class="task-row"><td>O5</td><td class="td-initiative"><span class="t-en">Content rebuild: oil-and-gas page — pos 22 · 1,765 impr (USA 90d) <span class="qw-badge">⚡ QW</span></span><span class="t-es">Reconstrucción contenido: página oil-and-gas — pos 22 · 1,765 impr (USA 90d) <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Page now at pos 22 with 1,765 impressions (USA 90d) — page 2+. Expand body with specific oil-and-gas use cases, add FAQ with long-tail queries. H1 confirmed present via SuperTemplate.</span><span class="t-es">Página en pos 22 con 1,765 impresiones (USA 90d). Expandir cuerpo con casos de uso específicos de oil-and-gas, agregar FAQ con queries long-tail. H1 confirmado presente via SuperTemplate.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">M·3–4h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O5')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O5','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O5','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O5','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O6" class="task-row"><td>O6</td><td class="td-initiative"><span class="t-en">Schema: SoftwareApplication + AggregateOffer ✓ Verify it is injected on pricing page</span><span class="t-es">Schema: SoftwareApplication + AggregateOffer ✓ Verificar que se inyecta en la página de pricing</span><div class="task-desc"><span class="t-en">SoftwareApplication + AggregateOffer already exists in lib/schema.ts. Verify it is imported and injected in pricing/page.tsx as a script tag. Check with Google Rich Results Test.</span><span class="t-es">SoftwareApplication + AggregateOffer ya existe en lib/schema.ts. Verificar que se importa y se inyecta en pricing/page.tsx. Confirmar con Google Rich Results Test.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-s">S·2–3h</td><td class="owner-lau-abe">Lau / Abe</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O6')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O6','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O6','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O6','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O7" class="task-row"><td>O7</td><td class="td-initiative"><span class="t-en">Keyword remapping from fresh GSC — cannibalization + page-1 gaps</span><span class="t-es">Remapeo de keywords desde GSC fresco — canibalización + gaps de página 1</span><div class="task-desc"><span class="t-en">Pull post-launch GSC data. Build a page→keyword map. Flag: pages competing for the same keyword (cannibalization) and pages with high impressions but no page-1 ranking.</span><span class="t-es">Traer datos de GSC post-lanzamiento. Construir mapa página→keyword. Detectar: páginas que compiten por la misma keyword (canibalización) y páginas con impresiones pero sin ranking en página 1.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">S·2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O7')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O7','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O7','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O7','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O9" class="task-row"><td>O9</td><td class="td-initiative"><span class="t-en">Blog post title + meta: striking-distance queries from GSC</span><span class="t-es">Título + meta de posts del blog: queries en striking-distance desde GSC</span><div class="task-desc"><span class="t-en">For blog posts with 200+ impressions but CTR below 1%, rewrite title to match the exact query format. Update meta description with keyword + urgency CTA.</span><span class="t-es">Para posts con 200+ impresiones pero CTR menor al 1%, reescribir el título para coincidir con el formato exacto de la query. Actualizar meta description con keyword + CTA de urgencia.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O9')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O9','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O9','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O9','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O10" class="task-row"><td>O10</td><td class="td-initiative"><span class="t-en">Internal linking sprint: hub→cluster, industry→compare, blog→industry</span><span class="t-es">Sprint de linking interno: hub→cluster, industria→comparativa, blog→industria</span><div class="task-desc"><span class="t-en">Add: hub→every industry page (anchor=keyword), each industry page→related compare page, each blog post→2 relevant industry pages. Map the full link graph first.</span><span class="t-es">Agregar: hub→cada página de industria (anchor=keyword), cada industria→página comparativa, cada post del blog→2 páginas de industria relevantes. Mapear el grafo de links primero.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">M·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O10')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O10','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O10','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O10','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O11" class="task-row"><td>O11</td><td class="td-initiative"><span class="t-en">Programmatic: map 17 SuperTemplate pages → identify 20–40 new industry/use-case gaps</span><span class="t-es">Programático: mapear 17 páginas SuperTemplate → identificar 20–40 gaps de industria</span><div class="task-desc"><span class="t-en">VLX has 17 industry template pages. Pull keyword demand for all inspection-related industries. Flag gaps: industries with 500+ monthly searches where VLX has no dedicated page.</span><span class="t-es">VLX tiene 17 páginas de plantilla de industria. Traer demanda de keywords para industrias relacionadas con inspección. Marcar gaps: industrias con 500+ búsquedas donde VLX no tiene página.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">M·3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O11')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O11','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O11','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O11','Abe')">Abe</button></div></td></tr>
+      <tr id="task-O12" class="task-row"><td>O12</td><td class="td-initiative"><span class="t-en">Listicle "Best Digital Inspection Software 2026" — 8,000+ words, VLX-published</span><span class="t-es">Listicle "Best Digital Inspection Software 2026" — 8,000+ palabras, publicado en VLX</span><div class="task-desc"><span class="t-en">Write a comprehensive listicle on VLX's own blog. The entire top-10 SERP for this query is 8,000–10,000 word listicles. VLX must publish one to appear in results AND to be cited by AI models.</span><span class="t-es">Escribir un listicle completo en el blog de VLX. Todo el top-10 de SERP para esta query son listicles de 8,000–10,000 palabras. VLX debe publicar uno para aparecer en resultados Y ser citado por modelos de IA.</span></div></td><td class="td-impact time-mes1"><span class="t-en">P3</span><span class="t-es">P3</span></td><td class="td-effort effort-m">M·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('O12')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('O12','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('O12','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('O12','Abe')">Abe</button></div></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SLIDE 7 — GROWTH & AI ═══ -->
+<div class="slide slide-phase" id="slide-phase3">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="phase-header">
+    <div class="ph-left">
+      <div class="overline"><span class="t-en">Phase 3</span><span class="t-es">Fase 3</span></div>
+      <h2><span class="t-en">Growth &amp; AI Visibility · Day 60–90</span><span class="t-es">Crecimiento &amp; Visibilidad en IA · Día 60–90</span></h2>
+      <div class="ph-sub"><span class="t-en">Expand clusters. Build AI citation presence across 5 platforms. Full competitive audit.</span><span class="t-es">Expandir clusters. Construir presencia en IA en 5 plataformas. Auditoría competitiva completa.</span></div>
+    </div>
+    <div class="phase-badge">
+      <div class="pb-label"><span class="t-en">Lau effort</span><span class="t-es">Esfuerzo Lau</span></div>
+      <div class="pb-value">~28–38h</div>
+      <div class="progress-counter"><span class="done-count">2</span>/<span class="total-count">8</span> <span class="t-en">done</span><span class="t-es">hechos</span></div>
+    </div>
+  </div>
+  <table class="task-table">
+    <thead><tr><th>ID</th><th><span class="t-en">Initiative</span><span class="t-es">Iniciativa</span></th><th class="th-sort" onclick="sortPhase(this,'impact')" data-sort="impact"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="sort-icon">↕</span></th><th class="th-sort" onclick="sortPhase(this,'effort')" data-sort="effort"><span class="t-en">Effort</span><span class="t-es">Esfuerzo</span><span class="sort-icon">↕</span></th><th><span class="t-en">Owner</span><span class="t-es">Responsable</span></th><th><span class="t-en">Done</span><span class="t-es">Hecho</span></th></tr></thead>
+        <tbody>
+      <tr id="task-G1" class="task-row"><td>G1</td><td class="td-initiative"><span class="t-en">Create 3–5 comparison pages based on G7/G8 competitive audit findings <span class="qw-badge">⚡ QW</span></span><span class="t-es">Crear 3–5 páginas comparativas basadas en auditoría competitiva G7/G8 <span class="qw-badge">⚡ QW</span></span><div class="task-desc"><span class="t-en">Based on G7+G8 gap analysis, build comparison landing pages (e.g. VLX vs SafetyCulture, VLX vs GoAudits). Target keywords with search intent found in the competitor audit.</span><span class="t-es">Con base en análisis G7+G8, crear páginas de aterrizaje comparativas (ej. VLX vs SafetyCulture, VLX vs GoAudits). Usar keywords con intención de búsqueda de la auditoría competitiva.</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">M·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G1')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G1','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G1','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G1','Abe')">Abe</button></div></td></tr>
+      <tr id="task-G2" class="task-row"><td>G2</td><td class="td-initiative"><span class="t-en">GEO: optimize hub + about copy for AI citation patterns (E-E-A-T proof points, stats, certifications)</span><span class="t-es">GEO: optimizar copy del hub + about para patrones de citación por IA (E-E-A-T, estadísticas, certificaciones)</span><div class="task-desc"><span class="t-en">Rewrite hub intro and about page to include: specific stat ("10,000+ inspections daily"), certifications (SOC 2 Type II), named features (KYPiT, CountIt), customer types. AI models cite specific claims, not generic copy.</span><span class="t-es">Reescribir intro del hub y página about para incluir: estadística específica ("10,000+ inspecciones diarias"), certificaciones (SOC 2 Tipo II), features con nombre (KYPiT, CountIt), tipos de clientes.</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">S·2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G2')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G2','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G2','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G2','Abe')">Abe</button></div></td></tr>
+      <tr id="task-G3" class="task-row"><td>G3</td><td class="td-initiative"><span class="t-en">FAQ/AEO: identify question queries in GSC → optimize answers + schema on hub + industry pages</span><span class="t-es">FAQ/AEO: identificar queries de pregunta en GSC → optimizar respuestas + schema en hub e industria</span><div class="task-desc"><span class="t-en">Filter GSC for queries starting with "how to", "what is", "best", "can". Add FAQ sections with 40–50 word direct answers + FAQPage schema. Feeds Google's PAA and AI answer boxes.</span><span class="t-es">Filtrar GSC por queries "how to", "what is", "best", "can". Agregar secciones FAQ con respuestas directas de 40–50 palabras + schema FAQPage. Alimenta los PAA de Google y las cajas de respuesta de IA.</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">S·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G3')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G3','Abe')">Abe</button></div></td></tr>
+      <tr id="task-G4" class="task-row"><td>G4</td><td class="td-initiative"><span class="t-en">Competitive audit: 2 direct organic competitors — 5-dimension gap matrix</span><span class="t-es">Auditoría competitiva: 2 competidores orgánicos directos — matriz 5 dimensiones</span><div class="task-desc"><span class="t-en">Audit both competitors across 5 dimensions: architecture (URL structure, depth), content (hub/blog quality), schema (types used), authority (DR, backlinks), AI presence (are they cited?). Build a comparison table.</span><span class="t-es">Auditar ambos competidores en 5 dimensiones: arquitectura (URLs, profundidad), contenido (hub/blog), schema (tipos usados), autoridad (DR, backlinks), presencia en IA (¿los cita la IA?). Construir tabla comparativa.</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">M·2–3h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G4')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G4','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G4','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G4','Abe')">Abe</button></div></td></tr>
+      <tr id="task-G5" class="task-row"><td>G5</td><td class="td-initiative"><span class="t-en">Competitive audit: 3 alternative competitors — gaps + plan 5 comparison pages</span><span class="t-es">Auditoría competitiva: 3 competidores alternativos — gaps + 5 páginas comparativas</span><div class="task-desc"><span class="t-en">Focus on keyword gaps: terms Jotform/GoCanvas rank for (pos 1–20) that VLX doesn't target. Identify 3–5 viable compare page opportunities (e.g. "VLX vs Jotform for inspections").</span><span class="t-es">Enfocarse en gaps de keywords: términos donde Jotform/GoCanvas rankean (pos 1–20) que VLX no apunta. Identificar 3–5 oportunidades de páginas comparativas (ej. "VLX vs Jotform for inspections").</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">M·2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G5')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G5','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G5','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G5','Abe')">Abe</button></div></td></tr>
+      <tr id="task-G6" class="task-row"><td>G6</td><td class="td-initiative"><span class="t-en">Benchmark: VLX vs competitors for 50 target keywords — track recovery trajectory</span><span class="t-es">Benchmark: VLX vs competidores para 50 keywords objetivo — seguir trayectoria de recuperación</span><div class="task-desc"><span class="t-en">Build a tracking sheet with 50 target keywords. Record starting positions for VLX vs 5 competidores orgánicos. Update bi-weekly. This is the recovery dashboard showing if SEO work is moving the needle.</span><span class="t-es">Construir hoja de seguimiento con 50 keywords objetivo. Registrar posiciones iniciales para VLX vs 5 competidores orgánicos. Actualizar quincenal. Es el dashboard que muestra si el SEO está funcionando.</span></div></td><td class="td-impact time-mes2"><span class="t-en">P4</span><span class="t-es">P4</span></td><td class="td-effort effort-m">S·1–2h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('G6')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('G6','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('G6','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('G6','Abe')">Abe</button></div></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ PHASE 4 — GROWTH BEYOND 90 DAYS ═══ -->
+<div class="slide slide-phase" id="slide-phase4">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="phase-header">
+    <div class="ph-left">
+      <div class="overline"><span class="t-en">Phase 4+</span><span class="t-es">Fase 4+</span></div>
+      <h2><span class="t-en">Growth Beyond 90 Days</span><span class="t-es">Crecimiento Más Allá de 90 Días</span></h2>
+      <div class="ph-sub"><span class="t-en">ASO, local SEO, competitive content gaps, programmatic expansion. Ongoing — indefinite engagement.</span><span class="t-es">ASO, SEO local, brechas de contenido competitivo, expansión programática. Contrato indefinido.</span></div>
+    </div>
+    <div class="phase-badge">
+      <div class="pb-label"><span class="t-en">Lau effort</span><span class="t-es">Esfuerzo Lau</span></div>
+      <div class="pb-value"><span class="t-en">P5</span><span class="t-es">P5</span></div>
+      <div class="progress-counter"><span class="done-count">0</span>/<span class="total-count">6</span> <span class="t-en">done</span><span class="t-es">hechos</span></div>
+    </div>
+  </div>
+  <table class="task-table">
+    <thead><tr><th>ID</th><th><span class="t-en">Initiative</span><span class="t-es">Iniciativa</span></th><th class="th-sort" onclick="sortPhase(this,'impact')" data-sort="impact"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="sort-icon">↕</span></th><th class="th-sort" onclick="sortPhase(this,'effort')" data-sort="effort"><span class="t-en">Effort</span><span class="t-es">Esfuerzo</span><span class="sort-icon">↕</span></th><th><span class="t-en">Owner</span><span class="t-es">Responsable</span></th><th><span class="t-en">Done</span><span class="t-es">Hecho</span></th></tr></thead>
+    <tbody>
+      <tr id="task-P1" class="task-row"><td>P1</td><td class="td-initiative"><span class="t-en">Competitive content gaps: pages for every keyword competitors rank for that VLX doesn't <span class="qw-badge">⚡</span></span><span class="t-es">Brechas de contenido: páginas para keywords de competidores donde VLX no rankea <span class="qw-badge">⚡</span></span><div class="task-desc"><span class="t-en">8 competitive wave analyses already exist. Extract top keyword gaps, prioritize by volume, build rolling content calendar. Ongoing as competitors evolve.</span><span class="t-es">8 análisis wave ya existen. Extraer gaps principales, priorizar por volumen, construir calendario de contenido. Continuo.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-m">M·ongoing</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P1')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P1','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P1','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P1','Abe')">Abe</button></div></td></tr>
+      <tr id="task-P2" class="task-row"><td>P2</td><td class="td-initiative"><span class="t-en">Brand comparison pages: VLX vs top 5 organic competitors</span><span class="t-es">Páginas comparativas: VLX vs top 5 competidores orgánicos</span><div class="task-desc"><span class="t-en">5 dedicated comparison landing pages capturing high-intent "VLX vs [competitor]" searches. Built from G7/G8 audit data + wave analyses.</span><span class="t-es">5 páginas de aterrizaje comparativas para búsquedas "VLX vs [competidor]". Basadas en datos de G7/G8 + análisis wave.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-m">M·3–4h</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P2')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P2','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P2','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P2','Abe')">Abe</button></div></td></tr>
+      <tr id="task-P3" class="task-row"><td>P3</td><td class="td-initiative"><span class="t-en">ASO deep: A/B test screenshots, title variants, review response strategy</span><span class="t-es">ASO profundo: A/B de capturas, variantes de título, gestión de reseñas</span><div class="task-desc"><span class="t-en">After G0 baseline ASO: iterative A/B testing in App Store Connect and Play Console. Monitor impressions → installs conversion rate.</span><span class="t-es">Después del ASO base G0: A/B iterativo en App Store Connect y Play Console. Monitorear tasa impresiones → instalaciones.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-s">S·ongoing</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P3')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P3','Abe')">Abe</button></div></td></tr>
+      <tr id="task-P4" class="task-row"><td>P4</td><td class="td-initiative"><span class="t-en">Local SEO expansion: citations, reviews, local content per market</span><span class="t-es">SEO local expandido: citas, reseñas, contenido local por mercado</span><div class="task-desc"><span class="t-en">After G0b GBP audit: build citations in industry directories, develop review acquisition strategy, create location-specific content pages for target markets.</span><span class="t-es">Después del audit GBP G0b: citas en directorios de industria, estrategia de reseñas, páginas de contenido por mercado objetivo.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-m">M·ongoing</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P4')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P4','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P4','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P4','Abe')">Abe</button></div></td></tr>
+      <tr id="task-P5" class="task-row"><td>P5</td><td class="td-initiative"><span class="t-en">Programmatic: 20–40 new industry pages from keyword gap + competitive data</span><span class="t-es">Programático: 20–40 páginas nuevas de industria desde gaps + datos competitivos</span><div class="task-desc"><span class="t-en">Combine O16 gap mapping + competitive wave data. Build new industry/use-case pages using existing SuperTemplate infrastructure. Ongoing quarterly expansion.</span><span class="t-es">Combinar mapeo O16 + datos wave. Crear páginas usando infraestructura SuperTemplate existente. Expansión trimestral continua.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-m">M·ongoing</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P5')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P5','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P5','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P5','Abe')">Abe</button></div></td></tr>
+      <tr id="task-P6" class="task-row"><td>P6</td><td class="td-initiative"><span class="t-en">Weekly GSC monitoring via Claude MCP — traffic recovery tracking</span><span class="t-es">Monitoreo GSC semanal via Claude MCP — seguimiento de recuperación de tráfico</span><div class="task-desc"><span class="t-en">Claude pulls fresh GSC data every session. Tracks clicks, positions, new keywords, regressions. Monthly report to client automatically generated.</span><span class="t-es">Claude jala datos GSC frescos en cada sesión. Seguimiento de clics, posiciones, keywords nuevas, regresiones. Reporte mensual generado automáticamente.</span></div></td><td class="td-impact time-mes3"><span class="t-en">P5</span><span class="t-es">P5</span></td><td class="td-effort effort-xs">XS·ongoing</td><td class="owner-lau">Lau</td><td class="td-controls"><button class="done-btn" onclick="toggleDone('P6')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('P6','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('P6','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('P6','Abe')">Abe</button></div></td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- ═══ SLIDE 8 — HOW WE WORK ═══ -->
+<div class="slide slide-capacity">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div class="capacity-left">
+    <div>
+      <div class="overline"><span class="t-en">Capacity &amp; Approach</span><span class="t-es">Capacidad &amp; Enfoque</span></div>
+      <h2><span class="t-en">How We Work</span><span class="t-es">Cómo Trabajamos</span></h2>
+      <div style="font-size:14px;color:#64748B;margin-top:8px"><span class="t-en">Part-time SEO with AI assistance. Low effort + high impact first — always.</span><span class="t-es">SEO de medio tiempo con asistencia de IA. Bajo esfuerzo + alto impacto primero — siempre.</span></div>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-item"><div class="ci-label">SEO Engagement</div><div class="ci-value"><span class="t-en">Part-time</span><span class="t-es">Medio tiempo</span></div><div class="ci-sub"><span class="t-en">Dedicated sprint model for VLX</span><span class="t-es">Modelo sprint dedicado a VLX</span></div></div>
+      <div class="cap-item"><div class="ci-label">AI Assistance</div><div class="ci-value"><span class="t-en">Active</span><span class="t-es">Activa</span></div><div class="ci-sub"><span class="t-en">Content · schema · analysis</span><span class="t-es">Contenido · schema · análisis</span></div></div>
+      <div class="cap-item"><div class="ci-label">Effort scale</div><div class="ci-value" style="font-size:14px"><span class="t-en">XS ≤1h · S 1–3h · M 3–8h · L 8h+</span><span class="t-es">XS ≤1h · S 1–3h · M 3–8h · L 8h+</span></div><div class="ci-sub"><span class="t-en">Estimates include AI assistance</span><span class="t-es">Estimados incluyen asistencia de IA</span></div></div>
+      <div class="cap-item" style="border-color:rgba(255,87,34,.3)"><div class="ci-label"><span class="t-en">Who does the work</span><span class="t-es">Quién hace el trabajo</span></div><div class="ci-value" style="color:var(--brand);font-size:15px">Lau · Hans · Abe</div><div class="ci-sub"><span class="t-en">Code tasks: any of the three</span><span class="t-es">Tareas de código: cualquiera de los tres</span></div></div>
+    </div>
+  </div>
+  <div class="capacity-right">
+    <div class="priority-row"><div class="priority-icon">⚡</div><div class="pr-text"><strong><span class="t-en">Quick wins first</span><span class="t-es">Quick wins primero</span></strong> <span class="t-en">— high impact + XS/S effort surface at top of each phase, integrated in the roadmap</span><span class="t-es">— alto impacto + esfuerzo XS/S al inicio de cada fase, integrado en el roadmap</span></div></div>
+    <div class="priority-row"><div class="priority-icon">🤖</div><div class="pr-text"><strong><span class="t-en">AI reduces effort</span><span class="t-es">IA reduce el esfuerzo</span></strong> <span class="t-en">on meta descriptions, schema JSON-LD, content briefs, and keyword clustering</span><span class="t-es">en meta descriptions, schema JSON-LD, briefs de contenido y clustering de keywords</span></div></div>
+    <div class="priority-row"><div class="priority-icon">👥</div><div class="pr-text"><strong><span class="t-en">Flexible ownership</span><span class="t-es">Responsabilidad flexible</span></strong> <span class="t-en">— code changes can be done by Lau, Hans, or Abe depending on availability</span><span class="t-es">— los cambios de código los puede hacer Lau, Hans o Abe según disponibilidad</span></div></div>
+    <div class="priority-row"><div class="priority-icon">📊</div><div class="pr-text"><strong><span class="t-en">Data first</span><span class="t-es">Datos primero</span></strong> <span class="t-en">— no moves without fresh GSC baseline established on launch day</span><span class="t-es">— ninguna acción sin baseline fresco de GSC establecido el día del lanzamiento</span></div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8 — KPIs ═══ -->
+<div class="slide slide-kpis">
+  <div class="accent-bar"></div><div class="grid-bg"></div>
+  <div>
+    <div class="overline"><span class="t-en">Success Metrics</span><span class="t-es">Métricas de Éxito</span></div>
+    <h2><span class="t-en">KPIs · 30 / 60 / 90 Days</span><span class="t-es">KPIs de Recuperación · 30 / 60 / 90 Días</span></h2>
+  </div>
+  <table class="kpi-table">
+    <thead><tr><th><span class="t-en">Metric</span><span class="t-es">Métrica</span></th><th><span class="t-en">Baseline (May 2026)</span><span class="t-es">Baseline (May 2026)</span></th><th class="target"><span class="t-en">30d Target</span><span class="t-es">Meta 30d</span</th><th class="target"><span class="t-en">60d Target</span><span class="t-es">Meta 60d</span</th><th class="target"><span class="t-en">90d Target</span><span class="t-es">Meta 90d</span</th></tr></thead>
+    <tbody>
+      <tr><td class="mn"><span class="t-en">"digital inspection software" position</span><span class="t-es">Posición "digital inspection software"</span></td><td class="bl">11.9 (volatile)</td><td class="t30">≤ 10</td><td class="t60">8–10</td><td class="t90">6–8</td></tr>
+      <tr><td class="mn"><span class="t-en">Total organic clicks (28d)</span><span class="t-es">Clics orgánicos totales (28d)</span></td><td class="bl">91 (USA)</td><td class="t30">120+</td><td class="t60">550+</td><td class="t90">650+</td></tr>
+      <tr><td class="mn"><span class="t-en">Brand CTR ("vlx" queries) ℹ</span><span class="t-es">CTR de marca (queries "vlx")</span></td><td class="bl">0.67%</td><td class="t30">0.8%</td><td class="t60">1%</td><td class="t90">1.2%+</td></tr>
+      <tr><td class="mn"><span class="t-en">Checklist posts with clicks (of 12)</span><span class="t-es">Posts checklist con clics (de 12)</span></td><td class="bl">2 / 12</td><td class="t30"><span class="t-en">recover to 6</span><span class="t-es">recuperar a 6</span></td><td class="t60">8 / 12</td><td class="t90">10–11</td></tr>
+      <tr><td class="mn"><span class="t-en">Domain Rating (Ahrefs)</span><span class="t-es">Domain Rating (Ahrefs)</span></td><td class="bl">11–25</td><td class="t30">25+</td><td class="t60">28+</td><td class="t90">32+</td></tr>
+      <tr><td class="mn"><span class="t-en">AI mentions (5 platforms combined)</span><span class="t-es">Menciones en IA (5 plataformas)</span></td><td class="bl">5–43 / month</td><td class="t30">30+/month</td><td class="t60">50+/month</td><td class="t90">80+/month</td></tr>
+      <tr><td class="mn"><span class="t-en">GSC Coverage errors</span><span class="t-es">Errores de cobertura GSC</span></td><td class="bl"><span class="t-en">TBD post-launch</span><span class="t-es">Por definir post-lanzamiento</span></td><td class="t30">&lt; 20</td><td class="t60">&lt; 10</td><td class="t90">&lt; 5</td></tr>
+      <tr><td class="mn"><span class="t-en">New keywords/month (content health)</span><span class="t-es">Keywords nuevas/mes (salud del contenido)</span></td><td class="bl">1,000+ (May 2026)</td><td class="t30"><span class="t-en">track baseline</span><span class="t-es">medir baseline</span></td><td class="t60">400+/month</td><td class="t90"><span class="t-en">500+ steady</span><span class="t-es">500+ estable</span></td></tr>
+      <tr><td class="mn"><span class="t-en">BWT Health Score</span><span class="t-es">Score de Salud BWT</span></td><td class="bl">28–91 (volatile)</td><td class="t30"><span class="t-en">stabilizing</span><span class="t-es">estabilizando</span></td><td class="t60">80+</td><td class="t90"><span class="t-en">80+ consistent</span><span class="t-es">80+ consistente</span></td></tr>
+      <tr><td class="mn"><span class="t-en">Non-brand impressions (GSC 28d)</span><span class="t-es">Impresiones sin marca (GSC 28d)</span></td><td class="bl">peak ~130k (Aug 2025, adj.)</td><td class="t30"><span class="t-en"><span class="t-en">live data needed (impressions may reflect pre-fix inflation)</span><span class="t-es">datos live requeridos (impresiones pueden reflejar inflación pre-corrección)</span></span><span class="t-es">datos live requeridos</span></td><td class="t60"><span class="t-en">recovering</span><span class="t-es">recuperando</span></td><td class="t90"><span class="t-en">approaching Aug 2025 peak</span><span class="t-es">acercándose al pico de Ago 2025</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── Add Task Modal ── -->
+<div class="add-modal-overlay" id="add-modal-overlay">
+  <div class="add-modal">
+    <h3><span class="t-en">Add Urgent Task</span><span class="t-es">Agregar Tarea Urgente</span></h3>
+    <input id="atm-desc" placeholder="Task description / Descripción de la tarea">
+    <div class="add-modal-row">
+      <select id="atm-phase">
+        <option value="slide-phase0">Phase 0 — Launch Week</option>
+        <option value="slide-phase1">Phase 1 — Stabilization</option>
+        <option value="slide-phase2">Phase 2 — Optimization</option>
+        <option value="slide-phase3">Phase 3 — Growth &amp; AI</option>
+      </select>
+      <select id="atm-impact">
+        <option value="critical">CRITICAL</option>
+        <option value="high">HIGH</option>
+        <option value="medium">MEDIUM</option>
+      </select>
+      <select id="atm-effort">
+        <option value="xs">XS ≤1h</option>
+        <option value="s">S 1–3h</option>
+        <option value="m">M 3–8h</option>
+        <option value="l">L 8h+</option>
+      </select>
+    </div>
+    <div class="add-modal-btns">
+      <button class="ctrl-btn" onclick="closeAddModal()"><span class="t-en">Cancel</span><span class="t-es">Cancelar</span></button>
+      <button class="ctrl-btn active" onclick="saveCustomTask()"><span class="t-en">Save</span><span class="t-es">Guardar</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'vlx-plan-2026';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+}
+function save(s) { localStorage.setItem(KEY, JSON.stringify(s)); }
+
+function toggleDone(id) {
+  const s = load();
+  if (!s[id]) s[id] = {};
+  s[id].done = !s[id].done;
+  save(s);
+  applyRow(id, s[id]);
+  refreshCounter(document.getElementById('task-' + id));
+}
+
+function setOwner(id, owner) {
+  const s = load();
+  if (!s[id]) s[id] = {};
+  s[id].owner = s[id].owner === owner ? null : owner;
+  save(s);
+  applyRow(id, s[id]);
+}
+
+function applyRow(id, state) {
+  const el = document.getElementById('task-' + id);
+  if (!el) return;
+  const done = !!state.done;
+  el.classList.toggle('done', done);
+  // done button (table rows use .done-btn, blocker cards use .b-done-btn)
+  const btn = el.querySelector('.done-btn') || el.querySelector('.b-done-btn');
+  if (btn) { btn.textContent = done ? '✓' : '○'; btn.classList.toggle('is-done', done); }
+  // owner pills
+  el.querySelectorAll('.owner-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.owner === state.owner);
+  });
+}
+
+function refreshCounter(el) {
+  if (!el) return;
+  const slide = el.closest('.slide');
+  if (!slide) return;
+  // blockers counter (special element)
+  const bc = slide.querySelector('#blockers-counter');
+  if (bc) {
+    const total = slide.querySelectorAll('.task-row').length;
+    const done  = slide.querySelectorAll('.task-row.done').length;
+    bc.querySelector('.done-count').textContent = done;
+    bc.querySelector('.total-count').textContent = total;
+    return;
+  }
+  // phase badge counter
+  const counter = slide.querySelector('.progress-counter');
+  if (!counter) return;
+  const total = slide.querySelectorAll('.task-row').length;
+  const done  = slide.querySelectorAll('.task-row.done').length;
+  counter.querySelector('.done-count').textContent = done;
+  counter.querySelector('.total-count').textContent = total;
+}
+
+// ── Lang / Details toggles ──
+function updateTooltips(isEs) {
+  document.querySelectorAll('[data-tip-en]').forEach(el => {
+    el.setAttribute('data-tip', isEs ? (el.getAttribute('data-tip-es')||'') : (el.getAttribute('data-tip-en')||''));
+  });
+}
+function toggleLang() {
+  const isEs = document.body.classList.toggle('es');
+  document.getElementById('lang-btn').classList.toggle('active', isEs);
+  localStorage.setItem('vlx-lang', isEs ? 'es' : 'en');
+  updateTooltips(isEs);
+}
+function toggleDetails() {
+  const show = document.body.classList.toggle('show-details');
+  document.getElementById('details-btn').classList.toggle('active', show);
+  localStorage.setItem('vlx-details', show ? '1' : '0');
+}
+
+// ── Sort ──
+function sortPhase(th, field) {
+  const slide = th.closest('.slide');
+  const tbody = slide.querySelector('tbody');
+  const rows = [...tbody.querySelectorAll('tr.task-row:not(.custom-row)')];
+  const ORDER = {
+    impact: {'impact-critical':0,'impact-high':1,'impact-medium':2},
+    effort: {'effort-xs':0,'effort-s':1,'effort-m':2,'effort-l':3}
+  };
+  rows.sort((a,b) => {
+    const cls = (r) => { const c=r.querySelector('.td-'+field); if(!c) return 9; for(const [k,v] of Object.entries(ORDER[field])) if(c.classList.contains(k)) return v; return 9; };
+    return cls(a)-cls(b);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+  tbody.querySelectorAll('.custom-row').forEach(r => tbody.appendChild(r));
+  slide.querySelectorAll('.sort-icon').forEach(ic => ic.textContent='↕');
+  th.querySelector('.sort-icon').textContent='↑';
+}
+
+// ── Add Task ──
+const CKEY = 'vlx-custom-2026';
+function loadCustom() { try { return JSON.parse(localStorage.getItem(CKEY))||[]; } catch { return []; } }
+function saveCustom(arr) { localStorage.setItem(CKEY, JSON.stringify(arr)); }
+
+function openAddModal() { document.getElementById('add-modal-overlay').classList.add('open'); document.getElementById('atm-desc').focus(); }
+function closeAddModal() { document.getElementById('add-modal-overlay').classList.remove('open'); }
+
+function saveCustomTask() {
+  const desc = document.getElementById('atm-desc').value.trim();
+  if (!desc) return;
+  const phase = document.getElementById('atm-phase').value;
+  const impact = document.getElementById('atm-impact').value;
+  const effort = document.getElementById('atm-effort').value;
+  const id = 'c'+ Date.now();
+  const task = { id, desc, phase, impact, effort };
+  const arr = loadCustom(); arr.push(task); saveCustom(arr);
+  renderCustomTask(task);
+  document.getElementById('atm-desc').value='';
+  closeAddModal();
+}
+
+function renderCustomTask(task) {
+  const slide = document.getElementById(task.phase);
+  if (!slide) return;
+  const tbody = slide.querySelector('tbody');
+  const impactClass = 'impact-'+task.impact;
+  const impactLabel = task.impact.toUpperCase();
+  const effortClass = 'effort-'+task.effort;
+  const tr = document.createElement('tr');
+  tr.id = 'task-'+task.id; tr.className='task-row custom-row';
+  tr.innerHTML = `<td><span class="custom-task-id">+</span></td>
+    <td class="td-initiative">${task.desc}<div style="margin-top:4px"><button class="del-btn" onclick="deleteCustomTask('${task.id}')">✕</button></div></td>
+    <td class="td-impact ${impactClass}">${impactLabel}</td>
+    <td class="td-effort ${effortClass}">${task.effort.toUpperCase()}</td>
+    <td>—</td>
+    <td class="td-controls"><button class="done-btn" onclick="toggleDone('${task.id}')">○</button><div class="owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('${task.id}','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('${task.id}','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('${task.id}','Abe')">Abe</button></div></td>`;
+  tbody.appendChild(tr);
+  refreshCounter(tr);
+}
+
+function deleteCustomTask(id) {
+  const arr = loadCustom().filter(t => t.id !== id);
+  saveCustom(arr);
+  const el = document.getElementById('task-'+id);
+  if (el) { refreshCounter(el); el.remove(); }
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => {
+  const s = load();
+  Object.keys(s).forEach(id => applyRow(id, s[id]));
+  document.querySelectorAll('.task-row').forEach(row => refreshCounter(row));
+  // Restore lang + details
+  const isEs = localStorage.getItem('vlx-lang')==='es';
+  if (isEs) { document.body.classList.add('es'); document.getElementById('lang-btn').classList.add('active'); }
+  updateTooltips(isEs);
+  if (localStorage.getItem('vlx-details')==='1') { document.body.classList.add('show-details'); document.getElementById('details-btn').classList.add('active'); }
+  // Render custom tasks
+  loadCustom().forEach(renderCustomTask);
+  // Close modal on overlay click
+  document.getElementById('add-modal-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeAddModal(); });
+  // Init drag-and-drop on all task rows
+  initDrag();
+  initTbodyDrop();
+  initDeps();
+  initCats();
+  initRecurring();
+});
+
+// ── Drag & Drop reorder ──
+const DKEY = 'vlx-order-2026';
+function saveOrder(slideId, ids) { const o=JSON.parse(localStorage.getItem(DKEY)||'{}'); o[slideId]=ids; localStorage.setItem(DKEY,JSON.stringify(o)); }
+function loadOrder() { try { return JSON.parse(localStorage.getItem(DKEY)||'{}'); } catch { return {}; } }
+
+function initDrag() {
+  document.querySelectorAll('.task-table tbody').forEach(tbody => {
+    // Add drag handles
+    tbody.querySelectorAll('tr.task-row').forEach(row => {
+      if (row.querySelector('.drag-handle')) return;
+      const td = row.querySelector('td');
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle'; handle.textContent = '⋮⋮'; handle.title = 'Drag to reorder';
+      td.insertBefore(handle, td.firstChild);
+      makeDraggable(row, tbody);
+    });
+    // Restore saved order
+    const slide = tbody.closest('.slide');
+    if (!slide || !slide.id) return;
+    const saved = loadOrder()[slide.id];
+    if (saved) {
+      saved.forEach(id => { const r=document.getElementById(id); if(r) tbody.appendChild(r); });
+    }
+  });
+}
+
+let dragSrc = null;
+let dragEnabled = false;
+
+// Phase prefix map for auto-rename
+const PHASE_PREFIX = {
+  'slide-phase0':'L','slide-phase1':'S','slide-phase2':'O',
+  'slide-phase3':'G','slide-phase4':'P4'
+};
+
+function getPhasePrefix(slide) {
+  if (!slide || !slide.id) return null;
+  return PHASE_PREFIX[slide.id] || null;
+}
+
+function applyTaskId(row, newId) {
+  const oldId = row.id.replace('task-','');
+  if (newId === oldId) return;
+  row.id = 'task-' + newId;
+  // Update visible ID cell (second child after drag handle)
+  const firstTd = row.querySelector('td');
+  if (firstTd) {
+    const nodes = [...firstTd.childNodes];
+    const textNode = nodes.find(n => n.nodeType === 3 && n.textContent.trim());
+    if (textNode) textNode.textContent = newId;
+  }
+  const doneBtn = row.querySelector('.done-btn, .b-done-btn');
+  if (doneBtn) doneBtn.setAttribute('onclick', `toggleDone('${newId}')`);
+  row.querySelectorAll('.owner-pill').forEach(p => {
+    p.setAttribute('onclick', `setOwner('${newId}','${p.dataset.owner}')`);
+  });
+  const s = load(); if (s[oldId]) { s[newId]=s[oldId]; delete s[oldId]; save(s); }
+}
+
+function renumberPhase(tbody) {
+  const slide = tbody.closest('.slide');
+  const prefix = getPhasePrefix(slide);
+  if (!prefix) return;
+  const rows = [...tbody.querySelectorAll('tr.task-row')].filter(r => !r.id.startsWith('task-c'));
+  rows.forEach((row, i) => applyTaskId(row, prefix + (i + 1)));
+}
+
+function renameTaskId(row, newPrefix) {
+  const oldId = row.id.replace('task-','');
+  const num = oldId.replace(/^[A-Za-z]+(\d+)$/, '$1');
+  if (!num || isNaN(num)) return;
+  const newId = newPrefix + num;
+  if (newId === oldId) return;
+  row.id = 'task-' + newId;
+  const firstTd = row.querySelector('td');
+  if (firstTd) {
+    const txt = firstTd.childNodes[0];
+    if (txt && txt.nodeType === 3) txt.textContent = newId;
+  }
+  const doneBtn = row.querySelector('.done-btn, .b-done-btn');
+  if (doneBtn) doneBtn.setAttribute('onclick', `toggleDone('${newId}')`);
+  // Update owner pills
+  row.querySelectorAll('.owner-pill').forEach(p => {
+    const owner = p.dataset.owner;
+    p.setAttribute('onclick', `setOwner('${newId}','${owner}')`);
+  });
+  // Transfer localStorage state
+  const s = load(); if (s[oldId]) { s[newId]=s[oldId]; delete s[oldId]; save(s); }
+}
+
+function makeDraggable(row, tbody) {
+  row.draggable = false;
+  const handle = row.querySelector('.drag-handle');
+  if (handle) {
+    handle.addEventListener('mousedown', () => { dragEnabled=true; row.draggable=true; });
+    handle.addEventListener('mouseup', () => { setTimeout(()=>{ dragEnabled=false; row.draggable=false; }, 100); });
+  }
+  row.addEventListener('dragstart', e => {
+    if (!dragEnabled) { e.preventDefault(); return; }
+    dragSrc=row; row.classList.add('dragging'); e.dataTransfer.effectAllowed='move';
+  });
+  row.addEventListener('dragend', () => {
+    row.classList.remove('dragging'); dragEnabled=false;
+    document.querySelectorAll('.task-row').forEach(r => r.classList.remove('drag-over'));
+    // Renumber ALL phases sequentially after any drag
+    document.querySelectorAll('.slide[id] tbody').forEach(tb => renumberPhase(tb));
+    // Save order for all slides
+    document.querySelectorAll('.slide[id]').forEach(slide => {
+      const tb = slide.querySelector('tbody');
+      if (tb) saveOrder(slide.id, [...tb.querySelectorAll('tr.task-row')].map(r=>r.id));
+    });
+  });
+  // Allow drop on any task row (cross-phase)
+  row.addEventListener('dragover', e => {
+    e.preventDefault(); e.dataTransfer.dropEffect='move';
+    document.querySelectorAll('.task-row').forEach(r => r.classList.remove('drag-over'));
+    row.classList.add('drag-over');
+  });
+  row.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!dragSrc || dragSrc===row) return;
+    const targetTbody = row.closest('tbody');
+    const rows = [...targetTbody.querySelectorAll('tr.task-row')];
+    const ti = rows.indexOf(row);
+    const si = rows.indexOf(dragSrc);
+    if (si === -1) {
+      // Cross-phase: insert before target
+      targetTbody.insertBefore(dragSrc, row);
+      // Re-init drag on moved row with new tbody
+      makeDraggable(dragSrc, targetTbody);
+    } else {
+      targetTbody.insertBefore(dragSrc, si > ti ? row : row.nextSibling);
+    }
+  });
+}
+
+// ── Dependencies ──
+// Keys = task ID fragments (matched by title keyword), Values = array of dep IDs
+// Updated manually when plan changes. IDs reflect current numbering.
+const DEPS = {
+  // Optimization phase — needs fresh post-launch GSC data first
+  'O6': ['L5'],   // keyword remapping → GSC baseline
+  'O7': ['O6'],   // hub expansion → keyword map first
+  'O8': ['O6'],   // blog titles → GSC striking-distance data
+  'O9': ['O7'],   // internal linking → hub content expanded first
+  'O11': ['O6'],  // programmatic mapping → keyword gaps identified
+  // Growth phase — compare pages need competitive audit data
+  'G1': ['G2','G3'],
+  // Phase 4 — programmatic expansion needs O11 gap mapping
+  'P5': ['O11']
+};
+
+// ── Categories ──
+const CAT_COLORS = {'Technical':'#60A5FA','Content':'#4ADE80','Schema':'#A78BFA','Links':'#FB923C','ASO':'#F472B6','Local SEO':'#2DD4BF','AI/GEO':'#22D3EE','CRO':'#FBBF24','Analytics':'#94A3B8','Competitive':'#F87171'};
+const CAT_ES = {'Technical':'Técnico','Content':'Contenido','Schema':'Schema','Links':'Link Building','ASO':'ASO','Local SEO':'SEO Local','AI/GEO':'IA / GEO','CRO':'CRO','Analytics':'Analítica','Competitive':'Competencia'};
+const CATS = {
+  'B1':['Technical'],'B2':['Technical'],'B3':['Technical'],'B4':['Technical'],
+  'B5':['Technical'],'B6':['Technical'],'B7':['Technical'],'B8':['Technical'],
+  'L1':['Technical'],'L2':['Technical'],'L3':['Technical'],'L4':['Technical'],
+  'L5':['Analytics'],'L6':['Analytics','Technical'],'L7':['Technical'],'L8':['Analytics'],'L9':['Analytics','Technical'],
+  'S1':['ASO'],'S2':['Local SEO'],'S3':['CRO','Content'],
+  'S4':['Links'],'S5':['Links','Competitive'],
+  'S6':['AI/GEO','Content'],'S7':['Schema','Technical'],
+  'S8':['AI/GEO'],'S9':['AI/GEO'],
+  'S10':['Links','Technical'],'S11':['Content'],'S12':['Schema','Technical'],
+  'S13':['Schema','Technical'],'S14':['Schema'],'S15':['Technical'],'S16':['Technical'],
+  'O1':['Content'],'O2':['Content'],'O3':['Content'],'O4':['Content'],
+  'O5':['Content','Technical'],'O6':['Analytics'],'O7':['Content','Technical'],
+  'O9':['Technical'],'O10':['Content'],'O11':['Content'],'O12':['Content'],
+  'G1':['Competitive','Content'],'G2':['Competitive','Analytics'],'G3':['Competitive','Analytics'],
+  'G4':['AI/GEO','Content'],'G5':['AI/GEO','Content'],'G6':['Analytics','Competitive'],
+  'P1':['Competitive','Content'],'P2':['Competitive','Content'],
+  'P3':['ASO'],'P4':['Local SEO'],'P5':['Content','Technical'],'P6':['Analytics']
+};
+function initCats() {
+  const isEs = document.body.classList.contains('es');
+  Object.entries(CATS).forEach(([id, cats]) => {
+    const row = document.getElementById('task-' + id);
+    if (!row) return;
+    const initiative = row.querySelector('.td-initiative');
+    if (!initiative || initiative.querySelector('.cat-badge')) return;
+    const catArr = Array.isArray(cats) ? cats : [cats];
+    const firstSpan = initiative.querySelector('.t-en');
+    catArr.forEach(cat => {
+      const label = isEs ? (CAT_ES[cat]||cat) : cat;
+      const col = CAT_COLORS[cat]||'#94A3B8';
+      const badge = document.createElement('span');
+      badge.className = 'cat-badge'; badge.setAttribute('data-cat', cat);
+      badge.style.cssText = `display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;color:${col};background:${col}1a;border:1px solid ${col}33`;
+      badge.textContent = label;
+      if (firstSpan && firstSpan.nextSibling) initiative.insertBefore(badge, firstSpan.nextSibling);
+      else initiative.appendChild(badge);
+    });
+  });
+}
+
+// ── Recurring tasks ──
+const RECURRING = new Set([
+  'L8',       // Monitor GSC Coverage daily
+  'S5',       // Link building outreach (ongoing)
+  'S8',       // AI Overviews test (monthly)
+  'S9',       // AI Mentions baseline (monthly)
+  'O6',       // Keyword remapping (post each GSC export)
+  'G6',       // Benchmark 50 keywords (bi-weekly)
+  'P3',       // ASO deep (iterative A/B)
+  'P4',       // Local SEO expansion (ongoing)
+  'P6'        // Weekly GSC monitoring
+]);
+
+function initRecurring() {
+  const isEs = document.body.classList.contains('es');
+  RECURRING.forEach(id => {
+    const row = document.getElementById('task-' + id);
+    if (!row || row.querySelector('.rec-badge')) return;
+    const initiative = row.querySelector('.td-initiative');
+    if (!initiative) return;
+    const badge = document.createElement('span');
+    badge.className = 'rec-badge';
+    badge.style.cssText = 'display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:middle;color:#C084FC;background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3)';
+    badge.innerHTML = isEs ? '🔄 Recurrente' : '🔄 Recurring';
+    const firstSpan = initiative.querySelector('.t-en');
+    if (firstSpan && firstSpan.nextSibling) initiative.insertBefore(badge, firstSpan.nextSibling);
+    else initiative.appendChild(badge);
+  });
+}
+
+function initDeps() {
+  Object.entries(DEPS).forEach(([taskId, deps]) => {
+    const row = document.getElementById('task-' + taskId);
+    if (!row) return;
+    // Add dep badge (with lock icon) below task title only
+    const initiative = row.querySelector('.td-initiative');
+    if (initiative && !initiative.querySelector('.dep-badge')) {
+      const isEs = document.body.classList.contains('es');
+      const badge = document.createElement('div');
+      badge.className = 'dep-badge';
+      badge.setAttribute('data-dep-tip', (isEs ? 'Requiere completar primero: ' : 'Must complete first: ') + deps.join(', '));
+      badge.innerHTML = '🔒 <span class="dep-label t-en">Requires:</span><span class="dep-label t-es" style="display:none">Requiere:</span> ' +
+        deps.map(d => `<strong>${d}</strong>`).join(', ');
+      initiative.appendChild(badge);
+    }
+  });
+}
+
+function initTbodyDrop() {
+  document.querySelectorAll('.task-table tbody').forEach(tb => {
+    tb.addEventListener('dragover', e => e.preventDefault());
+    tb.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc) return;
+      if (!tb.contains(dragSrc)) {
+        tb.appendChild(dragSrc);
+        makeDraggable(dragSrc, tb);
+      }
+    });
+  });
+}
+</script>
+</body>
+</html>
