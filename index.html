@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VLX — Post-Migration SEO Plan</title>
+<title>VLX — SEO Plan</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -827,7 +828,82 @@ document.addEventListener('DOMContentLoaded', () => {
   initDeps();
   initCats();
   initRecurring();
+  initSupabase();
 });
+
+// ── Supabase sync ──
+const SUPA_URL = 'https://vepnbdqpkfbjqwybaxim.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcG5iZHFwa2ZianF3eWJheGltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMjIyODksImV4cCI6MjA5NTg5ODI4OX0.YBo0D7SOvfJeT5jGLuAqngBTMA8g4flkJICoiPELjDY';
+let supa = null;
+
+async function initSupabase() {
+  try {
+    supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+    await syncStateFromSupabase();
+    console.log('Supabase connected');
+  } catch(e) { console.log('Supabase offline — using localStorage'); }
+}
+
+async function syncStateFromSupabase() {
+  if (!supa) return;
+  const { data } = await supa.from('task_state').select('*');
+  if (!data) return;
+  data.forEach(state => {
+    const row = document.getElementById('task-' + state.task_id);
+    if (!row) return;
+    if (state.is_done) {
+      row.classList.add('done');
+      const btn = row.querySelector('.done-btn,.b-done-btn');
+      if (btn) { btn.textContent='✓'; btn.classList.add('is-done'); }
+    }
+    if (state.owner) {
+      row.querySelectorAll('.owner-pill').forEach(p => p.classList.toggle('active', p.dataset.owner === state.owner));
+    }
+  });
+}
+
+// Override toggleDone to sync with Supabase
+const _toggleDone = toggleDone;
+window.toggleDone = async function(id) {
+  _toggleDone(id);
+  const row = document.getElementById('task-' + id);
+  const isDone = row && row.classList.contains('done');
+  if (supa) await supa.from('task_state').upsert({
+    task_id: id, is_done: isDone,
+    done_at: isDone ? new Date().toISOString() : null,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'task_id' });
+};
+
+// Override setOwner to sync with Supabase
+const _setOwner = setOwner;
+window.setOwner = async function(id, owner) {
+  _setOwner(id, owner);
+  if (supa) await supa.from('task_state').upsert({
+    task_id: id, owner,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'task_id' });
+};
+
+// Add task to Supabase when created via modal
+const _saveCustomTask = saveCustomTask;
+window.saveCustomTask = async function() {
+  _saveCustomTask();
+  const desc = document.getElementById('atm-desc').value.trim();
+  const phase = document.getElementById('atm-phase').value;
+  const impact = document.getElementById('atm-impact').value;
+  const effort = document.getElementById('atm-effort').value;
+  if (desc && supa) {
+    const newId = 'c' + Date.now();
+    await supa.from('tasks').insert({
+      id: newId, phase_id: phase,
+      title_en: desc, title_es: desc,
+      priority: 'P3', effort,
+      is_recurring: false,
+      sort_order: 999
+    });
+  }
+};
 
 // ── Drag & Drop reorder ──
 const DKEY = 'vlx-order-2026';
