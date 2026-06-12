@@ -125,7 +125,7 @@
   <p class="subtitle">Auditoría integral con verificación en código y datos en vivo: SEO Técnico · GSC Live · Contenido · Schema · CWV · AI/GEO · Off-Page · Social Media · GMB · ASO Mobile</p>
   <div class="meta">
     <div class="meta-item"><strong>Fecha:</strong> 2026-06-11</div>
-    <div class="meta-item"><strong>Revisión:</strong> v4.1 (Verificada + Plan SEO por fases — reemplaza v3.0 Master)</div>
+    <div class="meta-item"><strong>Revisión:</strong> v4.2 (Verificada + Plan SEO por fases, quick wins consolidados — reemplaza v3.0 Master)</div>
     <div class="meta-item"><strong>Auditora:</strong> Laura Ceballos — Software Craft CR</div>
     <div class="meta-item"><strong>Rama:</strong> Hans-review (Next.js 15 + Payload CMS) — commit 25cea3f</div>
     <div class="meta-item"><strong>Prompt base:</strong> PROMPT-AUDIT-COMPLETO-VLX.md v2.3/2.4</div>
@@ -1155,7 +1155,7 @@ Sitemap:                       https://vlx.ai/sitemap.xml</div>
   </div>
 
   <div class="card">
-    <p><strong>Cómo leer este plan:</strong> cada tarea tiene ID, prioridad (P1 = crítica, P2 = importante, P3 = deseable), esfuerzo (XS &lt;30m · S 1–3h · M 4–8h) y responsable sugerido (Lau = SEO, Abe = dev, Hans = cliente/negocio). Las tareas <span class="qw-badge">⚡ QW</span> son quick wins — máximo impacto con mínimo esfuerzo — y van <strong>primero dentro de cada fase</strong>. Formato alineado al dashboard del plan estratégico (vlx-seo.github.io/vlx-seo-plan).</p>
+    <p><strong>Cómo leer este plan:</strong> cada tarea tiene ID, prioridad (P1 = crítica, P2 = importante, P3 = deseable), esfuerzo (XS &lt;30m · S 1–3h · M 4–8h) y responsable sugerido (Lau = SEO, Abe = dev, Hans = cliente/negocio). Las tareas <span class="qw-badge">⚡ QW</span> son quick wins — máximo impacto con mínimo esfuerzo — y están <strong>todas consolidadas en la Fase 2, inmediatamente después de la estabilización del lanzamiento</strong> (los QW de la Fase 0 permanecen ahí porque son bloqueantes pre-launch). Los IDs originales se conservan para trazabilidad. Formato alineado al dashboard del plan estratégico (vlx-seo.github.io/vlx-seo-plan).</p>
   </div>
 
   <div class="subsection">
@@ -1189,15 +1189,17 @@ Sitemap:                       https://vlx.ai/sitemap.xml</div>
   </div>
 
   <div class="subsection">
-    <h3>Fase 2 — Semanas 1–2 · Quick Wins Técnicos <span class="phase-meta">esfuerzo ~9–12h · 10 tareas</span></h3>
+    <h3>Fase 2 — Semanas 1–2 · QUICK WINS — Todos Consolidados <span class="phase-meta">esfuerzo ~10–13h · 12 tareas (7 QW + 5 técnicas)</span></h3>
     <table class="findings-table">
       <thead><tr><th>ID</th><th>Iniciativa</th><th>Prioridad</th><th>Esfuerzo</th><th>Responsable</th></tr></thead>
       <tbody>
         <tr><td><strong>C1</strong></td><td>Snippet fix "abl field exam software" — pos 9.44, 112 impr, 0 clicks <span class="qw-badge">⚡ QW</span><br><span style="font-size:11px; color:var(--text-dim)">ICP comercial directo (ABL) en vertical blue-ocean. Title con la keyword exacta + meta con CTA en financial-services.</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-xs">XS·30m</span></td><td><span class="owner-chip">Lau</span></td></tr>
         <tr><td><strong>C2</strong></td><td>Quitar .slice(0,12) del ItemList en blog/page.tsx:99 (C3 del prompt) <span class="qw-badge">⚡ QW</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-xs">XS·15m</span></td><td><span class="owner-chip">Abe</span></td></tr>
         <tr><td><strong>C3</strong></td><td>Snippet fixes striking distance (live): homeowners insurance checklist (10.26/443), multi point inspection (7.15), 5 point inspection car (5.06), annual apartment (8.79) <span class="qw-badge">⚡ QW</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-s">S·2h</span></td><td><span class="owner-chip">Lau</span></td></tr>
+        <tr><td><strong>E1</strong></td><td>Renombrar apps con keyword (adelantado desde Fase 4) <span class="qw-badge">⚡ QW</span><br><span style="font-size:11px; color:var(--text-dim)">"VLX (Visualogyx)" no tiene keyword (verificado live). iOS 30c: "VLX: Digital Inspection App" · Play 50c: "VLX: Digital Inspection, Audit &amp; Checklist App". El nombre es el factor ASO #1 — independiente del lanzamiento web.</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-xs">XS·30m</span></td><td><span class="owner-chip">Hans (dueño de las fichas)</span></td></tr>
         <tr><td><strong>C4</strong></td><td>Hero: reducir delay de animación del H1 (riesgo LCP) <span class="qw-badge">⚡ QW</span><br><span style="font-size:11px; color:var(--text-dim)">tailwind.config.ts:90 — "0.5s ease-out 0.3s both" deja el H1 en opacity:0 los primeros 0.3s. Bajar delay a 0–0.1s o animar solo transform.</span></td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-xs">XS·30m</span></td><td><span class="owner-chip">Abe</span></td></tr>
         <tr><td><strong>C5</strong></td><td>X/Twitter: agregar al footer (SocialIcon) o retirarlo del sameAs + añadir twitter:site si está activo <span class="qw-badge">⚡ QW</span></td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-xs">XS·30m</span></td><td><span class="owner-chip">Lau decide · Abe ejecuta</span></td></tr>
+        <tr><td><strong>D1</strong></td><td>GMB activo (adelantada desde Fase 3): 20+ fotos, sección Products (KYPiT/CountIt/Virtual), posts semanales, estrategia de reviews post-onboarding <span class="qw-badge">⚡ QW</span></td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-s">S·2–3h</span></td><td><span class="owner-chip">Lau + Hans</span></td></tr>
         <tr><td><strong>C6</strong></td><td>Paginación estática crawleable en el fallback SSR de /blog/ (cierre definitivo de B2)<br><span style="font-size:11px; color:var(--text-dim)">BlogListFallback (BlogListContent.tsx:162) muestra 12 posts sin links de paginación. Añadir links /blog/?page=N.</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-s">S·2h</span></td><td><span class="owner-chip">Abe</span></td></tr>
         <tr><td><strong>C7</strong></td><td>CollectionPage + ItemList en el hub con las 17 páginas hijas (P0-3)</td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-s">S·1–2h</span></td><td><span class="owner-chip">Lau + Abe</span></td></tr>
         <tr><td><strong>C8</strong></td><td>LocalBusiness schema en /contact/ + NAP completo en footer (hoy solo dice "Aventura, Florida")</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-s">S·1h</span></td><td><span class="owner-chip">Lau + Abe</span></td></tr>
@@ -1208,11 +1210,10 @@ Sitemap:                       https://vlx.ai/sitemap.xml</div>
   </div>
 
   <div class="subsection">
-    <h3>Fase 3 — Mes 1 · Contenido &amp; Autoridad <span class="phase-meta">esfuerzo ~20–28h · 8 tareas</span></h3>
+    <h3>Fase 3 — Mes 1 · Contenido &amp; Autoridad <span class="phase-meta">esfuerzo ~18–25h · 7 tareas (D1 adelantada a Fase 2)</span></h3>
     <table class="findings-table">
       <thead><tr><th>ID</th><th>Iniciativa</th><th>Prioridad</th><th>Esfuerzo</th><th>Responsable</th></tr></thead>
       <tbody>
-        <tr><td><strong>D1</strong></td><td>GMB activo: 20+ fotos, sección Products (KYPiT/CountIt/Virtual), posts semanales, estrategia de reviews post-onboarding <span class="qw-badge">⚡ QW</span></td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-s">S·2–3h</span></td><td><span class="owner-chip">Lau + Hans</span></td></tr>
         <tr><td><strong>D2</strong></td><td>Consolidar canibalización del cluster apartment/annual inspection (4 variantes repartidas pos 8.79–17.74, live)</td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-m">M·4h</span></td><td><span class="owner-chip">Lau</span></td></tr>
         <tr><td><strong>D3</strong></td><td>Refresh clusters regresados: 5S/Lean (1,260 impr agregadas, pos 33–52) + assisted living safety checklist (761 impr, pos 68)</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-m">M·6h</span></td><td><span class="owner-chip">Lau</span></td></tr>
         <tr><td><strong>D4</strong></td><td>Listicle propio "Best Digital Inspection Software 2026" en el blog (challenger framing honesto)</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-m">M·4h</span></td><td><span class="owner-chip">Lau</span></td></tr>
@@ -1225,11 +1226,10 @@ Sitemap:                       https://vlx.ai/sitemap.xml</div>
   </div>
 
   <div class="subsection">
-    <h3>Fase 4 — Mes 2 · ASO &amp; Expansión <span class="phase-meta">esfuerzo ~12–16h · 6 tareas</span></h3>
+    <h3>Fase 4 — Mes 2 · ASO &amp; Expansión <span class="phase-meta">esfuerzo ~11–15h · 5 tareas (E1 adelantada a Fase 2)</span></h3>
     <table class="findings-table">
       <thead><tr><th>ID</th><th>Iniciativa</th><th>Prioridad</th><th>Esfuerzo</th><th>Responsable</th></tr></thead>
       <tbody>
-        <tr><td><strong>E1</strong></td><td>Renombrar apps con keyword <span class="qw-badge">⚡ QW</span><br><span style="font-size:11px; color:var(--text-dim)">"VLX (Visualogyx)" no tiene keyword (verificado live). iOS 30c: "VLX: Digital Inspection App" · Play 50c: "VLX: Digital Inspection, Audit &amp; Checklist App". El nombre es el factor ASO #1.</span></td><td><span class="badge badge-critical">P1</span></td><td><span class="effort effort-xs">XS·30m</span></td><td><span class="owner-chip">Hans (dueño de las fichas)</span></td></tr>
         <tr><td><strong>E2</strong></td><td>Keywords field iOS (100c) + subtitle + reescribir primeras 3 líneas de descripción · descripción Play con keywords (Google la indexa) + feature graphic 1024×500</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-s">S·2–3h</span></td><td><span class="owner-chip">Lau</span></td></tr>
         <tr><td><strong>E3</strong></td><td>In-app review prompts: SKStoreReviewAPI (iOS) + ReviewManager (Android) tras primera inspección completada — base actual 4.6★/57, target 100+ ratings</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-m">M·dev app</span></td><td><span class="owner-chip">Hans + equipo app</span></td></tr>
         <tr><td><strong>E4</strong></td><td>Preview video 30s en ambas stores (inspección end-to-end) — +25% conversión promedio</td><td><span class="badge badge-medium">P2</span></td><td><span class="effort effort-m">M·producción</span></td><td><span class="owner-chip">Hans</span></td></tr>
@@ -1273,7 +1273,7 @@ Sitemap:                       https://vlx.ai/sitemap.xml</div>
 </div><!-- /container -->
 
 <div style="background: var(--surface); border-top: 1px solid var(--border); padding: 20px 32px; margin-top: 40px; font-size:11px; color: var(--text-dim);">
-  <strong style="color: var(--text-muted);">VLX Audit Completo Verificado — Hans-review — 2026-06-11 (v4.1)</strong> ·
+  <strong style="color: var(--text-muted);">VLX Audit Completo Verificado — Hans-review — 2026-06-11 (v4.2)</strong> ·
   Auditora: Laura Ceballos (laura.ceballos@softwarecraftcr.com) ·
   Generado con Claude (Fable 5) ·
   Metodología: verificación en código (commit 25cea3f) + GSC API live + HTTP live en producción + iTunes Lookup API ·
