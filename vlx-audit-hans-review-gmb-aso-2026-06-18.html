@@ -195,12 +195,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
   </div>
   <nav>
     <div class="nav-section">Informe</div>
-    <a class="nav-link active" onclick="scrollTo('cover')"><span class="nav-icon">📋</span> Resumen ejecutivo</a>
-    <a class="nav-link" onclick="scrollTo('blockers')"><span class="nav-icon">🚧</span> Blockers de lanzamiento <span class="nav-badge">8</span></a>
-    <a class="nav-link" onclick="scrollTo('auditoria')"><span class="nav-icon">🔍</span> Hallazgos SEO <span class="nav-badge">24</span></a>
-    <a class="nav-link" onclick="scrollTo('impacto')"><span class="nav-icon">📉</span> Impacto en negocio</a>
-    <a class="nav-link" onclick="scrollTo('kpis')"><span class="nav-icon">📊</span> KPIs & Baseline</a>
-    <a class="nav-link" onclick="scrollTo('roadmap')"><span class="nav-icon">🚀</span> Roadmap <span class="nav-badge amber">+GMB/ASO</span></a>
+    <a class="nav-link active" onclick="navScrollTo('cover', this)"><span class="nav-icon">📋</span> Resumen ejecutivo</a>
+    <a class="nav-link" onclick="navScrollTo('blockers', this)"><span class="nav-icon">🚧</span> Blockers de lanzamiento <span class="nav-badge">8</span></a>
+    <a class="nav-link" onclick="navScrollTo('auditoria', this)"><span class="nav-icon">🔍</span> Hallazgos SEO <span class="nav-badge">24</span></a>
+    <a class="nav-link" onclick="navScrollTo('impacto', this)"><span class="nav-icon">📉</span> Impacto en negocio</a>
+    <a class="nav-link" onclick="navScrollTo('kpis', this)"><span class="nav-icon">📊</span> KPIs & Baseline</a>
+    <a class="nav-link" onclick="navScrollTo('roadmap', this)"><span class="nav-icon">🚀</span> Roadmap <span class="nav-badge amber">+GMB/ASO</span></a>
   </nav>
   <div class="sidebar-footer">
     Preparado por <strong>Lau / TheSEOLogyx</strong><br>
@@ -747,10 +747,10 @@ document.querySelectorAll('.h-row').forEach(row => {
   row.addEventListener('click', () => toggleExpand(row));
 });
 
-function scrollTo(id) {
+function navScrollTo(id, el) {
   document.getElementById(id).scrollIntoView({behavior:'smooth'});
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  el.classList.add('active');
 }
 
 const sections = document.querySelectorAll('section[id]');
