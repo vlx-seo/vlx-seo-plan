@@ -545,6 +545,23 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
   <p class="section-sub">Ordenado por impacto y facilidad de ejecución. Los items marcados con ⚡ son Quick Wins: alto impacto + esfuerzo XS o S.</p>
 
   <div class="phase-block">
+    <div class="phase-label">Fase 0 — Pre-lanzamiento (resolver antes del go-live)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Archivo</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0.1 ⚡</td><td>Cambiar <code>permanent: true</code> → <code>statusCode: 301</code> en los 286 redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>0.5h</td></tr>
+        <tr><td>0.2 ⚡</td><td>Remover <code>.slice(0, POSTS_PER_PAGE)</code> del BlogListFallback</td><td>BlogListContent.tsx:168</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>0.3 ⚡</td><td>Renombrar carpeta <code>oil-gas/</code> → <code>oil-and-gas/</code> y eliminar el redirect que invertía el canonical de GSC</td><td>src/app/(frontend)/digital-inspections-software/</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>0.4</td><td>Mapear las 11 Paid LPs faltantes con redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1–2h</td></tr>
+        <tr><td>0.5 ⚡</td><td>Confirmar VERCEL_ENV=production en Vercel antes del go-live</td><td>Vercel Dashboard</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
+        <tr><td>0.6</td><td>Agregar <code>/case-studies/</code> (índice) a <code>sitemap.ts</code></td><td>src/app/sitemap.ts</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
     <div class="phase-label">Fase 0 — Quick Wins GMB pre-lanzamiento</div>
     <table class="roadmap-table">
       <thead>
@@ -575,23 +592,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
         <tr><td>QW-A05 ⚡</td><td>Corregir H1 de <code>/app/kypit/</code>: "KYPiT: Know Your Product" → "KYPiT: Built-In Fraud Detection for Every Field Inspection"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
         <tr><td>QW-A06</td><td>Reescribir descripción de COUNTiT en Play Store — actual: ~150 palabras sin keywords. Máximo: 4,000 chars. Keywords clave: AI object counting · inventory count app · pallet counting · photo-based inventory · automated asset counter</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
         <tr><td>QW-A07</td><td>Agregar sección KYPiT en descripción de app VLX (Play Store): "KYPiT Fraud Detection — Built into every VLX inspection" con keywords: fraud detection · GPS validation · image integrity verification · inspection fraud prevention</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="phase-block">
-    <div class="phase-label">Fase 0 — Pre-lanzamiento (resolver antes del go-live)</div>
-    <table class="roadmap-table">
-      <thead>
-        <tr><th>#</th><th>Acción</th><th>Archivo</th><th>Impacto</th><th>Est.</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>0.1 ⚡</td><td>Cambiar <code>permanent: true</code> → <code>statusCode: 301</code> en los 286 redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>0.5h</td></tr>
-        <tr><td>0.2 ⚡</td><td>Remover <code>.slice(0, POSTS_PER_PAGE)</code> del BlogListFallback</td><td>BlogListContent.tsx:168</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
-        <tr><td>0.3 ⚡</td><td>Renombrar carpeta <code>oil-gas/</code> → <code>oil-and-gas/</code> y eliminar el redirect que invertía el canonical de GSC</td><td>src/app/(frontend)/digital-inspections-software/</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
-        <tr><td>0.4</td><td>Mapear las 11 Paid LPs faltantes con redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1–2h</td></tr>
-        <tr><td>0.5 ⚡</td><td>Confirmar VERCEL_ENV=production en Vercel antes del go-live</td><td>Vercel Dashboard</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
-        <tr><td>0.6</td><td>Agregar <code>/case-studies/</code> (índice) a <code>sitemap.ts</code></td><td>src/app/sitemap.ts</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
       </tbody>
     </table>
   </div>
