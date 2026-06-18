@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría SEO — VLX (Hans-review) | Junio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#FF5722;--brand-dark:#C63A0A;--brand-light:#FF8A65;--brand-soft:rgba(255,87,34,.08);
+  --amber:#F59E0B;--amber-soft:rgba(245,158,11,.1);
+  --green:#16A34A;--green-soft:rgba(22,163,74,.1);
+  --yellow:#EAB308;--yellow-soft:rgba(234,179,8,.1);
+  --blue:#2563EB;--blue-soft:rgba(37,99,235,.08);
+  --surface:#0F172A;--surface-2:#1E293B;--surface-3:#253347;
+  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.13);
+  --text:#F1F5F9;--text-muted:#94A3B8;--text-faint:#475569;
+  --sidebar:248px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:var(--text);display:flex;min-height:100vh;line-height:1.5}
+
+/* ── Sidebar ── */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface-2);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo .brand{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:4px}
+.sidebar-logo .project{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.sidebar-logo .date{font-size:11px;color:var(--text-faint);margin-top:4px}
+.sidebar nav{padding:12px 0;flex:1}
+.nav-section{padding:16px 20px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.nav-link{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;color:var(--text-muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.03);border-left-color:var(--border-strong)}
+.nav-link.active{color:var(--text);background:var(--brand-soft);border-left-color:var(--brand)}
+.nav-link .nav-icon{font-size:14px;width:16px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;background:var(--brand);color:#fff}
+.nav-badge.amber{background:var(--amber);color:#000}
+.nav-badge.green{background:var(--green)}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--text-faint)}
+
+/* ── Main ── */
+.main{margin-left:var(--sidebar);flex:1;padding:0 0 80px}
+
+/* ── Section ── */
+.section{padding:48px 56px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-overline{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-bottom:10px}
+.section-title{font-size:32px;font-weight:800;color:var(--text);line-height:1.15;margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text-muted);max-width:680px;line-height:1.6;margin-bottom:32px}
+
+/* ── Cover ── */
+#cover{background:linear-gradient(135deg,#0a0f1a 0%,#1a0d08 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:64px 56px;position:relative;overflow:hidden}
+#cover::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)}
+#cover::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,87,34,.12) 0%,transparent 60%);pointer-events:none}
+.cover-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--brand);margin-bottom:24px}
+.cover-title{font-size:52px;font-weight:800;color:#fff;line-height:1.1;max-width:700px;margin-bottom:16px}
+.cover-title span{color:var(--brand)}
+.cover-desc{font-size:17px;color:var(--text-muted);max-width:580px;line-height:1.65;margin-bottom:48px}
+.cover-meta{display:flex;gap:40px;flex-wrap:wrap}
+.meta-block{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.meta-value{font-size:14px;font-weight:600;color:var(--text)}
+.cover-stats{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:740px}
+.cover-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:20px 24px}
+.cs-num{font-size:36px;font-weight:800;color:var(--brand);line-height:1}
+.cs-label{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.4}
+
+/* ── Alert box ── */
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.alert-body{}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.alert-text{font-size:12.5px;line-height:1.55;color:var(--text-muted)}
+.alert.critical{background:rgba(255,87,34,.1);border:1px solid rgba(255,87,34,.25)}
+.alert.critical .alert-title{color:#fb923c}
+.alert.warning{background:var(--amber-soft);border:1px solid rgba(245,158,11,.25)}
+.alert.warning .alert-title{color:#fbbf24}
+.alert.info{background:var(--blue-soft);border:1px solid rgba(37,99,235,.2)}
+.alert.info .alert-title{color:#93c5fd}
+.alert.success{background:var(--green-soft);border:1px solid rgba(22,163,74,.25)}
+.alert.success .alert-title{color:#4ade80}
+
+/* ── Blockers ── */
+.blocker-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.blocker-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;gap:16px;align-items:flex-start}
+.blocker-card.open{border-left:3px solid #ef4444}
+.blocker-card.partial{border-left:3px solid var(--amber)}
+.blocker-card.resolved{border-left:3px solid var(--green)}
+.bl-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.bl-badge.open{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.bl-badge.partial{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.bl-badge.resolved{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(22,163,74,.25)}
+.bl-id{font-size:12px;font-weight:700;color:var(--brand);flex-shrink:0;width:28px}
+.bl-body{flex:1}
+.bl-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.bl-desc{font-size:12px;color:var(--text-muted);line-height:1.55}
+.bl-file{font-size:11px;color:var(--text-faint);margin-top:5px;font-family:monospace}
+
+/* ── Hallazgos ── */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.filter-btn{font-size:12px;font-weight:600;padding:6px 16px;border-radius:20px;border:1px solid var(--border-strong);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.filter-btn:hover{color:var(--text);border-color:rgba(255,255,255,.25)}
+.filter-btn.active{color:#fff;border-color:transparent}
+.filter-btn.all.active{background:var(--surface-3)}
+.filter-btn.p0.active{background:var(--brand);border-color:var(--brand)}
+.filter-btn.p1.active{background:var(--amber);color:#000}
+.filter-btn.p2.active{background:var(--yellow);color:#000}
+.filter-btn.p3.active{background:var(--green)}
+
+.hallazgos-table{width:100%;border-collapse:collapse}
+.hallazgos-table thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--text-faint);padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.hallazgos-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s;cursor:pointer}
+.hallazgos-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.hallazgos-table td{padding:10px 12px;vertical-align:middle}
+.h-id{font-size:11px;font-weight:600;color:var(--text-faint);font-variant-numeric:tabular-nums}
+.h-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;display:inline-block}
+.h-badge.p0{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.h-badge.p1{background:var(--amber-soft);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.h-badge.p2{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+.h-badge.p3{background:var(--green-soft);color:#4ade80;border:1px solid rgba(22,163,74,.2)}
+.h-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.h-area{font-size:11px;color:var(--text-faint);margin-top:2px}
+.h-estado{font-size:11px;font-weight:600;color:var(--text-faint)}
+.h-estado.open{color:#f87171}
+.h-estado.provisional{color:#fbbf24}
+.h-estado.resolved{color:#4ade80}
+
+/* ── Summary row ── */
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.sum-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.sum-num{font-size:28px;font-weight:800;line-height:1}
+.sum-label{font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.4}
+.sum-num.brand{color:var(--brand)}
+.sum-num.amber{color:var(--amber)}
+.sum-num.yellow{color:var(--yellow)}
+.sum-num.green{color:var(--green)}
+
+/* ── Impact ── */
+.impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+.impact-card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:28px 28px}
+.ic-icon{font-size:32px;margin-bottom:12px}
+.ic-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.ic-desc{font-size:13px;color:var(--text-muted);line-height:1.65}
+.ic-stat{font-size:28px;font-weight:800;color:var(--brand);margin:12px 0 4px}
+.ic-stat-label{font-size:12px;color:var(--text-faint)}
+
+/* ── Roadmap ── */
+.phase-block{margin-bottom:32px}
+.phase-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.roadmap-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+.roadmap-table th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:0 12px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.roadmap-table td{padding:9px 12px;vertical-align:top;font-size:12.5px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.roadmap-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+.rt-impact{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
+.rt-impact.critical{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.rt-impact.high{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.rt-impact.medium{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+
+/* ── Expandable rows ── */
+.h-row{cursor:pointer;user-select:none}
+.h-row:hover td{background:rgba(255,255,255,.025)}
+.h-chevron{font-size:9px;color:var(--text-faint);transition:transform .2s;display:inline-block;margin-left:7px;vertical-align:middle;opacity:.6}
+.h-row.expanded .h-chevron{transform:rotate(90deg);opacity:1;color:var(--brand)}
+.h-expand-row{display:none}
+.h-expand-row.open{display:table-row}
+.h-expand-td{padding:0 !important;border-bottom:1px solid rgba(255,87,34,.15) !important}
+.h-expand-inner{padding:16px 16px 18px 60px;display:grid;grid-template-columns:1fr 260px;gap:20px;background:rgba(255,87,34,.04);align-items:start}
+.h-expand-text{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.h-expand-fix{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.15);border-radius:8px;padding:12px 14px}
+.h-expand-fix-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#4ade80;margin-bottom:6px}
+.h-expand-fix-text{font-size:12px;color:rgba(74,222,128,.85);line-height:1.6}
+
+/* ── Divider ── */
+.divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+:target{scroll-margin-top:24px}
+
+/* ── KPI Grid ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.kpi-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:6px}
+.kpi-val{font-size:22px;font-weight:800;color:var(--text);line-height:1}
+.kpi-sub{font-size:11px;color:var(--text-muted);margin-top:4px}
+.kpi-target{font-size:11px;color:var(--brand);margin-top:6px;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">TheSEOLogyx / VLX</div>
+    <div class="project">vlx.ai — Hans-review</div>
+    <div class="date">Auditoría SEO · Junio 2026</div>
+  </div>
+  <nav>
+    <div class="nav-section">Informe</div>
+    <a class="nav-link active" onclick="scrollTo('cover')"><span class="nav-icon">📋</span> Resumen ejecutivo</a>
+    <a class="nav-link" onclick="scrollTo('blockers')"><span class="nav-icon">🚧</span> Blockers de lanzamiento <span class="nav-badge">8</span></a>
+    <a class="nav-link" onclick="scrollTo('auditoria')"><span class="nav-icon">🔍</span> Hallazgos SEO <span class="nav-badge">24</span></a>
+    <a class="nav-link" onclick="scrollTo('impacto')"><span class="nav-icon">📉</span> Impacto en negocio</a>
+    <a class="nav-link" onclick="scrollTo('kpis')"><span class="nav-icon">📊</span> KPIs & Baseline</a>
+    <a class="nav-link" onclick="scrollTo('roadmap')"><span class="nav-icon">🚀</span> Roadmap <span class="nav-badge amber">+GMB/ASO</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    Preparado por <strong>Lau / TheSEOLogyx</strong><br>
+    Rama auditada: Hans-review
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<main class="main">
+
+<!-- 1. Cover -->
+<section class="section" id="cover" style="background:linear-gradient(160deg,#0a0f1a 0%,#150a05 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(255,87,34,.1) 0%,transparent 55%);pointer-events:none"></div>
+
+  <div class="cover-label">Auditoría SEO Técnica · Junio 2026</div>
+  <h1 class="cover-title">VLX está a punto de lanzar — <span>pero 3 blockers críticos</span> deben resolverse primero.</h1>
+  <p class="cover-desc">El nuevo sitio (Next.js 15 + Payload CMS) ha mejorado significativamente desde mayo 2026. Los blockers B4, B6, B7 y B8 están resueltos. Sin embargo, B1 (308 → 301), B5 (slug oil-gas — se requiere renombrar la carpeta para preservar el equity de GSC) y B2 (a verificar en el commit más reciente) siguen sin confirmar resolución completa. Este informe incorpora correcciones post-comparativo con el plan externo auditado el 5 de junio 2026.</p>
+
+  <div class="cover-meta">
+    <div class="meta-block"><span class="meta-label">Dominio</span><span class="meta-value">vlx.ai</span></div>
+    <div class="meta-block"><span class="meta-label">Rama auditada</span><span class="meta-value">Hans-review</span></div>
+    <div class="meta-block"><span class="meta-label">Fecha</span><span class="meta-value">Junio 10, 2026</span></div>
+    <div class="meta-block"><span class="meta-label">Preparado por</span><span class="meta-value">Lau / TheSEOLogyx</span></div>
+  </div>
+
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <div class="cs-num">66</div>
+      <div class="cs-label">/ 100 — Launch Readiness Score</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cs-num" style="color:#f87171">3</div>
+      <div class="cs-label">blockers activos (B1 crítico · B5 corregido · B2 a verificar)</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cs-num" style="color:#4ade80">4</div>
+      <div class="cs-label">blockers resueltos desde la auditoría de mayo</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cs-num">25</div>
+      <div class="cs-label">hallazgos SEO identificados en esta sesión</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Blockers -->
+<section class="section" id="blockers">
+  <div class="section-overline">Gate de Lanzamiento</div>
+  <h2 class="section-title">Estado de blockers pre-lanzamiento</h2>
+  <p class="section-sub">El sitio NO debe lanzar hasta que B1, B5 y B2 (verificación) estén en verde. B4, B6, B7 y B8 están resueltos. <strong style="color:#fbbf24">Nota:</strong> B5 estaba marcado como resuelto en la auditoría anterior — el comparativo con el plan externo (Jun-05) reveló que la dirección del slug es incorrecta y destruye equity de GSC.</p>
+
+  <div class="alert critical" style="margin-bottom:16px">
+    <span class="alert-icon">🚨</span>
+    <div class="alert-body">
+      <div class="alert-title">Gate: no lanzar hasta tener B1, B5 y B2 en verde</div>
+      <div class="alert-text">B1 y B5 son cambios de código (≤ 1h en total). B2 requiere verificar el commit más reciente — el plan externo (Jun-05) indica que <code>generateStaticParams()</code> ya está implementado y los 116 posts se pre-renderizan en build. Si el slice fue removido, B2 está resuelto. Si no, es un fix de 15 minutos.</div>
+    </div>
+  </div>
+
+  <div class="alert warning" style="margin-bottom:28px">
+    <span class="alert-icon">⏳</span>
+    <div class="alert-body">
+      <div class="alert-title">Google May 2026 Core Update — retrasar DNS cutover hasta ~16 de junio</div>
+      <div class="alert-text">El Core Update de mayo 2026 completó el 2 de junio y dejó volatilidad activa en rankings. Lanzar durante volatilidad hace imposible interpretar los datos de GSC (¿el tráfico baja por la migración o por el update?). Recomendación: resolver B1, B5 y B2 esta semana, pero no cortar el DNS hasta ~16 de junio para tener señal limpia desde el primer día.</div>
+    </div>
+  </div>
+
+  <div class="blocker-grid">
+
+    <div class="blocker-card open">
+      <div class="bl-id">B1</div>
+      <div class="bl-body">
+        <div class="bl-title">308 → 301: todos los redirects emiten HTTP 308 en lugar de 301</div>
+        <div class="bl-desc">next.config.ts usa <code>permanent: true</code> en los 286 redirects. Next.js mapea esto a HTTP 308. La práctica estándar SEO y la recomendación de Google es 301. Herramientas como Ahrefs y DataForSEO pueden no transferir equity correctamente a través de 308. Fix: reemplazar <code>permanent: true</code> por <code>statusCode: 301</code> en todas las reglas.</div>
+        <div class="bl-file">next.config.ts — 286 reglas con permanent: true</div>
+      </div>
+      <span class="bl-badge open">❌ ABIERTO</span>
+    </div>
+
+    <div class="blocker-card partial">
+      <div class="bl-id">B2</div>
+      <div class="bl-body">
+        <div class="bl-title">BlogListFallback: verificar si el slice fue removido en commits recientes</div>
+        <div class="bl-desc">En el código analizado (Hans-review) se encontró <code>allPosts.slice(0, POSTS_PER_PAGE)</code> en línea 168 — lo que limita el SSR a 12 posts. Sin embargo, el plan externo (auditado Jun-05, Dev Tracker: 116/116) indica que <code>generateStaticParams()</code> fue implementado y todos los posts se pre-renderizan en build, resolviendo el problema. <strong>Acción requerida:</strong> confirmar en el commit más reciente de Hans-review que el slice fue eliminado del fallback antes de marcar como resuelto.</div>
+        <div class="bl-file">src/app/(frontend)/blog/BlogListContent.tsx:168 — verificar estado actual</div>
+      </div>
+      <span class="bl-badge partial">⚠️ VERIFICAR</span>
+    </div>
+
+    <div class="blocker-card partial">
+      <div class="bl-id">B3</div>
+      <div class="bl-body">
+        <div class="bl-title">13 Paid LPs sin redirect confirmado</div>
+        <div class="bl-desc">Solo 2 de las 13 landing pages de campañas pagas tienen redirect en next.config.ts: <code>/landing-inspection-software-capterra-d</code> y <code>/virtual-inspections-landing</code>. Las LPs de G2 y LinkedIn no están mapeadas. Las 11 restantes generarán 404 al lanzar, destruyendo el tráfico de campañas activas (~104 sesiones/mes confirmadas en Capterra LP).</div>
+        <div class="bl-file">next.config.ts — verificar lista completa de 13 LPs</div>
+      </div>
+      <span class="bl-badge partial">⚠️ PARCIAL</span>
+    </div>
+
+    <div class="blocker-card resolved">
+      <div class="bl-id">B4</div>
+      <div class="bl-body">
+        <div class="bl-title">Blog category wildcard redirect</div>
+        <div class="bl-desc">Los patrones <code>/blog/:category/:slug</code> ya están cubiertos por reglas específicas en next.config.ts y el patrón de date-based permalinks. No hay riesgo de 404 en URLs de blog con prefijo de categoría.</div>
+        <div class="bl-file">next.config.ts — reglas específicas + wildcard de fecha</div>
+      </div>
+      <span class="bl-badge resolved">✅ RESUELTO</span>
+    </div>
+
+    <div class="blocker-card open">
+      <div class="bl-id">B5</div>
+      <div class="bl-body">
+        <div class="bl-title">Slug oil-gas: la carpeta dev va en dirección contraria al canonical de GSC</div>
+        <div class="bl-desc">⚠️ <strong>Corrección post-comparativo:</strong> Este blocker fue marcado erróneamente como resuelto en la auditoría anterior. El canonical con equity acumulada en GSC es <code>/oil-and-gas/</code> (pos 22 · 1,765 impresiones). La carpeta dev se llama <code>oil-gas/</code> y el redirect actual va <code>/oil-and-gas → /oil-gas/</code> — transfiriendo equity desde el canonical real hacia un slug nuevo, destruyendo la autoridad acumulada. Fix: renombrar la carpeta de <code>oil-gas/</code> a <code>oil-and-gas/</code> y eliminar el redirect (la URL canónica ya no cambia).</div>
+        <div class="bl-file">src/app/(frontend)/digital-inspections-software/oil-gas/ → renombrar a oil-and-gas/</div>
+      </div>
+      <span class="bl-badge open">❌ ABIERTO</span>
+    </div>
+
+    <div class="blocker-card resolved">
+      <div class="bl-id">B6</div>
+      <div class="bl-body">
+        <div class="bl-title">/checklists/ ya no redirige a /blog</div>
+        <div class="bl-desc">El redirect <code>/checklists → /blog</code> fue eliminado. La página <code>/checklists/</code> sirve su propio contenido con estado 200. Confirmado en comentario next.config.ts:304.</div>
+        <div class="bl-file">next.config.ts:304 — REMOVED comment confirma la resolución</div>
+      </div>
+      <span class="bl-badge resolved">✅ RESUELTO</span>
+    </div>
+
+    <div class="blocker-card resolved">
+      <div class="bl-id">B7</div>
+      <div class="bl-body">
+        <div class="bl-title">BlogFilterBar usa useSearchParams() + links estáticos (no router.push)</div>
+        <div class="bl-desc">Resuelto por Abe. <code>BlogListContent.tsx</code> usa <code>useSearchParams()</code> + links estáticos para navegación de categorías. Googlebot puede crawlear los links de categoría directamente en el DOM.</div>
+        <div class="bl-file">src/app/(frontend)/blog/BlogListContent.tsx</div>
+      </div>
+      <span class="bl-badge resolved">✅ RESUELTO</span>
+    </div>
+
+    <div class="blocker-card resolved">
+      <div class="bl-id">B8</div>
+      <div class="bl-body">
+        <div class="bl-title">/real-estate existe en el nuevo sitio</div>
+        <div class="bl-desc">Página verificada en <code>src/app/(frontend)/digital-inspections-software/real-estate/</code>. El redirect <code>/real-estate → /digital-inspections-software/real-estate/</code> está configurado en next.config.ts:1046.</div>
+        <div class="bl-file">src/app/(frontend)/digital-inspections-software/real-estate/</div>
+      </div>
+      <span class="bl-badge resolved">✅ RESUELTO</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- 3. Auditoría -->
+<section class="section" id="auditoria">
+  <div class="section-overline">Auditoría Técnica Completa</div>
+  <h2 class="section-title">25 hallazgos SEO identificados</h2>
+  <p class="section-sub">Análisis del código (Hans-review), documentos de auditoría previos (mayo 2026), datos históricos de GSC y comparativo con plan externo Jun-05. Las secciones marcadas como PROVISIONAL requieren MCPs activos (seo-google, seo-dataforseo) para validación en vivo.</p>
+
+  <div class="summary-row">
+    <div class="sum-card"><div class="sum-num brand">5</div><div class="sum-label">P0 Críticos — bloquean o dañan el lanzamiento</div></div>
+    <div class="sum-card"><div class="sum-num amber">9</div><div class="sum-label">P1 Alto impacto — resolver en primeros 30 días</div></div>
+    <div class="sum-card"><div class="sum-num yellow">8</div><div class="sum-label">P2 Medio — oportunidades de optimización</div></div>
+    <div class="sum-card"><div class="sum-num green">3</div><div class="sum-label">P3 Bajo — mejoras menores</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn all active" onclick="filterHallazgos('all',this)">Todos (25)</button>
+    <button class="filter-btn p0" onclick="filterHallazgos('p0',this)">🔴 P0 Crítico (5)</button>
+    <button class="filter-btn p1" onclick="filterHallazgos('p1',this)">🟠 P1 Alto (9)</button>
+    <button class="filter-btn p2" onclick="filterHallazgos('p2',this)">🟡 P2 Medio (8)</button>
+    <button class="filter-btn p3" onclick="filterHallazgos('p3',this)">🟢 P3 Bajo (3)</button>
+  </div>
+
+  <table class="hallazgos-table">
+    <thead>
+      <tr>
+        <th style="width:52px">#</th>
+        <th style="width:90px">Prioridad</th>
+        <th>Hallazgo</th>
+        <th style="width:120px">Área</th>
+        <th style="width:110px">Estado</th>
+      </tr>
+    </thead>
+    <tbody id="hallazgos-body">
+      <!-- P0 -->
+      <tr class="h-row" data-p="p0"><td class="h-id">VLX-01</td><td><span class="h-badge p0">P0 Crítico</span></td><td><div class="h-title">286 redirects emiten HTTP 308 en lugar de 301</div><div class="h-area">Migraciones</div></td><td><span style="font-size:11px;color:var(--text-faint)">Migraciones</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p0"><td class="h-id">VLX-02</td><td><span class="h-badge p0">P0 Crítico</span></td><td><div class="h-title">BlogListFallback: solo 12 de 116 posts visibles a Googlebot en SSR</div><div class="h-area">Crawlability</div></td><td><span style="font-size:11px;color:var(--text-faint)">Crawlability</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p0"><td class="h-id">VLX-03</td><td><span class="h-badge p0">P0 Crítico</span></td><td><div class="h-title">13 Paid LPs sin redirect — generarán 404 al lanzar</div><div class="h-area">Migraciones</div></td><td><span style="font-size:11px;color:var(--text-faint)">Migraciones</span></td><td><span class="h-estado open">Parcial (2/13)</span></td></tr>
+      <tr class="h-row" data-p="p0"><td class="h-id">VLX-04</td><td><span class="h-badge p0">P0 Crítico</span></td><td><div class="h-title">Pricing page sin JSON-LD schema — página de alto intent sin rich results</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p0"><td class="h-id">VLX-05</td><td><span class="h-badge p0">P0 Crítico</span></td><td><div class="h-title">VERCEL_ENV=production no confirmado — riesgo de noindex en producción</div><div class="h-area">Técnico</div></td><td><span style="font-size:11px;color:var(--text-faint)">Técnico</span></td><td><span class="h-estado open">Pendiente verificar</span></td></tr>
+      <!-- P1 -->
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-06</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">H1 con regresión de keyword en 5 páginas de industria (hospitality, construction, safety, mining, virtual)</div><div class="h-area">Contenido</div></td><td><span style="font-size:11px;color:var(--text-faint)">Contenido</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-07</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">Meta descriptions sin CTA en 22 de 23 páginas principales</div><div class="h-area">Contenido</div></td><td><span style="font-size:11px;color:var(--text-faint)">Contenido</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-08</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">CollectionPage + ItemList faltante en hub /digital-inspections-software/</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-09</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">BlogPosting + BreadcrumbList faltante en todos los posts del blog</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-10</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">5 páginas de industria ausentes del navbar (hospitality, construction, safety, vehicle, mining)</div><div class="h-area">Arquitectura</div></td><td><span style="font-size:11px;color:var(--text-faint)">Arquitectura</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-11</td><td><span class="h-estado provisional" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">~80 backlinks de visualogyx.com apuntando a URLs antiguas sin recuperar</span><div class="h-area">Backlinks</div></td><td><span class="h-badge p1">P1 Alto</span></td><td><span style="font-size:11px;color:var(--text-faint)">Off-Page</span></td><td><span class="h-estado provisional">PROVISIONAL</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-12</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">VLX ausente de los 4 listicles top-10 "digital inspection software" (wifitalents, gitnux, zipdo, xenia)</div><div class="h-area">Off-Page / GEO</div></td><td><span style="font-size:11px;color:var(--text-faint)">Off-Page</span></td><td><span class="h-estado provisional">PROVISIONAL</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-13</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">H1 animation delay 0.3s en SuperTemplate — riesgo activo de LCP en páginas de industria</div><div class="h-area">Performance</div></td><td><span style="font-size:11px;color:var(--text-faint)">Performance</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p1"><td class="h-id">VLX-14</td><td><span class="h-badge p1">P1 Alto</span></td><td><div class="h-title">GPTBot bloqueado en robots.ts — ChatGPT no puede citar vlx.ai en respuestas generativas</div><div class="h-area">GEO / AI</div></td><td><span style="font-size:11px;color:var(--text-faint)">GEO / AI</span></td><td><span class="h-estado open">Decisión pendiente</span></td></tr>
+      <!-- P2 -->
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-15</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">Compare pages sin schema — solo BreadcrumbList, falta ItemList con ambos SoftwareApplication</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-16</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">llms-full.txt ausente — ChatGPT y Gemini no tienen contexto extendido de producto</div><div class="h-area">GEO / AI</div></td><td><span style="font-size:11px;color:var(--text-faint)">GEO / AI</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-17</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">llms.txt sin bloque "Key Facts" — sin anchors de citación para AI Overviews</div><div class="h-area">GEO / AI</div></td><td><span style="font-size:11px;color:var(--text-faint)">GEO / AI</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-18</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">Inconsistencia de precio en schema: $35/mes (schema.ts) vs $29 anual (llms.txt y copy)</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-19</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">HowTo schema en 10 páginas de integración — formato deprecado por Google (ago 2023)</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-20</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">Review schema ausente en 13 páginas de industria con testimonios verificados de Capterra</div><div class="h-area">Schema</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-21</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">OG images: solo 8 de 48 páginas tienen imagen Open Graph — impacto en CTR social</div><div class="h-area">On-Page</div></td><td><span style="font-size:11px;color:var(--text-faint)">On-Page</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <!-- P3 -->
+      <tr class="h-row" data-p="p3"><td class="h-id">VLX-22</td><td><span class="h-badge p3">P3 Bajo</span></td><td><div class="h-title">Organization schema incompleto: falta slogan, areaServed, y G2 sameAs apunta a /reviews en lugar de /products/vlx/</div><div class="h-area">Schema / Brand</div></td><td><span style="font-size:11px;color:var(--text-faint)">Schema</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <tr class="h-row" data-p="p3"><td class="h-id">VLX-23</td><td><span class="h-badge p3">P3 Bajo</span></td><td><div class="h-title">Bingbot no explícitamente permitido en robots.ts — cubierto por wildcard pero recomendable para IndexNow</div><div class="h-area">Técnico</div></td><td><span style="font-size:11px;color:var(--text-faint)">Técnico</span></td><td><span class="h-estado open">Bajo riesgo</span></td></tr>
+      <tr class="h-row" data-p="p3"><td class="h-id">VLX-24</td><td><span class="h-badge p3">P3 Bajo</span></td><td><div class="h-title">Blog pagination redirect a query param (/blog?page=:num) — query params no son crawleados de forma confiable</div><div class="h-area">Técnico</div></td><td><span style="font-size:11px;color:var(--text-faint)">Técnico</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+      <!-- P2 nuevo -->
+      <tr class="h-row" data-p="p2"><td class="h-id">VLX-25</td><td><span class="h-badge p2">P2 Medio</span></td><td><div class="h-title">/case-studies/ ausente del sitemap.ts — páginas de caso de uso no indexables por Google</div><div class="h-area">Técnico / Indexación</div></td><td><span style="font-size:11px;color:var(--text-faint)">Técnico</span></td><td><span class="h-estado open">Sin resolver</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4. Impacto -->
+<section class="section" id="impacto">
+  <div class="section-overline">Impacto en Negocio</div>
+  <h2 class="section-title">¿Qué significa esto para el lanzamiento?</h2>
+  <p class="section-sub">Los problemas técnicos activos tienen consecuencias directas en indexación, visibilidad y la recuperación post-migración (visualogyx.com → vlx.ai, septiembre 2025).</p>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="ic-icon">📝</div>
+      <div class="ic-title">104 posts del blog invisibles a Google</div>
+      <div class="ic-stat">12/116</div>
+      <div class="ic-stat-label">posts que Googlebot ve actualmente en SSR</div>
+      <div class="ic-desc" style="margin-top:12px">El blog es el mayor driver de tráfico orgánico no-brand de VLX (checklists = 8 de los top 12 páginas por clics). Con solo 12 posts visibles al crawler, Google no puede indexar ni rankear el 90% del contenido editorial ya producido. Un solo cambio de una línea de código desbloquea los 104 posts restantes.</div>
+    </div>
+    <div class="impact-card">
+      <div class="ic-icon">🔗</div>
+      <div class="ic-title">Link equity subóptima en 286 redirects</div>
+      <div class="ic-stat">308</div>
+      <div class="ic-stat-label">código HTTP actual — debería ser 301</div>
+      <div class="ic-desc" style="margin-top:12px">Todos los redirects de WordPress → Next.js emiten 308 en lugar de 301. Aunque Google procesa 308, es el formato no estándar para contenido permanente. Herramientas SEO como Ahrefs y DataForSEO pueden reportar gaps de equity. Con 286 redirects activos, el impacto acumulado es significativo para la recuperación post-migración.</div>
+    </div>
+    <div class="impact-card">
+      <div class="ic-icon">🤖</div>
+      <div class="ic-title">VLX ausente de todos los listicles top-SERP</div>
+      <div class="ic-stat">0/4</div>
+      <div class="ic-stat-label">listicles principales que mencionan VLX (PROVISIONAL)</div>
+      <div class="ic-desc" style="margin-top:12px">El top 10 de "digital inspection software" está dominado por listicles de 8,000–10,000 palabras. VLX no aparece en ninguno de los 4 principales (wifitalents, gitnux, zipdo, xenia). Cada mes sin estar listado es tráfico y menciones AI que van a la competencia. El outreach a estos sitios es el mayor quick win de off-page.</div>
+    </div>
+    <div class="impact-card">
+      <div class="ic-icon">📈</div>
+      <div class="ic-title">AI mentions: 5–43/mes vs objetivo de 80+</div>
+      <div class="ic-stat">pos 12.47</div>
+      <div class="ic-stat-label">para "digital inspection software" — baseline pre-lanzamiento</div>
+      <div class="ic-desc" style="margin-top:12px">VLX está en posición 12.47 con 3,015 impresiones para su keyword principal. La recuperación de autoridad post-migración visualogyx.com → vlx.ai está en curso (9 meses). Con B1 y B2 resueltos + hub corregido (ya hecho), las condiciones técnicas estarán listas para mejorar el posicionamiento en los primeros 30–60 días post-lanzamiento.</div>
+    </div>
+  </div>
+
+  <div class="alert success">
+    <span class="alert-icon">✅</span>
+    <div class="alert-body">
+      <div class="alert-title">Lo que ya está funcionando bien en Hans-review</div>
+      <div class="alert-text">Hub con 17 links crawleables a páginas cluster (resuelve el impacto del Core Update marzo 2026) · H1 en SSR con CSS animation (Googlebot indexa el H1 correctamente) · BlogFilterBar con links estáticos crawleables · sitemap.ts bien estructurado con todas las páginas de industria · robots.ts permite Googlebot, Bing, Apple, Claude-SearchBot y OAI-SearchBot · Organization + SoftwareApplication + AggregateRating + FAQPage schemas implementados.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. KPIs -->
+<section class="section" id="kpis">
+  <div class="section-overline">Métricas & Baseline</div>
+  <h2 class="section-title">KPIs de referencia — pre-lanzamiento</h2>
+  <p class="section-sub">Datos derivados de GSC export 2026-04-17 y documentos históricos. Marcar como PROVISIONAL hasta re-exportar GSC fresco antes del lanzamiento.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Posición — keyword principal</div>
+      <div class="kpi-val">12.47</div>
+      <div class="kpi-sub">"digital inspection software" — 3,015 impresiones</div>
+      <div class="kpi-target">→ Target día 90: pos 7–9</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Clics orgánicos (28d)</div>
+      <div class="kpi-val">~470</div>
+      <div class="kpi-sub">Baseline GA4 export 2026-04-03</div>
+      <div class="kpi-target">→ Target día 90: 650+</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">AI mentions / mes</div>
+      <div class="kpi-val">5–43</div>
+      <div class="kpi-sub">Rango en 5 plataformas — pico 27 en noviembre</div>
+      <div class="kpi-target">→ Target día 90: 80+</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Domain Rating (Ahrefs)</div>
+      <div class="kpi-val">11–25</div>
+      <div class="kpi-sub">Rango histórico post-migración (8 meses)</div>
+      <div class="kpi-target">→ Target día 90: 28–32</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">oil-and-gas — posición</div>
+      <div class="kpi-val">22</div>
+      <div class="kpi-sub">1,765 impresiones — dato actualizado Jun-05</div>
+      <div class="kpi-target">→ Target día 90: Top 10</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">home insurance checklist</div>
+      <div class="kpi-val">13.33</div>
+      <div class="kpi-sub">2,134 impresiones — near page 1</div>
+      <div class="kpi-target">→ Target día 60: Top 10</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Posts blog indexados</div>
+      <div class="kpi-val">~12</div>
+      <div class="kpi-sub">Pre-launch (SSR fallback limitado)</div>
+      <div class="kpi-target">→ Post-fix: 100+ posts indexados</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Nuevas keywords / mes</div>
+      <div class="kpi-val">264–1,142</div>
+      <div class="kpi-sub">Pico en julio (correlaciona con publicación)</div>
+      <div class="kpi-target">→ Target: 500+ steady</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Launch Readiness Score</div>
+      <div class="kpi-val" style="color:var(--brand)">66/100</div>
+      <div class="kpi-sub">9 items críticos abiertos (mayo 2026)</div>
+      <div class="kpi-target">→ Target pre-launch: 85+</div>
+    </div>
+  </div>
+
+  <div class="alert warning">
+    <span class="alert-icon">⚠️</span>
+    <div class="alert-body">
+      <div class="alert-title">GSC export con 6 semanas de antigüedad — re-exportar antes del lanzamiento</div>
+      <div class="alert-text">El último export de GSC es del 2026-04-17. Los datos de posiciones, impresiones y cobertura pueden haber cambiado. Acción obligatoria el día del lanzamiento: exportar GSC fresco (últimos 90 días) y re-ejecutar compare_gsc.py para validar cobertura de redirects.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Roadmap -->
+<section class="section" id="roadmap">
+  <div class="section-overline">Plan de Trabajo</div>
+  <h2 class="section-title">Roadmap post-lanzamiento</h2>
+  <p class="section-sub">Ordenado por impacto y facilidad de ejecución. Los items marcados con ⚡ son Quick Wins: alto impacto + esfuerzo XS o S.</p>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 0 — Pre-lanzamiento (resolver antes del go-live)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Archivo</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0.1 ⚡</td><td>Cambiar <code>permanent: true</code> → <code>statusCode: 301</code> en los 286 redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>0.5h</td></tr>
+        <tr><td>0.2 ⚡</td><td>Remover <code>.slice(0, POSTS_PER_PAGE)</code> del BlogListFallback</td><td>BlogListContent.tsx:168</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>0.3 ⚡</td><td>Renombrar carpeta <code>oil-gas/</code> → <code>oil-and-gas/</code> y eliminar el redirect que invertía el canonical de GSC</td><td>src/app/(frontend)/digital-inspections-software/</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>0.4</td><td>Mapear las 11 Paid LPs faltantes con redirects</td><td>next.config.ts</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1–2h</td></tr>
+        <tr><td>0.5 ⚡</td><td>Confirmar VERCEL_ENV=production en Vercel antes del go-live</td><td>Vercel Dashboard</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
+        <tr><td>0.6</td><td>Agregar <code>/case-studies/</code> (índice) a <code>sitemap.ts</code></td><td>src/app/sitemap.ts</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 1 — Día de lanzamiento (go-live workflow)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Owner</th><th>Impacto</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>L1 ⚡</td><td>Verificar robots.txt en producción: Googlebot + Bingbot + Applebot permitidos</td><td>Lau</td><td><span class="rt-impact critical">CRÍTICO</span></td><td></td></tr>
+        <tr><td>L2 ⚡</td><td>Submit sitemap a GSC inmediatamente post-lanzamiento</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td></td></tr>
+        <tr><td>L3 ⚡</td><td>Submit URLs vía IndexNow (Bing) el día 0</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td></td></tr>
+        <tr><td>L4 ⚡</td><td>Export GSC fresco (90d) — baseline de migración</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td></td></tr>
+        <tr><td>L5 ⚡</td><td>Screenshot posiciones SERP para 10 KWs core (baseline)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td></td></tr>
+        <tr><td>L6</td><td>Run PageSpeed en homepage, hub, top industry page, blog hub</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 1 — Días 7–30 (estabilización)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Área</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>S1 ⚡</td><td>Fix H1 regressions en 5 páginas de industria (hospitality, construction, safety, mining, virtual)</td><td>Contenido / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>S2 ⚡</td><td>Agregar CTAs a meta descriptions de 22 páginas</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>S3 ⚡</td><td>Schema: CollectionPage + ItemList en hub /digital-inspections-software/</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>S4</td><td>Schema: BlogPosting + BreadcrumbList en todos los blog posts</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>3h</td></tr>
+        <tr><td>S5 ⚡</td><td>Schema: pricing page — SoftwareApplication + AggregateOffer</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>S6 ⚡</td><td>Agregar 5 páginas de industria al navbar (hospitality, construction, safety, vehicle, mining)</td><td>Abe</td><td><span class="rt-impact medium">MEDIO</span></td><td>30min</td></tr>
+        <tr><td>S7 ⚡</td><td>Reducir delay animate-hero-fade-in: 0.3s → 0s o 0.1s</td><td>Abe</td><td><span class="rt-impact medium">MEDIO</span></td><td>10min</td></tr>
+        <tr><td>S8</td><td>Decidir sobre GPTBot: actualmente bloqueado — evaluar impacto GEO vs protección de contenido</td><td>Hans / Lau</td><td><span class="rt-impact medium">MEDIO</span></td><td>Decisión</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 2 — Días 30–60 (optimización)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Área</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>O1</td><td>Keyword remapping con GSC fresco — encontrar canibalizaciones y gaps a página 1</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>3h</td></tr>
+        <tr><td>O2</td><td>Full page audit + optimización: oil-and-gas (pos 18.16, 2,111 impr)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>3h</td></tr>
+        <tr><td>O3 ⚡</td><td>Optimización: brc audit checklist (pos 8.55, 1,013 impr) → featured snippet</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>O4</td><td>Pull backlink report visualogyx.com — identificar los ~80 links sin recuperar</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>O5 ⚡</td><td>Crear llms-full.txt con contenido extendido de producto + integraciones</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>O6 ⚡</td><td>Agregar bloque Key Facts a llms.txt (stats, certificaciones, integraciones)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>O7</td><td>Generar disavow.txt para ~120 spam links → submit en GSC</td><td>Lau</td><td><span class="rt-impact medium">MEDIO</span></td><td>2h</td></tr>
+        <tr><td>O8</td><td>Fix schema precios: estandarizar en $29/$47 anual en schema.ts + llms.txt</td><td>Lau / Abe</td><td><span class="rt-impact medium">MEDIO</span></td><td>30min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 3 — Días 60–90 (crecimiento y visibilidad AI)</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Área</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>G1 ⚡</td><td>Test AI Overviews, ChatGPT, Perplexity, Gemini y Bing Copilot para queries core</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>G2</td><td>Outreach a 4 listicles: wifitalents, gitnux, zipdo, xenia — con Hunter.io</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>8h+</td></tr>
+        <tr><td>G3</td><td>Crear listicle propio: "Best Digital Inspection Software 2026" (8,000+ palabras)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>L</td></tr>
+        <tr><td>G4</td><td>Audit completo SafetyCulture + GoAudits (5 dimensiones)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>4h</td></tr>
+        <tr><td>G5</td><td>Schema Review en 13 páginas de industria con testimonios Capterra</td><td>Lau / Abe</td><td><span class="rt-impact medium">MEDIO</span></td><td>3h</td></tr>
+        <tr><td>G6</td><td>Expandir SuperTemplate: 17 → 40–60 páginas (industrias adicionales)</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>L</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 0 — Quick Wins pre-lanzamiento: GMB &amp; App Stores</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Canal</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>QW-01 ⚡</td><td>Confirmar horario especial 4 de julio en panel GMB (alerta activa)</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
+        <tr><td>QW-02 ⚡</td><td>Responder las 2 reseñas pendientes (Hans Stimming + Daniel Rosen) — ambas 5★ sin texto, sin respuesta</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>QW-03 ⚡</td><td>Auditar nombre visible en LinkedIn — verificar si el encabezado del perfil muestra "Visualogyx" o "VLX" (<code>linkedin.com/company/vlx/</code> tiene URL correcta pero el display name puede no haberse actualizado)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min</td></tr>
+        <tr><td>QW-04</td><td>Solicitar cambio de nombre en Facebook: "Visualogyx" → "VLX" (requiere admin — Meta tarda 7–14 días en aprobar)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min + espera</td></tr>
+        <tr><td>QW-05</td><td>Verificar en App Store Connect si VLX y COUNTiT están activos en iOS — todas las URLs de App Store devuelven error (iOS = ~65% del tráfico B2B enterprise)</td><td>App Store</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h</td></tr>
+        <tr><td>QW-06 ⚡</td><td>Agregar badges de descarga ("Get it on Google Play" + "Download on the App Store") en <code>/app/countit/</code> y <code>/app/kypit/</code> — actualmente no tienen ningún link a tiendas</td><td>Web / ASO</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h dev</td></tr>
+        <tr><td>QW-07 ⚡</td><td>Reescribir descripción de GMB con versión bilingüe (EN + ES) incluyendo keywords LatAm: "software de inspecciones digitales", "auditorías digitales en campo", "verificación de activos". Agregar CTA al final.</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>QW-08 ⚡</td><td>Subir mínimo 5 fotos nuevas a GMB — 274 días sin actualización (alerta activa). Priorizar: nueva UI de vlx.ai, caso industrial, KYPiT en acción, COUNTiT, logo VLX actualizado</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>QW-09</td><td>Cambiar nombre del desarrollador en Play Store: "Visualogyx Inc." → "VLX" — alinear con salida del nuevo sitio</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
+        <tr><td>QW-10</td><td>Corregir H1 de <code>/app/countit/</code>: "Count Anything. Photograph It. Prove It." → "COUNTiT: AI-Powered Object Counting for Field Inspections"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
+        <tr><td>QW-11</td><td>Corregir H1 de <code>/app/kypit/</code>: "KYPiT: Know Your Product" → "KYPiT: Built-In Fraud Detection for Every Field Inspection"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
+        <tr><td>QW-12</td><td>Reescribir descripción de COUNTiT en Play Store — actual: ~150 palabras sin keywords. Máximo: 4,000 chars. Keywords clave: AI object counting · inventory count app · pallet counting · photo-based inventory · automated asset counter</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>QW-13</td><td>Agregar sección KYPiT en descripción de app VLX (Play Store): "KYPiT Fraud Detection — Built into every VLX inspection" con keywords: fraud detection · GPS validation · image integrity verification · inspection fraud prevention</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert info" style="margin-top:24px">
+    <span class="alert-icon">💡</span>
+    <div class="alert-body">
+      <div class="alert-title">El mayor ROI está en dos acciones que toman menos de 1 hora</div>
+      <div class="alert-text"><strong>B2 (BlogListFallback):</strong> cambiar una línea de código desbloquea la indexación de 104 posts del blog — el mayor driver de tráfico orgánico de VLX. <strong>B1 (308→301):</strong> reemplazar <code>permanent: true</code> por <code>statusCode: 301</code> en next.config.ts protege la equity de link transferida a través de los 286 redirects de migración. Ambos deben resolverse antes del go-live.</div>
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+const DESC = {
+  'VLX-01': { text: 'Next.js emite HTTP 308 (Permanent Redirect) cuando se usa <code>permanent: true</code> en la configuración de redirects. El estándar SEO para redirecciones permanentes de contenido es HTTP 301. Aunque Google procesa ambos, herramientas como Ahrefs y DataForSEO pueden reportar gaps de link equity a través de 308. Con 286 redirects activos de la migración WordPress → Next.js, el impacto acumulado es relevante para la recuperación post-migración de visualogyx.com → vlx.ai.', fix: 'Reemplazar permanent: true por statusCode: 301 en las 286 reglas de next.config.ts. Nota: statusCode y permanent son mutuamente excluyentes en Next.js — usar solo statusCode: 301.' },
+  'VLX-02': { text: 'El blog usa <code>BlogListContent.tsx</code> que envuelve el contenido en un <code>&lt;Suspense&gt;</code>. El fallback de Suspense (lo que Googlebot ve en SSR antes de que cargue JavaScript) estaba limitado a <code>allPosts.slice(0, POSTS_PER_PAGE)</code> donde POSTS_PER_PAGE = 12. <strong>Estado actual incierto:</strong> el código analizado en Hans-review mostraba el slice en línea 168. Sin embargo, el plan externo auditado el 5 de junio indica que <code>generateStaticParams()</code> fue implementado y el Dev Tracker registra "Blog SSR complete: 116/116". Es posible que el fix ya esté en un commit más reciente del branch.', fix: 'Verificar el estado actual de BlogListContent.tsx en el commit más reciente de Hans-review. Si el slice sigue presente: cambiar <code>const firstPage = allPosts.slice(0, POSTS_PER_PAGE)</code> por <code>const firstPage = allPosts</code>. Si <code>generateStaticParams()</code> ya está implementado, confirmar que ningún fallback usa el slice y marcar como resuelto.' },
+  'VLX-03': { text: 'El audit de mayo 2026 identificó 13 landing pages de campañas pagas (Capterra, G2, LinkedIn, etc.) con tráfico activo. Al revisar next.config.ts, solo se encontraron 2 con redirect configurado. Las 11 restantes devolverán 404 al lanzar el nuevo sitio, destruyendo el tráfico de campañas activas. La LP de Capterra tenía ~104 sesiones/mes registradas en GA4.', fix: 'Identificar la lista completa de las 13 LPs (del documento AUDIT-MIGRATIONS-EN-2026-05-28.md §CRIT-3), verificar cuáles tienen tráfico activo en GA4, y agregar los redirects 301 correspondientes en next.config.ts antes del lanzamiento.' },
+  'VLX-04': { text: 'La página de pricing (<code>/pricing/</code>) es un componente cliente (client component en Next.js). Los componentes cliente no ejecutan código en el servidor — lo que significa que no puede inyectarse JSON-LD schema desde el server component wrapper. Sin schema, la página de pricing no puede aparecer en rich results de Google (precio, rating, ofertas). Esta es la página de mayor intent comercial del sitio.', fix: 'Agregar el JSON-LD de SoftwareApplication + AggregateOffer al server component wrapper en pricing/page.tsx. Ver AUDIT-CONSOLIDATED §3 para el código completo de schema.' },
+  'VLX-05': { text: 'La lógica de noindex en layout.tsx es: si VERCEL_ENV existe y NO es "production", se aplica noindex. Si la variable no está configurada en Vercel al momento del lanzamiento, la condición process.env.VERCEL_ENV es undefined — lo que hace que el sitio se indexe correctamente. Sin embargo, si hay cualquier issue con la configuración de Vercel, todo el sitio podría quedar en noindex sin aviso visual.', fix: 'Antes del lanzamiento, verificar en el Dashboard de Vercel que el proyecto tiene VERCEL_ENV=production configurado. También verificar haciendo fetch de cualquier URL de producción con View Source y buscando "noindex" en el HTML.' },
+  'VLX-06': { text: 'En el nuevo sitio (Hans-review), 5 páginas de industria tienen regresiones en su H1 respecto a la versión de producción (WordPress). Los H1 pierden las keywords de industria + "software" que la versión actual sí incluye. Esto es crítico porque el H1 es la señal on-page más importante para Google de qué trata la página. Una regresión en H1 puede tardar meses en recuperarse en rankings.<br><br>Páginas afectadas: Hospitality (pierde "hotel" + "software"), Construction (pierde "construction software"), Safety (pierde "software"), Mining (pierde "software"), Virtual/Remote (pierde "Remote Inspection Software").', fix: 'Actualizar el H1 en los 5 archivos de contenido (*Content.tsx) para incluir la keyword de industria + "software". Ejemplo para Mining: cambiar el H1 a "Digital Inspection Software for Mining Operations".' },
+  'VLX-07': { text: 'Solo la página /demo/ tiene un llamado a la acción en su meta description. Las 22 páginas restantes tienen descripciones informativas pero sin CTA. El CTR (click-through rate) en SERP es un factor de ranking confirmado, y las meta descriptions con CTA claro ("Start Free Trial", "See How It Works", "Get a Demo") tienen CTR mediblemente más alto.', fix: 'El equipo SEO redacta las meta descriptions con CTA para las 22 páginas, Abe las implementa en los archivos de metadata correspondientes. Priorizar: homepage, hub de industrias, páginas de oil&gas, insurance y financial services.' },
+  'VLX-08': { text: 'El hub /digital-inspections-software/ es la página de mayor importancia arquitectural del sitio. Sin CollectionPage + ItemList schema, Google no puede representar la página como una colección estructurada de productos/servicios. Este schema también potencia la aparición en AI Overviews como una fuente autorizada de comparación de categorías.', fix: 'Agregar a src/lib/schema.ts una función hubPageSchema() que emita CollectionPage con ItemList listando las 17+ páginas de industria y uso. Inyectar en /digital-inspections-software/page.tsx.' },
+  'VLX-09': { text: 'Los 116 posts del blog no tienen BlogPosting schema individual. Sin este schema, los posts no son elegibles para rich results de artículos (fecha de publicación, autor, thumbnail). El schema también es una señal de E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) que Google premia en contenido editorial.', fix: 'Agregar a src/lib/schema.ts una función blogPostSchema(post) que emita BlogPosting con author, datePublished, dateModified y BreadcrumbList. Inyectar en /blog/[slug]/page.tsx desde el server component.' },
+  'VLX-10': { text: 'Las páginas de Hospitality, Construction, Safety, Vehicle y Mining fueron agregadas en sesiones recientes (Session 6 y Session 8). Sin embargo, no están incluidas en el dropdown del navbar. Esto significa que solo reciben link equity desde el hub (/digital-inspections-software/), sin el refuerzo del header que aparece en cada página del sitio. Con un sitio de ~50+ páginas, el header es una fuente significativa de internal links.', fix: 'Agregar las 5 páginas faltantes al dropdown de industrias en el componente Navbar.tsx. Verificar también que la sección "Browse by Industry" del hub las incluya (debería con 17 links ya configurados).' },
+  'VLX-11': { text: 'La migración de dominio visualogyx.com → vlx.ai (septiembre 2025) dejó aproximadamente 80 backlinks legítimos de DA > 20 apuntando al dominio anterior. Estos links no están transfiriendo equity al nuevo dominio. La recuperación de estos links es crítica en el período de 6–12 meses post-migración donde Google está transfiriendo autoridad del dominio viejo al nuevo.', fix: 'Pull del report de backlinks de visualogyx.com con DataForSEO o Ahrefs. Filtrar: DA > 20, no-spam, anchor con brand o keywords de producto. Usar Hunter.io para encontrar contactos y enviar outreach personalizado solicitando actualizar el link a vlx.ai.' },
+  'VLX-12': { text: 'El top 10 de "digital inspection software" en SERP USA está dominado por listicles de 8,000–10,000 palabras. VLX no aparece en ninguno de los 4 principales: wifitalents.com, gitnux.org, zipdo.co, xenia.team. Tampoco en ningún otro listicle del top 20 (excepto el propio de GoAudits donde aparece en #3). Cada uno de estos listicles es una fuente de tráfico de referencia + señal de relevancia para AI Overviews y Perplexity.', fix: 'Iniciar outreach a los 4 listicles con el value prop diferenciado de VLX: KYPiT (único en el mercado), FCRA compliant virtual inspections, CountIt, SOC 2 Type 2. Usar Hunter.io free para encontrar emails de editores. Paralelamente, crear el propio listicle en /blog/best-digital-inspection-software/.' },
+  'VLX-13': { text: 'El H1 en SuperTemplate usa la animación CSS <code>animate-hero-fade-in</code> definida como <code>hero-fade-in 0.5s ease-out 0.3s both</code>. El <code>0.3s</code> es el delay antes de que comience la animación. Con <code>animation-fill-mode: both</code>, el H1 es visualmente invisible durante los primeros 300ms después del paint. Si el H1 es el elemento LCP (Largest Contentful Paint), este delay se suma directamente al score de LCP. En páginas de industria donde el H1 es prominente en el hero, es probable que sea el LCP.', fix: 'En tailwind.config.ts, cambiar la definición de hero-fade-in de 0.3s delay a 0s: "hero-fade-in": "hero-fade-in 0.5s ease-out 0s both". Alternativamente, usar 0.1s para mantener una transición suave sin impacto medible en LCP.' },
+  'VLX-14': { text: 'robots.ts bloquea GPTBot (el crawler de ChatGPT para entrenamiento). Esto también previene que ChatGPT cite vlx.ai en sus respuestas generativas cuando hace búsquedas para responder preguntas de usuarios. Con AI Overviews y respuestas generativas siendo cada vez más prominentes en SERP, estar bloqueado en GPTBot significa menos visibilidad en ChatGPT, que tiene ~100M de usuarios activos diarios consultando queries comerciales.', fix: 'Evaluar con Hans si el objetivo es proteger el contenido de ser usado para entrenamiento de modelos (legítimo) vs. aparecer en respuestas de ChatGPT. Una opción es bloquear GPTBot para entrenamiento pero permitir el crawler de búsqueda (si OpenAI ofrece uno diferenciado en el futuro). Actualmente, bloquear GPTBot bloquea ambas funciones.' },
+  'VLX-15': { text: 'Las páginas /compare/vlx-vs-goaudits/ y /compare/vlx-vs-safetyculture/ solo emiten BreadcrumbList schema. Sin ItemList schema con los dos SoftwareApplication (VLX + competidor), estas páginas no pueden aparecer en rich results de comparación. Las páginas de comparación tienen altísimo intent comercial — son visitadas por usuarios en el bottom of funnel listos para tomar una decisión.', fix: 'Agregar ItemList schema con dos ListItem, cada uno conteniendo un SoftwareApplication (VLX y el competidor). Incluir campos: name, url, description, aggregateRating si disponible.' },
+  'VLX-16': { text: 'llms.txt está presente y bien estructurado con las URLs principales del producto. Pero falta llms-full.txt, que es el archivo extendido que ChatGPT y Gemini usan para entender en detalle qué hace el producto, cómo se integra y qué casos de uso cubre. Sin llms-full.txt, las respuestas generativas sobre VLX son superficiales.', fix: 'Crear /public/llms-full.txt con contenido extendido: descripción completa del producto, los 10 casos de uso principales, lista de integraciones, descripción de KYPiT y CountIt, pricing detallado, casos de estudio clave, y datos de la empresa.' },
+  'VLX-17': { text: 'Google AI Overviews usa los "Key Facts" del contenido para construir respuestas directas. VLX no tiene un bloque de Key Facts en llms.txt que pueda ser citado verbatim por AI Overviews. Sin estos anchors, las respuestas de AI sobre VLX son genéricas y fácilmente dominadas por competidores que sí los tienen.', fix: 'Agregar a llms.txt un bloque "Key Facts" con: número de inspecciones procesadas, número de organizaciones activas, certificaciones (SOC 2 Type 2), diferenciadores únicos (KYPiT, FCRA compliance), pricing ($29/$47/user/month), y mercados principales.' },
+  'VLX-18': { text: 'schema.ts define AggregateOffer con lowPrice: "35" (precio mensual estimado). Pero llms.txt y el copy de usuario muestran $29/$47 (precios anuales). Esta inconsistencia puede confundir a Google sobre el precio real del producto y afectar la confianza de la entidad en el Knowledge Graph.', fix: 'Estandarizar a precios anuales ($29/$47) en schema.ts. Actualizar: lowPrice: "29", highPrice: "47", y agregar un comentario indicando que son precios anuales por usuario.' },
+  'VLX-19': { text: 'Las 10 páginas de integraciones (/integrations/*) usan HowTo schema. Google anunció en agosto 2023 que HowTo ya no genera rich results en SERP — el schema es técnicamente válido pero no produce ningún beneficio visual en los resultados de búsqueda. Es markup que ocupa espacio en el HTML sin retorno SEO.', fix: 'Reemplazar HowTo schema con SoftwareApplication schema en las páginas de integración, describiendo VLX como la aplicación que se integra con cada herramienta. Esto sí puede generar rich results relevantes.' },
+  'VLX-20': { text: 'Las 13 páginas de industria del sitio muestran testimonios verificados de Capterra (con rating y nombre del revisor). Sin embargo, ninguna emite Review schema. Review schema permite que Google muestre las estrellas de calificación directamente en SERP (star ratings en snippets), lo que aumenta el CTR significativamente.', fix: 'Agregar Review schema (o AggregateRating) en cada una de las 13 páginas de industria, citando los testimonios de Capterra como fuente. El AggregateRating global ya está en SoftwareApplication schema — estos serían Review individuales por industria.' },
+  'VLX-21': { text: 'Solo 8 de las 48 páginas principales del sitio tienen una imagen Open Graph configurada. Las 40 páginas restantes cuando se comparten en LinkedIn, Twitter/X o Slack muestran el fallback genérico del sitio. Las OG images de alta calidad aumentan el CTR en redes sociales entre 3–5x respecto a las genéricas.', fix: 'Prioridad: crear OG images personalizadas para las páginas de industria (17), hub, homepage y pricing. Las páginas de industria pueden usar una plantilla con el logo de VLX + nombre de industria + brand color — se puede generar programáticamente con la API de Vercel OG Image.' },
+  'VLX-22': { text: 'El schema Organization de VLX tiene tres gaps menores: (1) falta el campo "slogan" ("Verify, then Trust®"), (2) falta "areaServed" (USA, Canada), y (3) el campo sameAs incluye la URL de G2 apuntando a /products/vlx/reviews — la URL canónica de G2 para el Knowledge Graph debería ser /products/vlx/ sin el sufijo /reviews.', fix: 'En src/lib/schema.ts, en la función organizationSchema(), agregar: slogan: "Verify, then Trust®", areaServed: ["US", "CA"]. Y corregir el sameAs de G2 a "https://www.g2.com/products/vlx".' },
+  'VLX-23': { text: 'La regla wildcard en robots.ts (userAgent: "*", allow: "/") cubre Bingbot implícitamente. Sin embargo, para el workflow de Day 0 (submit IndexNow + verificar Bing Webmaster Tools), tener una regla explícita para Bingbot da más claridad y evita cualquier ambigüedad.', fix: 'Agregar a robots.ts: { userAgent: "Bingbot", allow: "/" } y { userAgent: "Applebot", allow: "/" } como reglas explícitas.' },
+  'VLX-24': { text: 'El redirect de paginación del blog es: /blog/page/:num → /blog?page=:num. Los query parameters no son crawleados de forma confiable por Googlebot — Google puede ignorar o canonicalizar las URLs con ?page=N al /blog/ base. El formato correcto para paginación crawleable en Next.js es /blog/page/2/, /blog/page/3/, etc.', fix: 'Cambiar el redirect a: { source: "/blog/page/:num", destination: "/blog/", statusCode: 301 } — ya que consolidar la paginación al blog hub es la opción más simple. Si se quiere paginación crawleable real, implementar rutas /blog/page/[num]/page.tsx.' },
+  'VLX-25': { text: 'La página /case-studies/ existe en el sitio (confirmado en el plan externo Jun-05) pero no está incluida en sitemap.ts. Sin estar en el sitemap, Google no tiene señal explícita de que esta URL debe ser rastreada e indexada. Los case studies son contenido de fondo de embudo con alto valor para conversión y para E-E-A-T (demuestran experiencia real con clientes verificados).', fix: 'Agregar en src/app/sitemap.ts una entrada estática para /case-studies/ con changeFrequency: "monthly" y priority: 0.7. Si hay páginas individuales de case studies (/case-studies/[slug]/), también incluirlas en el sitemap con un fetch dinámico similar al de los blog posts.' }
+};
+
+function toggleExpand(row) {
+  const id = row.querySelector('.h-id').textContent.trim();
+  const data = DESC[id];
+  if (!data) return;
+  const isExpanded = row.classList.contains('expanded');
+  document.querySelectorAll('.h-row.expanded').forEach(r => {
+    r.classList.remove('expanded');
+    const next = r.nextElementSibling;
+    if (next && next.classList.contains('h-expand-row')) next.classList.remove('open');
+  });
+  if (!isExpanded) {
+    row.classList.add('expanded');
+    let expandRow = row.nextElementSibling;
+    if (!expandRow || !expandRow.classList.contains('h-expand-row')) {
+      expandRow = document.createElement('tr');
+      expandRow.className = 'h-expand-row';
+      const cols = row.querySelectorAll('td').length;
+      expandRow.innerHTML = `<td class="h-expand-td" colspan="${cols}">
+        <div class="h-expand-inner">
+          <div class="h-expand-text">${data.text}</div>
+          <div class="h-expand-fix">
+            <div class="h-expand-fix-label">✦ Solución recomendada</div>
+            <div class="h-expand-fix-text">${data.fix}</div>
+          </div>
+        </div>
+      </td>`;
+      row.after(expandRow);
+    }
+    expandRow.classList.add('open');
+  }
+}
+
+document.querySelectorAll('.h-row').forEach(row => {
+  const titleEl = row.querySelector('.h-title');
+  if (titleEl && !titleEl.querySelector('.h-chevron')) {
+    titleEl.insertAdjacentHTML('beforeend', '<span class="h-chevron">▶</span>');
+  }
+  row.addEventListener('click', () => toggleExpand(row));
+});
+
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[onclick*="${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, {threshold: 0.25});
+sections.forEach(s => observer.observe(s));
+
+function filterHallazgos(priority, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.h-row.expanded').forEach(r => {
+    r.classList.remove('expanded');
+    const next = r.nextElementSibling;
+    if (next && next.classList.contains('h-expand-row')) next.classList.remove('open');
+  });
+  document.querySelectorAll('.h-row').forEach(row => {
+    const show = priority === 'all' || row.dataset.p === priority;
+    row.style.display = show ? '' : 'none';
+    const next = row.nextElementSibling;
+    if (next && next.classList.contains('h-expand-row')) next.style.display = 'none';
+  });
+}
+</script>
+</body>
+</html>
