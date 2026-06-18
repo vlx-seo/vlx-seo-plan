@@ -545,6 +545,41 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
   <p class="section-sub">Ordenado por impacto y facilidad de ejecución. Los items marcados con ⚡ son Quick Wins: alto impacto + esfuerzo XS o S.</p>
 
   <div class="phase-block">
+    <div class="phase-label">Fase 0 — Quick Wins GMB pre-lanzamiento</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Canal</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>QW-G01 ⚡</td><td>Confirmar horario especial 4 de julio en panel GMB (alerta activa)</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
+        <tr><td>QW-G02 ⚡</td><td>Responder las 2 reseñas pendientes (Hans Stimming + Daniel Rosen) — ambas 5★ sin texto, sin respuesta</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
+        <tr><td>QW-G03 ⚡</td><td>Auditar nombre visible en LinkedIn — verificar si el encabezado del perfil muestra "Visualogyx" o "VLX" (<code>linkedin.com/company/vlx/</code> tiene URL correcta pero el display name puede no haberse actualizado)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min</td></tr>
+        <tr><td>QW-G04</td><td>Solicitar cambio de nombre en Facebook: "Visualogyx" → "VLX" (requiere admin — Meta tarda 7–14 días en aprobar)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min + espera</td></tr>
+        <tr><td>QW-G05 ⚡</td><td>Reescribir descripción de GMB con versión bilingüe (EN + ES) incluyendo keywords LatAm: "software de inspecciones digitales", "auditorías digitales en campo", "verificación de activos". Agregar CTA al final.</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+        <tr><td>QW-G06 ⚡</td><td>Subir mínimo 5 fotos nuevas a GMB — 274 días sin actualización (alerta activa). Priorizar: nueva UI de vlx.ai, caso industrial, KYPiT en acción, COUNTiT, logo VLX actualizado</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
+    <div class="phase-label">Fase 0 — Quick Wins App Stores pre-lanzamiento</div>
+    <table class="roadmap-table">
+      <thead>
+        <tr><th>#</th><th>Acción</th><th>Canal</th><th>Impacto</th><th>Est.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>QW-A01</td><td>Verificar en App Store Connect si VLX y COUNTiT están activos en iOS — todas las URLs de App Store devuelven error (iOS = ~65% del tráfico B2B enterprise)</td><td>App Store</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h</td></tr>
+        <tr><td>QW-A02 ⚡</td><td>Agregar badges de descarga ("Get it on Google Play" + "Download on the App Store") en <code>/app/countit/</code> y <code>/app/kypit/</code> — actualmente no tienen ningún link a tiendas</td><td>Web / ASO</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h dev</td></tr>
+        <tr><td>QW-A03</td><td>Cambiar nombre del desarrollador en Play Store: "Visualogyx Inc." → "VLX" — alinear con salida del nuevo sitio</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
+        <tr><td>QW-A04 ⚡</td><td>Corregir H1 de <code>/app/countit/</code>: "Count Anything. Photograph It. Prove It." → "COUNTiT: AI-Powered Object Counting for Field Inspections"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
+        <tr><td>QW-A05 ⚡</td><td>Corregir H1 de <code>/app/kypit/</code>: "KYPiT: Know Your Product" → "KYPiT: Built-In Fraud Detection for Every Field Inspection"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
+        <tr><td>QW-A06</td><td>Reescribir descripción de COUNTiT en Play Store — actual: ~150 palabras sin keywords. Máximo: 4,000 chars. Keywords clave: AI object counting · inventory count app · pallet counting · photo-based inventory · automated asset counter</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
+        <tr><td>QW-A07</td><td>Agregar sección KYPiT en descripción de app VLX (Play Store): "KYPiT Fraud Detection — Built into every VLX inspection" con keywords: fraud detection · GPS validation · image integrity verification · inspection fraud prevention</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="phase-block">
     <div class="phase-label">Fase 0 — Pre-lanzamiento (resolver antes del go-live)</div>
     <table class="roadmap-table">
       <thead>
@@ -629,30 +664,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
         <tr><td>G4</td><td>Audit completo SafetyCulture + GoAudits (5 dimensiones)</td><td>Lau</td><td><span class="rt-impact high">ALTO</span></td><td>4h</td></tr>
         <tr><td>G5</td><td>Schema Review en 13 páginas de industria con testimonios Capterra</td><td>Lau / Abe</td><td><span class="rt-impact medium">MEDIO</span></td><td>3h</td></tr>
         <tr><td>G6</td><td>Expandir SuperTemplate: 17 → 40–60 páginas (industrias adicionales)</td><td>Lau / Abe</td><td><span class="rt-impact high">ALTO</span></td><td>L</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="phase-block">
-    <div class="phase-label">Fase 0 — Quick Wins pre-lanzamiento: GMB &amp; App Stores</div>
-    <table class="roadmap-table">
-      <thead>
-        <tr><th>#</th><th>Acción</th><th>Canal</th><th>Impacto</th><th>Est.</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>QW-01 ⚡</td><td>Confirmar horario especial 4 de julio en panel GMB (alerta activa)</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>5min</td></tr>
-        <tr><td>QW-02 ⚡</td><td>Responder las 2 reseñas pendientes (Hans Stimming + Daniel Rosen) — ambas 5★ sin texto, sin respuesta</td><td>GMB</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>15min</td></tr>
-        <tr><td>QW-03 ⚡</td><td>Auditar nombre visible en LinkedIn — verificar si el encabezado del perfil muestra "Visualogyx" o "VLX" (<code>linkedin.com/company/vlx/</code> tiene URL correcta pero el display name puede no haberse actualizado)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min</td></tr>
-        <tr><td>QW-04</td><td>Solicitar cambio de nombre en Facebook: "Visualogyx" → "VLX" (requiere admin — Meta tarda 7–14 días en aprobar)</td><td>Marca</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>20min + espera</td></tr>
-        <tr><td>QW-05</td><td>Verificar en App Store Connect si VLX y COUNTiT están activos en iOS — todas las URLs de App Store devuelven error (iOS = ~65% del tráfico B2B enterprise)</td><td>App Store</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h</td></tr>
-        <tr><td>QW-06 ⚡</td><td>Agregar badges de descarga ("Get it on Google Play" + "Download on the App Store") en <code>/app/countit/</code> y <code>/app/kypit/</code> — actualmente no tienen ningún link a tiendas</td><td>Web / ASO</td><td><span class="rt-impact critical">CRÍTICO</span></td><td>1h dev</td></tr>
-        <tr><td>QW-07 ⚡</td><td>Reescribir descripción de GMB con versión bilingüe (EN + ES) incluyendo keywords LatAm: "software de inspecciones digitales", "auditorías digitales en campo", "verificación de activos". Agregar CTA al final.</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
-        <tr><td>QW-08 ⚡</td><td>Subir mínimo 5 fotos nuevas a GMB — 274 días sin actualización (alerta activa). Priorizar: nueva UI de vlx.ai, caso industrial, KYPiT en acción, COUNTiT, logo VLX actualizado</td><td>GMB</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
-        <tr><td>QW-09</td><td>Cambiar nombre del desarrollador en Play Store: "Visualogyx Inc." → "VLX" — alinear con salida del nuevo sitio</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>15min</td></tr>
-        <tr><td>QW-10</td><td>Corregir H1 de <code>/app/countit/</code>: "Count Anything. Photograph It. Prove It." → "COUNTiT: AI-Powered Object Counting for Field Inspections"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
-        <tr><td>QW-11</td><td>Corregir H1 de <code>/app/kypit/</code>: "KYPiT: Know Your Product" → "KYPiT: Built-In Fraud Detection for Every Field Inspection"</td><td>Web / ASO</td><td><span class="rt-impact high">ALTO</span></td><td>5min dev</td></tr>
-        <tr><td>QW-12</td><td>Reescribir descripción de COUNTiT en Play Store — actual: ~150 palabras sin keywords. Máximo: 4,000 chars. Keywords clave: AI object counting · inventory count app · pallet counting · photo-based inventory · automated asset counter</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>2h</td></tr>
-        <tr><td>QW-13</td><td>Agregar sección KYPiT en descripción de app VLX (Play Store): "KYPiT Fraud Detection — Built into every VLX inspection" con keywords: fraud detection · GPS validation · image integrity verification · inspection fraud prevention</td><td>App Store</td><td><span class="rt-impact high">ALTO</span></td><td>1h</td></tr>
       </tbody>
     </table>
   </div>
