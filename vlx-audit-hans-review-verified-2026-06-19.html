@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VLX SEO Audit — Review Completo 2026-06-19</title>
+  <style>
+    :root {
+      --brand: #FF5722;
+      --brand-dark: #E64A19;
+      --text: #263238;
+      --text-secondary: #546E7A;
+      --surface: #fff;
+      --surface-muted: #F8FAFC;
+      --surface-dark: #1E293B;
+      --surface-darker: #0F172A;
+      --border: #E2E8F0;
+      --green: #10B981;
+      --yellow: #F59E0B;
+      --red: #EF4444;
+      --blue: #3B82F6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text); background: #F1F5F9; line-height: 1.6; }
+
+    /* Header */
+    .page-header { background: var(--surface-darker); color: #fff; padding: 40px 0 32px; border-bottom: 3px solid var(--brand); }
+    .page-header .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .page-header h1 span { color: var(--brand); }
+    .meta-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+    .meta-pill { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 6px 14px; font-size: 0.8rem; color: #CBD5E1; }
+    .meta-pill strong { color: #fff; }
+    .provisional-banner { background: #7C3AED; color: #fff; text-align: center; padding: 8px 24px; font-size: 0.82rem; }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+    /* Dashboard */
+    .dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .kpi-card { background: var(--surface); border-radius: 10px; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+    .kpi-card .label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+    .kpi-card .value { font-size: 1.6rem; font-weight: 700; }
+    .kpi-card .sub { font-size: 0.78rem; color: var(--text-secondary); }
+    .kpi-ok .value { color: var(--green); }
+    .kpi-warn .value { color: var(--yellow); }
+    .kpi-bad .value { color: var(--red); }
+
+    /* Sections */
+    .section { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 32px; overflow: hidden; }
+    .section-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; background: var(--surface-muted); }
+    .section-num { background: var(--brand); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .section-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .section-body { padding: 24px 28px; }
+
+    /* Badges */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-ok { background: #D1FAE5; color: #065F46; }
+    .badge-warn { background: #FEF3C7; color: #92400E; }
+    .badge-bad { background: #FEE2E2; color: #991B1B; }
+    .badge-info { background: #DBEAFE; color: #1E40AF; }
+    .badge-prov { background: #EDE9FE; color: #5B21B6; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th { background: var(--surface-darker); color: #fff; font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface-muted); }
+
+    /* Blockers */
+    .blocker { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .blocker-header { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: var(--surface-muted); border-bottom: 1px solid var(--border); }
+    .blocker-id { font-size: 0.8rem; font-weight: 700; color: var(--brand); min-width: 28px; }
+    .blocker-title { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .blocker-body { padding: 16px 20px; display: grid; gap: 10px; }
+    .blocker-body .row { display: grid; grid-template-columns: 100px 1fr; gap: 8px; font-size: 0.85rem; }
+    .blocker-body .row .lbl { font-weight: 600; color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .blocker-body code { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 4px; padding: 2px 6px; font-size: 0.78rem; font-family: 'Courier New', monospace; color: #475569; }
+
+    /* Top 5 */
+    .top5 { display: grid; gap: 12px; }
+    .top5-item { display: flex; align-items: flex-start; gap: 14px; background: var(--surface-muted); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+    .top5-num { background: var(--brand); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+    .top5-content strong { font-size: 0.95rem; display: block; margin-bottom: 4px; }
+    .top5-content span { font-size: 0.83rem; color: var(--text-secondary); }
+
+    /* Roadmap */
+    .phase { margin-bottom: 28px; }
+    .phase-title { font-size: 1rem; font-weight: 700; color: var(--surface-darker); border-left: 4px solid var(--brand); padding-left: 12px; margin-bottom: 12px; }
+
+    /* Misc */
+    h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 20px 0 10px; }
+    h3:first-child { margin-top: 0; }
+    p { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .prov-note { background: #EDE9FE; border-left: 4px solid #7C3AED; border-radius: 4px; padding: 12px 16px; font-size: 0.82rem; color: #5B21B6; margin-bottom: 16px; }
+    .tag-xhigh { font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: #FEE2E2; color: #991B1B; }
+    .tag-high { font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: #FEF3C7; color: #92400E; }
+    .tag-med { font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: #DBEAFE; color: #1E40AF; }
+    ul.findings { padding-left: 18px; font-size: 0.875rem; display: grid; gap: 6px; }
+    ul.findings li { color: var(--text-secondary); }
+    ul.findings li strong { color: var(--text); }
+    .footer-bar { background: var(--surface-darker); color: #64748B; font-size: 0.78rem; text-align: center; padding: 20px; margin-top: 40px; }
+    .footer-bar strong { color: #94A3B8; }
+  </style>
+</head>
+<body>
+
+<div class="provisional-banner">
+  ⚠️ Secciones GSC, Backlinks, App Stores y Social marcadas como <strong>[PROVISIONAL]</strong> — requieren validación con acceso a herramientas externas
+</div>
+
+<div class="page-header">
+  <div class="inner">
+    <h1>VLX SEO Audit — <span>Review Completo desde Cero</span></h1>
+    <p style="color:#94A3B8;font-size:0.9rem;margin-top:6px;">Plan de ajustes basado en análisis de código · Sin GSC · Sin inferencias de mejoras previas</p>
+    <div class="meta-grid">
+      <div class="meta-pill"><strong>Dominio:</strong> vlx.ai</div>
+      <div class="meta-pill"><strong>Fecha:</strong> 2026-06-19</div>
+      <div class="meta-pill"><strong>Auditor:</strong> Laura Ceballos / Software Craft CR</div>
+      <div class="meta-pill"><strong>Rama:</strong> origin/Hans-review</div>
+      <div class="meta-pill"><strong>Stack:</strong> Next.js 15 · Payload CMS · Vercel</div>
+      <div class="meta-pill"><strong>Método:</strong> Inspección de código + arquitectura</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+    <div class="kpi-card kpi-warn">
+      <div class="label">URLs en Sitemap</div>
+      <div class="value">200+</div>
+      <div class="sub">9 tiers · /case-studies/ índice ausente</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">Páginas con OG image propia</div>
+      <div class="value">~8</div>
+      <div class="sub">de 56+ páginas · 48+ usan genérica</div>
+    </div>
+    <div class="kpi-card kpi-warn">
+      <div class="label">Schemas JSON-LD activos</div>
+      <div class="value">7 tipos</div>
+      <div class="sub">4 con errores · HowTo deprecated activo</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">Blockers abiertos</div>
+      <div class="value">10</div>
+      <div class="sub">P0: 6 · P1: 4</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">Testimonios placeholder</div>
+      <div class="value">14</div>
+      <div class="sub">"QUOTE: needs final copy" en producción</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">Imágenes Blog >1MB</div>
+      <div class="value">2</div>
+      <div class="sub">Afectan LCP · max 1.16 MB</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">CSP Estado</div>
+      <div class="value">Report-Only</div>
+      <div class="sub">No enforcing · Sin protección real</div>
+    </div>
+    <div class="kpi-card kpi-bad">
+      <div class="label">LocalBusiness Schema</div>
+      <div class="value">Ausente</div>
+      <div class="sub">No existe en ninguna página</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1 — RECONCILIACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Reconciliación con Audits Anteriores</h2>
+    </div>
+    <div class="section-body">
+      <p>Fuentes comparadas: <code>SEO-AUDIT-VERIFIED-2026-04-27.md</code> + <code>VLX-AUDIT-HANS-REVIEW-VERIFIED-2026-06-11.html</code> vs estado actual de código en rama <code>Hans-review</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Hallazgo anterior</th><th>Estado actual</th><th>Evidencia</th></tr></thead>
+          <tbody>
+            <tr><td>P0-1</td><td>Hub sin enlaces crawlables</td><td><span class="badge badge-ok">✅ RESUELTO</span></td><td><code>6cf73df</code> — BROWSE_INDUSTRIES activo</td></tr>
+            <tr><td>P0-2</td><td>Hub H1 genérico</td><td><span class="badge badge-ok">✅ RESUELTO</span></td><td>H1 = "Digital Inspection Software for Every Industry"</td></tr>
+            <tr><td>P0-3</td><td>Hub sin CollectionPage/ItemList schema</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td><code>digital-inspections-software/page.tsx</code> solo emite softwareApplicationSchema()</td></tr>
+            <tr><td>P0-4</td><td>Jerarquía de headings rota</td><td><span class="badge badge-warn">⚠️ PARCIAL</span></td><td>SectionHeading hardcoded a h2; FeaturesAccordion usa spans</td></tr>
+            <tr><td>P0-5</td><td>Hero arranca en opacity:0</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td><code>HeroSection.tsx</code> — animate-hero-fade-in desde opacity:0</td></tr>
+            <tr><td>P0-6</td><td>Pricing duplicado en SoftwareApplication</td><td><span class="badge badge-ok">✅ RESUELTO</span></td><td><code>3e1a33f</code> — unificado</td></tr>
+            <tr><td>P0-7</td><td>/case-studies/ ausente del sitemap</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td><code>sitemap.ts:107-118</code> — solo slugs dinámicos</td></tr>
+            <tr><td>P0-8</td><td>HowTo schema deprecated en integrations</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td><code>integrations/[slug]/page.tsx</code></td></tr>
+            <tr><td>P0-9</td><td>trustLogos vacío renderizando strip</td><td><span class="badge badge-info">✅ CHANGED</span></td><td>SuperTemplate ya omite trust strip si length===0</td></tr>
+            <tr><td>P0-10</td><td>Alt text genérico en trust logos</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td>Tipo string[], alt="Trusted customer"</td></tr>
+            <tr><td>P0-11</td><td>2 imágenes blog >1MB</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td>aio-master…webp (1.16MB), default-bank.webp (1.14MB)</td></tr>
+            <tr><td>P0-12</td><td>Testimonios placeholder en producción</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td>"QUOTE: needs final copy" en 14 bloques de SuperTemplate</td></tr>
+            <tr><td>P1-6</td><td>CSP en Report-Only</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td><code>next.config.ts</code> — Content-Security-Policy-Report-Only</td></tr>
+            <tr><td>P1-8</td><td>OG images genéricas en mayoría de páginas</td><td><span class="badge badge-bad">❌ ABIERTO</span></td><td>Solo 8 rutas con opengraph-image.tsx propio</td></tr>
+            <tr><td>P1-21</td><td>Hub sin OG image específica</td><td><span class="badge badge-ok">✅ RESUELTO</span></td><td><code>2b9a6b3</code></td></tr>
+            <tr><td>P1-22</td><td>TrustBar sin next/image</td><td><span class="badge badge-ok">✅ RESUELTO</span></td><td><code>2a6e72c</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;"><strong>Drift del audit anterior:</strong> 6 de 17 items revisados siguen abiertos (35.3%)</p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2 — BLOCKERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Blockers (B1–B10)</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B1</span>
+          <div>
+            <div class="blocker-title">/case-studies/ ausente del sitemap</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-info">XS &lt;30min</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>src/app/sitemap.ts:107-118</code> — getAllCaseStudies() mapea solo slugs dinámicos /case-studies/slug/. La ruta /case-studies/ no aparece en ningún tier.</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Agregar entrada estática <code>{ url: "${BASE_URL}/case-studies/", priority: 0.7 }</code> en sitemap.ts</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B2</span>
+          <div>
+            <div class="blocker-title">HowTo schema deprecated activo en 10 páginas de integración</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-warn">S 1-2h</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Contexto</span><span>Google deprecó HowTo para software SaaS en 2024 — puede resultar en penalización o pérdida de rich results</span></div>
+          <div class="row"><span class="lbl">Evidencia</span><span><code>src/app/(frontend)/integrations/[slug]/page.tsx</code> emite <code>@type: "HowTo"</code> para los 10 slugs: salesforce, zapier, oracle, sap, netsuite, hubspot, google-drive, sharepoint, power-bi, microsoft-teams</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Eliminar el objeto HowTo del schema; mantener SoftwareApplication</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B3</span>
+          <div>
+            <div class="blocker-title">Hero arranca con opacity:0 — riesgo de crawling</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-warn">S 1-2h</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Contexto</span><span>Googlebot puede no ejecutar la animación completa; contenido above-fold potencialmente invisible en crawl</span></div>
+          <div class="row"><span class="lbl">Evidencia</span><span><code>src/components/sections/HeroSection.tsx</code> aplica animate-hero-fade-in; <code>tailwind.config.ts</code> define animación desde opacity: 0 con delay 0.3s</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Usar valor inicial visible + JS para aplicar animación solo si prefers-reduced-motion=no</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B4</span>
+          <div>
+            <div class="blocker-title">CollectionPage/ItemList schema ausente en hub de Digital Inspections</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-warn">S 1-3h</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>src/app/(frontend)/digital-inspections-software/page.tsx</code> emite solo softwareApplicationSchema(). SuperTemplate emite BreadcrumbList/FAQ/Service pero no CollectionPage ni hasPart.</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Agregar JSON-LD con <code>@type: CollectionPage</code> + <code>hasPart</code> listando las 18 URLs hijas del hub</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B5</span>
+          <div>
+            <div class="blocker-title">OG image genérica en 50+ páginas clave</div>
+            <span class="badge badge-warn" style="margin-top:4px;">P1</span> <span class="badge badge-bad">M 4-8h por batch</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span>Solo 8 rutas tienen opengraph-image.tsx propio. Todas las 18 industry pages, pricing, about-us, contact, comparisons usan el OG global genérico opengraph-image.jpg (178KB)</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Crear opengraph-image.tsx para top 10 páginas: hub, pricing, financial-services, manufacturing, insurance, transportation-logistics, ambas compare pages, about-us, contact</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B6</span>
+          <div>
+            <div class="blocker-title">Testimonios placeholder en producción</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-bad">M requiere cliente</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>data.quote</code> renderizado públicamente por SuperTemplate; 14 bloques de quote bajo /digital-inspections-software/ contienen "QUOTE: needs final copy"</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Reemplazar con citas aprobadas de clientes o eliminar secciones de testimonial donde no haya citas disponibles</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B7</span>
+          <div>
+            <div class="blocker-title">2 imágenes de blog superan 1 MB</div>
+            <span class="badge badge-bad" style="margin-top:4px;">P0</span> <span class="badge badge-info">XS &lt;30min</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>aio-master-the-art...webp</code>: 1,164,538 bytes · <code>default-bank.webp</code>: 1,144,160 bytes</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Re-encodear/redimensionar a max 300-400KB. Usar next/image con quality={75} y sizes apropiado.</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B8</span>
+          <div>
+            <div class="blocker-title">robots.txt: falta regla Applebot allow</div>
+            <span class="badge badge-warn" style="margin-top:4px;">P1</span> <span class="badge badge-info">XS &lt;15min</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>src/app/robots.ts:36-41</code> — Applebot-Extended disallowed, pero no existe regla Applebot (allow). Apple Search (Spotlight, Siri) no puede rastrear vlx.ai</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Agregar <code>{ userAgent: "Applebot", allow: "/" }</code> antes de la regla Applebot-Extended</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B9</span>
+          <div>
+            <div class="blocker-title">CSP en modo Report-Only (no enforcing)</div>
+            <span class="badge badge-warn" style="margin-top:4px;">P1</span> <span class="badge badge-bad">M 4-8h</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span><code>next.config.ts</code> envía Content-Security-Policy-Report-Only en lugar de Content-Security-Policy</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Revisar violation reports, corregir directivas problemáticas, promover a enforcing</span></div>
+        </div>
+      </div>
+
+      <div class="blocker">
+        <div class="blocker-header">
+          <span class="blocker-id">B10</span>
+          <div>
+            <div class="blocker-title">Heading hierarchy incompleta en Homepage</div>
+            <span class="badge badge-warn" style="margin-top:4px;">P1</span> <span class="badge badge-warn">S 2-3h</span>
+          </div>
+        </div>
+        <div class="blocker-body">
+          <div class="row"><span class="lbl">Evidencia</span><span>FeaturesAccordion.tsx y StatsSection.tsx usan &lt;span&gt; en lugar de &lt;h3&gt; para subsection labels. SectionHeading component hardcoded a h2.</span></div>
+          <div class="row"><span class="lbl">Acción</span><span>Agregar prop <code>level</code> a SectionHeading; convertir span labels a elementos heading apropiados</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3 — GSC -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>GSC Live Data <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Sin acceso a GSC API en esta sesión. Verificar en Google Search Console > Performance antes de ejecutar el plan de ajustes.</div>
+      <h3>Métricas base a extraer</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Métrica</th><th>Período</th><th>Nota</th></tr></thead>
+        <tbody>
+          <tr><td>Clicks totales</td><td>28d + 90d</td><td>Comparar tendencias entre períodos</td></tr>
+          <tr><td>Impressions totales</td><td>28d + 90d</td><td>Baseline de visibilidad</td></tr>
+          <tr><td>CTR promedio</td><td>28d</td><td>Target: >2.5% para SaaS B2B</td></tr>
+          <tr><td>Posición promedio</td><td>28d</td><td>Target: <25 para keywords primarios</td></tr>
+          <tr><td>URLs indexadas</td><td>Live</td><td>Verificar contra count de sitemap</td></tr>
+          <tr><td>URLs excluidas</td><td>Live</td><td>Identificar páginas con cobertura 0</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">Páginas con mayor riesgo de no-indexación (identificadas en código)</h3>
+      <ul class="findings">
+        <li><strong>/case-studies/</strong> — No está en sitemap (Blocker B1)</li>
+        <li><strong>/lp/[campaign]/</strong> — Correctamente excluido (noindex por diseño)</li>
+        <li><strong>/admin/</strong> — Correctamente excluido</li>
+        <li>Páginas en Vercel preview deployments — noindex/nofollow automático vía env check en <code>layout.tsx:32-34</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4 — KEYWORDS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Keywords y Oportunidades <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Sin datos GSC live. Análisis basado en targeting actual del código y estructura de páginas existentes.</div>
+      <h3>Clusters de keywords activos</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Cluster</th><th>URL objetivo</th><th>Keyword primario</th><th>Estado H1</th></tr></thead>
+        <tbody>
+          <tr><td>Hub / Brand</td><td>/digital-inspections-software/</td><td>digital inspection software</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Financial Services</td><td>/digital-inspections-software/financial-services/</td><td>inspection software financial services</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Manufacturing</td><td>/digital-inspections-software/manufacturing/</td><td>inspection software manufacturing</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Insurance</td><td>/digital-inspections-software/insurance/</td><td>digital inspection insurance</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Transportation</td><td>/digital-inspections-software/transportation-logistics/</td><td>transportation inspection software</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>KYPiT AI</td><td>/digital-inspections-software/app/kypit/</td><td>AI fraud detection inspection</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Comparison SafetyCulture</td><td>/compare/vlx-vs-safetyculture/</td><td>VLX vs SafetyCulture</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Comparison GoAudits</td><td>/compare/vlx-vs-goaudits/</td><td>VLX vs GoAudits</td><td><span class="badge badge-ok">✅</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">Gaps de keywords — Sin página dedicada</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Keyword</th><th>Justificación</th><th>Acción recomendada</th></tr></thead>
+        <tbody>
+          <tr><td>audit software</td><td>Término relacionado sin página específica</td><td>Evaluar en hub o cluster de blog</td></tr>
+          <tr><td>inspection app</td><td>Homepage menciona "app" pero sin página dedicada</td><td>Expandir /product/ con este targeting</td></tr>
+          <tr><td>field inspection software</td><td>/field-operations/ existe pero puede fortalecer keyword</td><td>Revisar meta title/description de esa página</td></tr>
+          <tr><td>checklist software</td><td>/checklists/ con prioridad 0.8 en sitemap pero sin cluster de blog</td><td>Crear cluster de blog alrededor de esta keyword</td></tr>
+          <tr><td>vlx vs GoCanvas</td><td>Competidor sin página de comparación</td><td>Crear /compare/vlx-vs-gocanvas/ (prioridad alta)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5 — CONTENIDO Y ARQUITECTURA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Contenido y Arquitectura</h2>
+    </div>
+    <div class="section-body">
+      <h3>Inventario de páginas</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Categoría</th><th>Cantidad</th><th>Estado SEO</th></tr></thead>
+        <tbody>
+          <tr><td>Core product pages</td><td>8</td><td><span class="badge badge-ok">✅ Metadata completa</span></td></tr>
+          <tr><td>Industry/use-case pages</td><td>19 (hub + 18 spokes)</td><td><span class="badge badge-warn">⚠️ Contenido muy similar entre páginas</span></td></tr>
+          <tr><td>Blog posts (Payload CMS)</td><td>116</td><td><span class="badge badge-ok">✅ seoTitle/seoDescription/seoKeyword</span></td></tr>
+          <tr><td>Integration pages</td><td>10 pre-built + [slug]</td><td><span class="badge badge-bad">❌ HowTo schema deprecated</span></td></tr>
+          <tr><td>Comparison pages</td><td>2</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Company pages</td><td>6</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Case studies</td><td>Dinámico (CMS)</td><td><span class="badge badge-warn">⚠️ Índice /case-studies/ no en sitemap</span></td></tr>
+          <tr><td>Legal pages</td><td>4</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>Landing pages /lp/</td><td>Dinámico</td><td><span class="badge badge-ok">✅ Excluidas de sitemap</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">Problemas de arquitectura de contenido</h3>
+      <ul class="findings">
+        <li><strong>A1 — Near-duplicate content en SuperTemplate:</strong> 94KB de componente maneja 17 páginas de industria. El contenido varía principalmente en el H1/H2. Riesgo de thin content a ojos de Google. Falta contenido único por industria.</li>
+        <li><strong>A2 — Blog disperso en 5 prefijos:</strong> Posts distribuidos entre /blog/, /checklists/, /use-case/, /forms/, /reports/ — fragmenta señal de autoridad. Evaluar si consolidar o mejorar interlinking cross-type.</li>
+        <li><strong>A3 — Breadcrumbs incompletos:</strong> Blog posts carecen de BreadcrumbList schema (solo Article). Pricing page sin BreadcrumbList. Ambas compare pages sin BreadcrumbList.</li>
+        <li><strong>A4 — Interlinking blog→producto escaso:</strong> Posts de blog no enlazan consistentemente a páginas de producto relacionadas (P1-16 de audit previo aún abierto).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6 — SCHEMA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Schema Markup</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Schema Type</th><th>Estado</th><th>Archivo</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>Organization</td><td><span class="badge badge-warn">⚠️ ERRORES</span></td><td><code>src/lib/schema.ts:6-49</code></td><td>foundingDate mal formateado, falta image property</td></tr>
+          <tr><td>WebSite</td><td><span class="badge badge-ok">✅ OK</span></td><td><code>src/lib/schema.ts:51-65</code></td><td>Correcto</td></tr>
+          <tr><td>SoftwareApplication</td><td><span class="badge badge-warn">⚠️ ERRORES</span></td><td><code>src/lib/schema.ts:67-108</code></td><td>AggregateRating ratingCount:20 vs claim "12,000+ users" en copy</td></tr>
+          <tr><td>FAQPage</td><td><span class="badge badge-ok">✅ OK</span></td><td><code>src/lib/schema.ts:123-149</code></td><td>Filtra entries sin texto correctamente</td></tr>
+          <tr><td>Article (blog)</td><td><span class="badge badge-warn">⚠️ INCOMPLETO</span></td><td><code>blog/[slug]/page.tsx</code></td><td>Publisher inlined en lugar de @id reference; falta @id propio; falta BreadcrumbList</td></tr>
+          <tr><td>Article (case studies)</td><td><span class="badge badge-bad">❌ INCOMPLETO</span></td><td><code>case-studies/[slug]/page.tsx</code></td><td>Falta @id, author, dateModified, image, publisher @id reference</td></tr>
+          <tr><td>BreadcrumbList</td><td><span class="badge badge-warn">⚠️ PARCIAL</span></td><td>Múltiples páginas</td><td>Ausente en blog posts, pricing, compare pages</td></tr>
+          <tr><td>VideoObject</td><td><span class="badge badge-warn">⚠️ INCOMPLETO</span></td><td>Homepage</td><td>Falta propiedad <code>duration</code> en ISO 8601</td></tr>
+          <tr><td>HowTo</td><td><span class="badge badge-bad">❌ DEPRECATED</span></td><td><code>integrations/[slug]/page.tsx</code></td><td>Google deprecó HowTo para SaaS; activo en 10 páginas</td></tr>
+          <tr><td>LocalBusiness</td><td><span class="badge badge-bad">❌ AUSENTE</span></td><td>—</td><td>No existe en ninguna página del sitio</td></tr>
+          <tr><td>CollectionPage</td><td><span class="badge badge-bad">❌ AUSENTE</span></td><td>Hub page</td><td>Necesario para comunicar estructura hub+spokes</td></tr>
+          <tr><td>ContactPage</td><td><span class="badge badge-ok">✅</span></td><td><code>src/lib/schema.ts:110-121</code></td><td>OK si está implementado en /contact/</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">Errores específicos</h3>
+      <ul class="findings">
+        <li><strong>Organization foundingDate:</strong> Valor actual: <code>"2020"</code> → Debe ser <code>"2020-01-01"</code> (formato ISO 8601 completo requerido por Google)</li>
+        <li><strong>Organization image:</strong> Schema tiene <code>logo</code> pero no <code>image</code> — son propiedades separadas en schema.org</li>
+        <li><strong>SoftwareApplication aggregateRating:</strong> ratingCount:"20" (correcto para reviews G2+Capterra) pero el copy del sitio dice "4.9/5 across 12,000+ users" — el schema no debe implicar 20 usuarios totales</li>
+        <li><strong>Article publisher:</strong> Inlined como objeto Organization completo en lugar de referencia <code>{"@id": "https://vlx.ai/#organization"}</code></li>
+        <li><strong>Blog author fallback:</strong> Posts sin autor usan David Woldenberg como Person — debería ser VLX Team / Organization</li>
+        <li><strong>VideoObject duration:</strong> Falta propiedad <code>duration</code> en ISO 8601 (ej: "PT3M42S")</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 7 — CORE WEB VITALS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Core Web Vitals <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Sin acceso a PageSpeed Insights API o CrUX. Análisis basado en inspección de código.</div>
+      <h3>Riesgos LCP (Largest Contentful Paint)</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Factor</th><th>Estado</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>Hero image con priority</td><td><span class="badge badge-ok">✅</span></td><td>next/image con priority flag en hero</td></tr>
+          <tr><td>Rubik font display:swap</td><td><span class="badge badge-warn">⚠️</span></td><td>Puede causar FOUT; considerar display:optional</td></tr>
+          <tr><td>2 imágenes blog >1MB</td><td><span class="badge badge-bad">❌</span></td><td>Afectan LCP en posts individuales — ver B7</td></tr>
+          <tr><td>Hero opacity:0 inicial</td><td><span class="badge badge-bad">❌</span></td><td>Contenido above-fold no visible inmediatamente — ver B3</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:16px;">Imágenes sin prop <code>sizes</code> (identificadas en código)</h3>
+      <ul class="findings">
+        <li><strong>Navbar.tsx</strong> — Logo image sin sizes</li>
+        <li><strong>Footer.tsx</strong> — Logo/icon images sin sizes</li>
+        <li><strong>LogoBar.tsx</strong> — Customer logos sin sizes</li>
+        <li><strong>VideoShowcase.tsx</strong> — Thumbnail sin sizes</li>
+        <li><strong>IntegrationsPreview.tsx</strong> — Partner logos sin sizes</li>
+      </ul>
+      <h3 style="margin-top:16px;">Imágenes duplicadas en /public/images/homepage/</h3>
+      <ul class="findings">
+        <li><code>seamless.webp</code>, <code>seamless-new.png</code>, <code>seamless-new.jpg</code> coexisten — solo <code>seamless-new.png</code> referenciado en código. Eliminar variantes no usadas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 8 — AI/GEO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>AI / GEO Visibility</h2>
+    </div>
+    <div class="section-body">
+      <h3>Configuración de crawlers IA en robots.txt</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Bot</th><th>Regla actual</th><th>Evaluación</th></tr></thead>
+        <tbody>
+          <tr><td>OAI-SearchBot (OpenAI Search)</td><td>allow: "/"</td><td><span class="badge badge-ok">✅ Correcto</span></td></tr>
+          <tr><td>PerplexityBot</td><td>allow: "/"</td><td><span class="badge badge-ok">✅ Correcto</span></td></tr>
+          <tr><td>Claude-SearchBot</td><td>allow: "/"</td><td><span class="badge badge-ok">✅ Correcto</span></td></tr>
+          <tr><td>Claude-User</td><td>allow: "/"</td><td><span class="badge badge-ok">✅ Correcto</span></td></tr>
+          <tr><td>GPTBot</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅ Training-only, correcto</span></td></tr>
+          <tr><td>Google-Extended</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅ Gemini training, correcto</span></td></tr>
+          <tr><td>ClaudeBot</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅ Training-only, correcto</span></td></tr>
+          <tr><td>Applebot-Extended</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅ Training, correcto</span></td></tr>
+          <tr style="background:#FFF5F5;"><td><strong>Applebot</strong></td><td><strong>SIN REGLA EXPLÍCITA</strong></td><td><span class="badge badge-bad">❌ Falta allow explícito — ver B8</span></td></tr>
+          <tr><td>Amazonbot</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅</span></td></tr>
+          <tr><td>FacebookBot</td><td>disallow: "/"</td><td><span class="badge badge-ok">✅</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">llms.txt <span class="badge-prov badge" style="margin-left:6px;">VERIFICAR</span></h3>
+      <ul class="findings">
+        <li>Confirmado existente en audits previos (P1-3, P1-4), pero con datos desactualizados</li>
+        <li><strong>Precios desactualizados:</strong> Menciona Pro desde $29, debería ser $35</li>
+        <li><strong>Slugs de URL desactualizados</strong> en algunas entradas</li>
+        <li><strong>Acción:</strong> Actualizar precios ($35-$55), slugs actuales, expandir descripción de features y casos de uso</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 9 — BACKLINKS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>Backlinks <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Sin acceso a Ahrefs, DataForSEO, o Semrush. Análisis basado en perfiles declarados en schema y arquitectura del sitio.</div>
+      <h3>Perfiles sociales declarados en Organization schema (sameAs)</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Red</th><th>URL en schema</th><th>Verificación requerida</th></tr></thead>
+        <tbody>
+          <tr><td>LinkedIn</td><td>linkedin.com/company/vlxai/</td><td>Handle activo, descripción actualizada</td></tr>
+          <tr><td>YouTube</td><td>youtube.com/@vlx-ai</td><td>Canal activo, videos recientes</td></tr>
+          <tr><td>Instagram</td><td>instagram.com/vlx_ai</td><td>Handle activo</td></tr>
+          <tr><td>X (Twitter)</td><td>x.com/vlx_ai</td><td>@vlx_ai activo</td></tr>
+          <tr><td>Facebook</td><td>facebook.com/vlxai</td><td>Página activa</td></tr>
+          <tr><td>G2</td><td>g2.com/products/vlx/reviews</td><td>Perfil actualizado, reviews recientes</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:20px;">Oportunidades de link building identificadas en código</h3>
+      <ul class="findings">
+        <li><strong>Case studies:</strong> ITI International confirmado como cliente en seed — outreach para backlinks</li>
+        <li><strong>10 páginas de integración</strong> (Salesforce, SAP, Oracle, etc.) — directorios de apps de cada plataforma</li>
+        <li><strong>Blog con 116 posts</strong> — contenido linkable si está bien optimizado y promovido</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 10 — COMPETENCIA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Posicionamiento Competitivo</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Competidor</th><th>Página /compare/</th><th>Prioridad</th></tr></thead>
+        <tbody>
+          <tr><td>SafetyCulture</td><td><span class="badge badge-ok">✅ /compare/vlx-vs-safetyculture/</span></td><td>—</td></tr>
+          <tr><td>GoAudits</td><td><span class="badge badge-ok">✅ /compare/vlx-vs-goaudits/</span></td><td>—</td></tr>
+          <tr><td>GoCanvas</td><td><span class="badge badge-bad">❌ Ausente</span></td><td><strong>Alta</strong> — competidor directo más buscado</td></tr>
+          <tr><td>Jotform</td><td><span class="badge badge-bad">❌ Ausente</span></td><td>Media</td></tr>
+          <tr><td>Fulcrum</td><td><span class="badge badge-bad">❌ Ausente</span></td><td>Media</td></tr>
+          <tr><td>MaintainX</td><td><span class="badge badge-bad">❌ Ausente</span></td><td>Media</td></tr>
+          <tr><td>Fluix</td><td><span class="badge badge-bad">❌ Ausente</span></td><td>Media</td></tr>
+          <tr><td>Workiz</td><td><span class="badge badge-bad">❌ Ausente</span></td><td>Baja</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:12px;">Acción prioritaria: crear <code>/compare/vlx-vs-gocanvas/</code> como siguiente página de comparación.</p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 11 — ANALYTICS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Analytics y Tracking</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Herramienta</th><th>Estado</th><th>Implementación</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>Google Analytics 4</td><td><span class="badge badge-ok">✅</span></td><td><code>src/components/analytics/GoogleTag.tsx</code></td><td>Via GTM</td></tr>
+          <tr><td>Meta Pixel</td><td><span class="badge badge-ok">✅</span></td><td><code>src/components/analytics/MetaPixel.tsx</code></td><td>Implementado</td></tr>
+          <tr><td>PostHog</td><td><span class="badge badge-ok">✅</span></td><td><code>PostHogProvider.tsx</code></td><td>Via requestIdleCallback — no bloquea</td></tr>
+          <tr><td>Vercel Analytics</td><td><span class="badge badge-ok">✅</span></td><td>&lt;Analytics /&gt; en layout</td><td>Footprint mínimo</td></tr>
+          <tr><td>Vercel Speed Insights</td><td><span class="badge badge-ok">✅</span></td><td>&lt;SpeedInsights /&gt; en layout</td><td>Core Web Vitals tracking</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:16px;">Faltante — Tracking de conversiones</h3>
+      <ul class="findings">
+        <li><strong>Sin eventos de conversión explícitos en GA4</strong> — Los handlers de formulario (contact/route.ts, demo-request/route.ts) tienen rate limiting pero no emiten eventos de conversión a GA4</li>
+        <li><strong>Verificar:</strong> GA4/Meta Pixel respetan estado del cookie consent antes de activarse</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 12 — HEADERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <h2>Headers HTTP y Seguridad</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Header</th><th>Estado</th><th>Valor configurado</th></tr></thead>
+        <tbody>
+          <tr><td>Strict-Transport-Security (HSTS)</td><td><span class="badge badge-ok">✅</span></td><td>max-age=63072000; includeSubDomains; preload</td></tr>
+          <tr><td>X-Frame-Options</td><td><span class="badge badge-ok">✅</span></td><td>DENY</td></tr>
+          <tr><td>X-Content-Type-Options</td><td><span class="badge badge-ok">✅</span></td><td>nosniff</td></tr>
+          <tr><td>X-XSS-Protection</td><td><span class="badge badge-ok">✅</span></td><td>1; mode=block</td></tr>
+          <tr><td>Referrer-Policy</td><td><span class="badge badge-ok">✅</span></td><td>strict-origin-when-cross-origin</td></tr>
+          <tr><td>Permissions-Policy</td><td><span class="badge badge-ok">✅</span></td><td>camera=(), microphone=(), geolocation=()</td></tr>
+          <tr style="background:#FFF5F5;"><td><strong>Content-Security-Policy</strong></td><td><span class="badge badge-bad">❌ REPORT-ONLY</span></td><td>Content-Security-Policy-<strong>Report-Only</strong> — sin protección real</td></tr>
+          <tr><td>X-Powered-By</td><td><span class="badge badge-ok">✅ Suprimido</span></td><td>poweredByHeader: false en next.config.ts</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:16px;">Rutas WordPress legacy — Pendiente</h3>
+      <ul class="findings">
+        <li>/wp-admin, /wp-login.php → 410 ✅ Correcto</li>
+        <li><strong>Pendiente:</strong> xmlrpc.php, wp-cron.php, wp-includes, wp-json, wp-content aún hacen 301 a / — deben retornar 410 (Gone)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 13 — OG/SOCIAL -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <h2>OG Tags y Social Meta</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Elemento</th><th>Estado</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>OG Title (default)</td><td><span class="badge badge-ok">✅</span></td><td>"VLX | Digital Inspections &amp; Verification Platform"</td></tr>
+          <tr><td>OG Description (default)</td><td><span class="badge badge-ok">✅</span></td><td>Descripción global en layout.tsx:28-30</td></tr>
+          <tr><td>OG Image (default)</td><td><span class="badge badge-warn">⚠️</span></td><td>opengraph-image.jpg (178KB) — genérico para 50+ páginas</td></tr>
+          <tr><td>OG Image específica por ruta</td><td><span class="badge badge-warn">⚠️</span></td><td>Solo 8 rutas con opengraph-image.tsx propio</td></tr>
+          <tr><td>Twitter Card</td><td><span class="badge badge-ok">✅</span></td><td>summary_large_image, site=@vlx_ai</td></tr>
+          <tr><td>OG Locale</td><td><span class="badge badge-ok">✅</span></td><td>en_US hardcoded</td></tr>
+          <tr><td>OG Site Name</td><td><span class="badge badge-ok">✅</span></td><td>"VLX"</td></tr>
+          <tr><td>Canonical URL</td><td><span class="badge badge-ok">✅</span></td><td>alternates.canonical en todas las páginas</td></tr>
+          <tr><td>hreflang</td><td><span class="badge badge-bad">❌ AUSENTE</span></td><td>No hay i18n — solo inglés. No aplica por ahora.</td></tr>
+          <tr><td>OG image explícita en homepage metadata</td><td><span class="badge badge-bad">❌</span></td><td>layout.tsx:35-42 — openGraph sin images explícito</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 14 — URL NORMALIZATION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">14</div>
+      <h2>Normalización de URLs</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Regla</th><th>Estado</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>trailingSlash: true</td><td><span class="badge badge-ok">✅</span></td><td>next.config.ts — todas las URLs con trailing slash</td></tr>
+          <tr><td>Canonicals con trailing slash</td><td><span class="badge badge-ok">✅</span></td><td>alternates.canonical en todas las páginas</td></tr>
+          <tr><td>Sitemap con trailing slash</td><td><span class="badge badge-ok">✅</span></td><td>Todas las entradas en sitemap.ts</td></tr>
+          <tr><td>/digital-inspection-software → plural</td><td><span class="badge badge-ok">✅ 301</span></td><td>next.config.ts redirect</td></tr>
+          <tr><td>/inspection-companies → hub</td><td><span class="badge badge-ok">✅ 301</span></td><td>next.config.ts redirect</td></tr>
+          <tr><td>/team → /about-us/</td><td><span class="badge badge-ok">✅ 301</span></td><td>next.config.ts redirect</td></tr>
+          <tr><td>/wp-admin, /wp-login.php → 410</td><td><span class="badge badge-ok">✅</span></td><td>Route handlers</td></tr>
+          <tr><td>xmlrpc.php, wp-cron.php, etc.</td><td><span class="badge badge-warn">⚠️ 301→/</span></td><td>Deben ser 410 (Gone) en lugar de 301</td></tr>
+          <tr><td>IndexNow API</td><td><span class="badge badge-ok">✅</span></td><td>src/app/(frontend)/api/indexnow/route.ts</td></tr>
+          <tr><td>STATIC_CONTENT_DATE idéntica para todas las páginas</td><td><span class="badge badge-warn">⚠️</span></td><td>new Date("2026-05-05") compartida — señala false freshness igual para todo</td></tr>
+          <tr><td>Blog sitemap usando publishedAt</td><td><span class="badge badge-warn">⚠️</span></td><td>Debería usar updatedAt con fallback a publishedAt</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 15 — SOCIAL Y GMB -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">15</div>
+      <h2>Social y Google Business Profile <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Verificación requiere acceso manual a cada plataforma social y GBP.</div>
+      <h3>Consistencia NAP (Name, Address, Phone)</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Campo</th><th>Valor en schema</th><th>Verificar en</th></tr></thead>
+        <tbody>
+          <tr><td>Name</td><td>"VLX" / "Visualogyx"</td><td>Todas las redes sociales, GBP</td></tr>
+          <tr><td>Address</td><td>Aventura, FL, US</td><td>GBP + LinkedIn + Facebook</td></tr>
+          <tr><td>Email</td><td>info@vlx.ai</td><td>Consistente en perfiles</td></tr>
+          <tr><td>URL</td><td>https://vlx.ai/</td><td>Bio/about en todas las redes</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:16px;">Gap — LocalBusiness schema</h3>
+      <p>No existe LocalBusiness JSON-LD en ninguna página del sitio. Si VLX tiene presencia física relevante en Aventura, FL, agregar LocalBusiness schema mejora la elegibilidad para Knowledge Panel y búsquedas locales.</p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 16 — ASO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">16</div>
+      <h2>ASO — App Stores <span class="badge-prov badge" style="margin-left:8px;">PROVISIONAL</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="prov-note">Sin acceso a iTunes Lookup API o Google Play data en esta sesión.</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Plataforma</th><th>Acción necesaria</th></tr></thead>
+        <tbody>
+          <tr><td>iOS App Store</td><td>Verificar rating actual, descripción con "digital inspection" en título/keywords, screenshots actualizados</td></tr>
+          <tr><td>Google Play Store</td><td>Verificar rating actual, descripción actualizada, keywords optimizados</td></tr>
+          <tr><td>aggregateRating schema</td><td>Alinear ratingCount/ratingValue con datos reales de App Store (actualmente refleja solo G2+Capterra)</td></tr>
+          <tr><td>SoftwareApplication operatingSystem</td><td>"Web, iOS, Android" ✅ declarado — verificar que apps existan en ambas stores</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 17 — ROADMAP -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">17</div>
+      <h2>Roadmap de Ajustes</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="phase">
+        <div class="phase-title">Fase 0 — Blockers críticos (ejecutar primero, antes de cualquier campaign)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Acción</th><th>Esfuerzo</th><th>Propietario</th></tr></thead>
+          <tbody>
+            <tr><td>B1</td><td>Agregar /case-studies/ al sitemap</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>B2</td><td>Eliminar HowTo schema de las 10 integration pages</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>B3</td><td>Corregir hero opacity:0 animation</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>B6</td><td>Reemplazar 14 testimonios placeholder con citas aprobadas</td><td><span class="tag-xhigh">M</span></td><td>Cliente + Dev</td></tr>
+            <tr><td>B7</td><td>Re-encodear las 2 imágenes de blog >1MB</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>B8</td><td>Agregar regla Applebot allow en robots.txt</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">Fase 1 — Schema y datos estructurados (1-2 semanas)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Acción</th><th>Esfuerzo</th><th>Propietario</th></tr></thead>
+          <tbody>
+            <tr><td>S1</td><td>Agregar CollectionPage/ItemList en hub /digital-inspections-software/</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>S2</td><td>Corregir foundingDate a "2020-01-01" en Organization schema</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>S3</td><td>Agregar image property a Organization schema</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>S4</td><td>Agregar BreadcrumbList a blog posts, pricing y compare pages</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>S5</td><td>Cambiar Article publisher de inline a referencia @id</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>S6</td><td>Agregar duration a VideoObject schema</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>S7</td><td>Corregir author fallback en blog a VLX Team / Organization</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>S8</td><td>Completar Article schema en case studies (author, dateModified, image, publisher @id)</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">Fase 2 — Contenido y OG images (2-4 semanas)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Acción</th><th>Esfuerzo</th><th>Propietario</th></tr></thead>
+          <tbody>
+            <tr><td>C1</td><td>Crear opengraph-image.tsx para top 10 páginas (hub, pricing, top 5 industry, compare x2, about-us)</td><td><span class="tag-xhigh">M</span></td><td>Dev/Design</td></tr>
+            <tr><td>C2</td><td>Agregar OG image explícita en homepage metadata</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>C3</td><td>Agregar contenido único por industria en SuperTemplate (al menos 1 sección diferente por página)</td><td><span class="tag-xhigh">L</span></td><td>SEO + Cliente</td></tr>
+            <tr><td>C4</td><td>Actualizar llms.txt con precios actuales ($35-$55) y slugs correctos</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>C5</td><td>Expandir interlinking contextual blog posts → páginas de producto</td><td><span class="tag-xhigh">M</span></td><td>SEO</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">Fase 3 — Técnico y performance (2-3 semanas)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Acción</th><th>Esfuerzo</th><th>Propietario</th></tr></thead>
+          <tbody>
+            <tr><td>T1</td><td>Agregar sizes prop en Navbar, Footer, LogoBar, VideoShowcase, IntegrationsPreview</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>T2</td><td>Corregir jerarquía de headings en homepage (prop level en SectionHeading)</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>T3</td><td>Eliminar imágenes duplicadas en /public/images/homepage/</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>T4</td><td>Promover CSP de Report-Only a enforcing</td><td><span class="tag-xhigh">M</span></td><td>Dev</td></tr>
+            <tr><td>T5</td><td>Cambiar redirects WP legacy (xmlrpc, wp-cron, etc.) de 301 a 410</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>T6</td><td>Actualizar blog sitemap para usar updatedAt en lugar de publishedAt</td><td><span class="tag-med">XS</span></td><td>Dev</td></tr>
+            <tr><td>T7</td><td>Revisar STATIC_CONTENT_DATE y usar fechas específicas por página</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">Fase 4 — Expansión y backlinks (ongoing)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Acción</th><th>Esfuerzo</th><th>Propietario</th></tr></thead>
+          <tbody>
+            <tr><td>E1</td><td>Crear página /compare/vlx-vs-gocanvas/</td><td><span class="tag-xhigh">M</span></td><td>SEO + Dev</td></tr>
+            <tr><td>E2</td><td>Agregar LocalBusiness schema (si hay presencia física relevante en Aventura, FL)</td><td><span class="tag-high">S</span></td><td>Dev</td></tr>
+            <tr><td>E3</td><td>Crear 3-5 case studies completos con métricas en Payload CMS</td><td><span class="tag-xhigh">L</span></td><td>Cliente + SEO</td></tr>
+            <tr><td>E4</td><td>Outreach para backlinks en directorios Salesforce, SAP, Oracle App Exchanges</td><td><span class="tag-xhigh">M</span></td><td>Marketing</td></tr>
+            <tr><td>E5</td><td>Auditar y actualizar fichas en G2, Capterra, GetApp con copy actualizado</td><td><span class="tag-xhigh">M</span></td><td>Marketing</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOP 5 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#1E293B;">⚡</div>
+      <h2>Si Solo Hay Tiempo para 5 Cosas</h2>
+    </div>
+    <div class="section-body">
+      <div class="top5">
+        <div class="top5-item">
+          <div class="top5-num">1</div>
+          <div class="top5-content">
+            <strong>Eliminar testimonios placeholder de producción (B6)</strong>
+            <span>14 bloques con "QUOTE: needs final copy" están siendo indexados públicamente. Daño inmediato a credibilidad y posible penalización por thin content.</span>
+          </div>
+        </div>
+        <div class="top5-item">
+          <div class="top5-num">2</div>
+          <div class="top5-content">
+            <strong>Eliminar HowTo schema deprecated de 10 páginas de integración (B2)</strong>
+            <span>Google deprecó HowTo para SaaS. Acción de 1-2h con riesgo de penalización activo mientras no se corrija.</span>
+          </div>
+        </div>
+        <div class="top5-item">
+          <div class="top5-num">3</div>
+          <div class="top5-content">
+            <strong>Agregar /case-studies/ al sitemap (B1)</strong>
+            <span>Una línea de código. Página de conversión importante que no está siendo señalada a Google correctamente.</span>
+          </div>
+        </div>
+        <div class="top5-item">
+          <div class="top5-num">4</div>
+          <div class="top5-content">
+            <strong>Re-encodear las 2 imágenes de blog >1MB (B7)</strong>
+            <span>Impacto directo en Core Web Vitals (LCP) de los posts. aio-master...webp a 1.16MB. Herramienta: Squoosh o cwebp.</span>
+          </div>
+        </div>
+        <div class="top5-item">
+          <div class="top5-num">5</div>
+          <div class="top5-content">
+            <strong>Crear OG images para hub, pricing y las 2 compare pages (C1 parcial)</strong>
+            <span>4 páginas de alto impacto social con el mayor esfuerzo/retorno de OG images. Una opengraph-image.tsx compartida entre páginas similares reduce el trabajo.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-bar">
+  <strong>VLX SEO Audit — Review Completo 2026-06-19</strong> · Generado por Laura Ceballos / Software Craft CR ·
+  Fuente: Inspección de código rama <strong>Hans-review</strong> · Datos PROVISIONAL requieren validación con GSC API, herramientas de backlinks y verificación live HTTP ·
+  Próxima revisión recomendada: <strong>2026-07-19</strong>
+</div>
+
+</body>
+</html>
