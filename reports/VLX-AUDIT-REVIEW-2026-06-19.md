@@ -1,9 +1,440 @@
-# VLX SEO Audit — Review Completo desde Cero
-**Versión:** 2026-06-19 · **Dominio:** vlx.ai · **Auditor:** Laura Ceballos / Software Craft CR  
-**Rama verificada:** `origin/Hans-review` · **Método:** Inspección de código + análisis de arquitectura  
-**Fuente de verdad:** Codebase local (commit actual) + análisis de archivos estáticos
+# VLX SEO Audit — Plan de Correcciones 2026-06-19
+
+**Creado:** 2026-06-19 · **Dominio:** vlx.ai · **Auditor:** Laura Ceballos / Software Craft CR  
+**Rama verificada:** `origin/Hans-review` · **Score actual:** Ver Dashboard de Estado  
+**Fuente:** Inspección de código + análisis de arquitectura (commit actual)
 
 ---
+
+## Cómo usar este archivo
+
+- Marcar tareas completadas: `- [ ]` → `- [x]`
+- Cada tarea tiene un **Commit label** — usarlo en el mensaje del commit para trazabilidad
+- Si algo se rompe, buscar el commit label para identificar qué cambio causó el problema
+- Las tareas dentro de cada Wave son independientes y se pueden hacer en paralelo
+- Los Waves deben hacerse en orden (Wave 0 antes de Wave 1, etc.)
+
+### Protocolo de fin de sesión
+
+Al terminar cada sesión de trabajo, Claude debe:
+
+1. **Actualizar este archivo** — marcar tareas completadas, agregar notas sobre desvíos o problemas encontrados
+2. **Proveer resumen de sesión** — listar qué cambió (archivos modificados, commits realizados, problemas encontrados)
+3. **Proveer prompt de continuación** — un prompt copy-paste para la siguiente sesión que incluya:
+   - Desde qué Wave/tarea retomar
+   - Contexto necesario (blockers, decisiones tomadas, trabajo parcial)
+   - Los pasos de verificación que aún faltan
+
+### Session Log
+
+| Sesión | Fecha | Tareas Completadas | Notas |
+|--------|-------|-------------------|-------|
+| 0 | 2026-06-19 | Audit creado | Inspección completa de codebase rama Hans-review |
+
+---
+
+## Kickoff Prompt
+
+Copy-paste para iniciar la primera sesión de implementación:
+
+```
+Lee docs/seo/VLX-AUDIT-REVIEW-2026-06-19.md y ejecuta Wave 0 (tareas B1, B2, B3, B6, B7, B8).
+Estos son los blockers críticos que deben resolverse antes de cualquier campaña.
+
+Contexto clave:
+- Rama: Hans-review
+- Stack: Next.js 15 App Router + Payload CMS + Tailwind + Framer Motion
+- Los testimonios placeholder "QUOTE: needs final copy" están en producción — requieren aprobación del cliente
+- HowTo schema está deprecated desde 2024; eliminar de las 10 páginas de integración
+- Hero opacity:0 puede impedir que Googlebot vea contenido above-fold
+
+Después de completar Wave 0:
+1. Ejecutar npm run build para verificar 0 errores
+2. Actualizar este archivo con checkboxes completados
+3. Dar resumen de cambios y prompt para continuar con Wave 1
+```
+
+---
+
+## Wave 0 — Blockers Críticos (ejecutar antes de cualquier campaign)
+
+### B1 — Agregar `/case-studies/` al sitemap
+- [ ] **File:** `src/app/sitemap.ts:107-118`
+- [ ] **Change:** Agregar entrada estática `{ url: "${BASE_URL}/case-studies/", priority: 0.7, changeFrequency: "weekly" }` en el tier correcto. Actualmente `getAllCaseStudies()` mapea solo slugs dinámicos `/case-studies/${cs.slug}/`; la ruta índice no aparece en ningún tier.
+- [ ] **Impact:** P0 — La página índice de case studies no está indexada correctamente por Google
+- [ ] **Verify:** Visitar `/sitemap.xml` — URL `/case-studies/` presente con priority 0.7
+- **Esfuerzo:** XS (<30 min)
+- **Commit label:** `seo: add /case-studies/ index to sitemap`
+
+### B2 — Eliminar HowTo schema deprecated de integrations
+- [ ] **File:** `src/app/(frontend)/integrations/[slug]/page.tsx`
+- [ ] **Change:** Eliminar el objeto `@type: "HowTo"` del JSON-LD emitido para los 10 slugs pre-built (salesforce, zapier, oracle, sap, netsuite, hubspot, google-drive, sharepoint, power-bi, microsoft-teams). Mantener SoftwareApplication.
+- [ ] **Impact:** P0 — Google deprecó HowTo para software SaaS en 2024; puede resultar en penalización o pérdida de rich results
+- [ ] **Verify:** Google Rich Results Test en `/integrations/salesforce/` — no debe aparecer HowTo schema
+- **Esfuerzo:** S (1-2h)
+- **Commit label:** `seo: remove deprecated HowTo schema from integration pages`
+
+### B3 — Corregir hero opacity:0 (riesgo de crawling)
+- [ ] **File:** `src/components/sections/HeroSection.tsx`
+- [ ] **Change:** Aplicar `opacity-0` solo cuando JS detecta `prefers-reduced-motion=no`, o usar `will-change: opacity` con valor inicial visible. Actualmente `animate-hero-fade-in` arranca desde `opacity: 0` con `0.3s both` definido en `tailwind.config.ts`.
+- [ ] **Impact:** P0 — Googlebot puede no ejecutar la animación completa; contenido above-fold invisible en crawl
+- [ ] **Verify:** View-source en homepage — H1 visible sin JS; Lighthouse no reporta contenido oculto
+- **Esfuerzo:** S (1-2h)
+- **Commit label:** `perf: fix hero opacity:0 crawlability issue`
+
+### B6 — Reemplazar testimonios placeholder en producción
+- [ ] **File:** Datos en páginas que usan `SuperTemplate` — 14 bloques de `data.quote` bajo `/digital-inspections-software/`
+- [ ] **Change:** Reemplazar texto "QUOTE: needs final copy" con citas aprobadas de clientes, o eliminar las secciones de testimonial donde no haya citas disponibles.
+- [ ] **Impact:** P0 — Texto de relleno en producción daña credibilidad y puede ser indexado por Google
+- [ ] **Verify:** Buscar en el sitio en producción "QUOTE" — no debe aparecer ningún resultado
+- **Esfuerzo:** M (requiere aprobación del cliente)
+- **Commit label:** `content: replace placeholder testimonials with approved quotes`
+
+### B7 — Re-encodear 2 imágenes de blog >1 MB
+- [ ] **Files:** `public/images/blog/aio-master-the-art...webp` (1,164,538 bytes) · `public/images/blog/default-bank.webp` (1,144,160 bytes)
+- [ ] **Change:** Re-encodear/redimensionar a max 300-400 KB. Usar `quality={75}` y prop `sizes` apropiado en los componentes `next/image` que las sirven.
+- [ ] **Impact:** P0 — Core Web Vitals (LCP) comprometido; Google PageSpeed Insights penaliza
+- [ ] **Verify:** Lighthouse en un post que use estas imágenes — LCP < 2.5s; imágenes < 400 KB
+- **Esfuerzo:** XS (<30 min)
+- **Commit label:** `perf: compress oversized blog images (aio-master, default-bank)`
+
+### B8 — Agregar regla `Applebot` allow en robots.txt
+- [ ] **File:** `src/app/robots.ts:36-41`
+- [ ] **Change:** Agregar `{ userAgent: "Applebot", allow: "/" }` antes de la regla `Applebot-Extended`. Actualmente solo `Applebot-Extended` está disallowed pero no hay regla explícita para `Applebot`.
+- [ ] **Impact:** P1 — Sin regla explícita, Apple Search (Spotlight, Siri) depende del wildcard; best practice es regla explícita
+- [ ] **Verify:** Visitar `/robots.txt` — regla `Applebot allow: /` presente
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add explicit Applebot allow rule to robots.txt`
+
+---
+
+## Wave 1 — Schema y Datos Estructurados (1-2 semanas)
+
+### S1 — Agregar CollectionPage/ItemList schema en hub de Digital Inspections
+- [ ] **File:** `src/app/(frontend)/digital-inspections-software/page.tsx`
+- [ ] **Change:** Agregar JSON-LD con `@type: CollectionPage` + `hasPart` listando las 18 URLs hijas. Actualmente solo emite `softwareApplicationSchema()`. `SuperTemplate` emite BreadcrumbList/FAQ/Service pero no CollectionPage ni `hasPart`.
+- [ ] **Impact:** P0 — El hub page no comunica su estructura hub+spokes a search engines
+- [ ] **Verify:** Google Rich Results Test en `/digital-inspections-software/` — CollectionPage schema válido
+- **Esfuerzo:** S (1-3h)
+- **Commit label:** `seo: add CollectionPage/ItemList schema to digital-inspections hub`
+
+### S2 — (ver B2 — ya cubierto en Wave 0)
+
+### S3 — Corregir `foundingDate` en Organization schema
+- [ ] **File:** `src/lib/schema.ts:38`
+- [ ] **Change:** Cambiar `"foundingDate": "2020"` a `"foundingDate": "2020-01-01"` (ISO 8601 completo requerido por Google)
+- [ ] **Impact:** Schema inválido según spec de schema.org
+- [ ] **Verify:** Google Rich Results Test — Organization schema sin errores de formato de fecha
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: fix foundingDate ISO 8601 format in Organization schema`
+
+### S4 — Agregar `image` property a Organization schema
+- [ ] **File:** `src/lib/schema.ts:6-49`
+- [ ] **Change:** Agregar `"image": "https://vlx.ai/images/logos/vlx-logo.svg"` como propiedad separada de `logo` en el objeto Organization
+- [ ] **Impact:** Schema incompleto; `image` es distinto de `logo` según schema.org
+- [ ] **Verify:** Google Rich Results Test — Organization schema con `image` presente
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add image property to Organization schema`
+
+### S5 — Agregar BreadcrumbList a blog posts
+- [ ] **File:** `src/app/(frontend)/blog/[slug]/page.tsx`
+- [ ] **Change:** Importar `buildBreadcrumbJsonLd()` de `src/lib/metadata.ts` y emitir BreadcrumbList JSON-LD. Actualmente solo emite Article schema.
+- [ ] **Impact:** Blog posts sin breadcrumb schema; señal de estructura ausente para Google
+- [ ] **Verify:** Google Rich Results Test en cualquier blog post — BreadcrumbList presente
+- **Esfuerzo:** S (1-2h)
+- **Commit label:** `seo: add BreadcrumbList schema to blog posts`
+
+### S6 — Agregar BreadcrumbList a pricing page
+- [ ] **File:** `src/app/(frontend)/pricing/page.tsx`
+- [ ] **Change:** Agregar BreadcrumbList JSON-LD via `buildBreadcrumbJsonLd()`
+- [ ] **Impact:** Página de pricing sin breadcrumb schema
+- [ ] **Verify:** View-source en `/pricing/` — BreadcrumbList JSON-LD presente
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add BreadcrumbList to pricing page`
+
+### S7 — Agregar BreadcrumbList a compare pages
+- [ ] **Files:** `src/app/(frontend)/compare/vlx-vs-safetyculture/page.tsx` · `src/app/(frontend)/compare/vlx-vs-goaudits/page.tsx`
+- [ ] **Change:** Agregar BreadcrumbList JSON-LD via `buildBreadcrumbJsonLd()` en ambas páginas
+- [ ] **Impact:** Páginas de comparación sin breadcrumb schema
+- [ ] **Verify:** View-source en ambas compare pages — BreadcrumbList JSON-LD presente
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add BreadcrumbList to compare pages`
+
+### S8 — Cambiar Article publisher de inline a referencia por @id
+- [ ] **File:** `src/app/(frontend)/blog/[slug]/page.tsx`
+- [ ] **Change:** Reemplazar objeto Organization completo inline por `{"@id": "https://vlx.ai/#organization"}` en la propiedad `publisher` del Article schema
+- [ ] **Impact:** Schema verboso y no usa linked data correctamente; puede causar advertencias en Rich Results Test
+- [ ] **Verify:** Google Rich Results Test en blog post — Article schema sin warnings de publisher
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: use @id reference for Article publisher schema`
+
+### S9 — Agregar `duration` a VideoObject schema
+- [ ] **File:** `src/app/(frontend)/page.tsx` (o donde esté el VideoObject del homepage)
+- [ ] **Change:** Agregar `"duration": "PT3M42S"` (o el valor real en ISO 8601) y verificar que `uploadDate` esté actualizado
+- [ ] **Impact:** VideoObject incompleto; `duration` es requerido para rich results de video
+- [ ] **Verify:** Google Rich Results Test en homepage — VideoObject con duration válida
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add duration to VideoObject schema on homepage`
+
+### S10 — Corregir author fallback en blog posts
+- [ ] **File:** `src/app/(frontend)/blog/[slug]/page.tsx`
+- [ ] **Change:** Cambiar fallback de autor de `David Woldenberg` como Person a `VLX Team` / Organization para posts sin autor específico asignado en Payload CMS
+- [ ] **Impact:** Posts sin autor asignado usan el nombre del CEO como fallback; semánticamente incorrecto
+- [ ] **Verify:** View-source en un blog post sin autor — Article schema usa "VLX Team" en `author`
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: fix blog post author fallback to VLX Team`
+
+### S11 — Completar Article schema en case studies
+- [ ] **File:** `src/app/(frontend)/case-studies/[slug]/page.tsx`
+- [ ] **Change:** Agregar `@id`, `author`, `dateModified`, `image`, y `publisher` como `{"@id": "https://vlx.ai/#organization"}` al Article schema. Actualmente el schema está incompleto.
+- [ ] **Impact:** Case studies sin schema completo; menor elegibilidad para rich results
+- [ ] **Verify:** Google Rich Results Test en cualquier case study — Article schema completo sin errores
+- **Esfuerzo:** S (1-2h)
+- **Commit label:** `seo: complete Article schema for case studies`
+
+---
+
+## Wave 2 — Contenido y OG Images (2-4 semanas)
+
+### C1 — Crear OG images para top 10 páginas
+- [ ] **Files:** Crear `opengraph-image.tsx` en: `/digital-inspections-software/`, `/pricing/`, `/digital-inspections-software/financial-services/`, `/digital-inspections-software/manufacturing/`, `/digital-inspections-software/insurance/`, `/digital-inspections-software/transportation-logistics/`, `/compare/vlx-vs-safetyculture/`, `/compare/vlx-vs-goaudits/`, `/about-us/`, `/blog/`
+- [ ] **Change:** Reutilizar `src/lib/og-image.tsx` como generador base. Actualmente solo 8 rutas tienen `opengraph-image.tsx` propio; todas las demás usan el OG global genérico `opengraph-image.jpg` (178 KB)
+- [ ] **Impact:** P1 — CTR social bajo; brand inconsistente al compartir en LinkedIn/Twitter
+- [ ] **Verify:** Verificar OG images con opengraph.dev para cada URL — imagen específica por página visible
+- **Esfuerzo:** M (4-8h por batch)
+- **Commit label:** `seo: add page-specific OG images for top 10 pages`
+
+### C2 — Agregar OG image explícita en metadata de homepage
+- [ ] **File:** `src/app/(frontend)/layout.tsx:35-42`
+- [ ] **Change:** Agregar en la metadata del homepage:
+  ```typescript
+  openGraph: {
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "VLX Digital Inspection Platform" }]
+  }
+  ```
+  Actualmente el bloque OpenGraph de la metadata global no incluye `images`.
+- [ ] **Impact:** Homepage sin OG image explícita en metadata (depende de convención de archivo Next.js, no de metadata declarada)
+- [ ] **Verify:** Compartir URL de homepage en Twitter Card Validator — imagen visible
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: add explicit OG image to homepage metadata`
+
+### C3 — Agregar contenido único por industria en SuperTemplate
+- [ ] **File:** `src/components/sections/SuperTemplate.tsx` (94 KB) + archivos de data de cada industria
+- [ ] **Change:** Agregar al menos 1 sección de contenido único por industria (casos específicos, regulaciones del sector, workflows propios). Actualmente 17 páginas de industria comparten la misma estructura con solo el keyword swapeado en H1/H2.
+- [ ] **Impact:** Google puede percibir thin content o near-duplicate content entre páginas de industria
+- [ ] **Verify:** Comparar contenido de 3 páginas de industria — diferencias sustanciales en al menos 1 sección
+- **Esfuerzo:** L (requiere SEO + Cliente)
+- **Commit label:** `content: add unique industry-specific sections to SuperTemplate pages`
+
+### C4 — Actualizar `llms.txt` con precios y slugs actuales
+- [ ] **File:** `public/llms.txt` o `src/app/(frontend)/llms.txt/route.ts`
+- [ ] **Change:** Actualizar precios vigentes (actualmente indica Pro desde $29; precio actual $35-$55), slugs de URL actuales, y expandir descripción de features
+- [ ] **Impact:** llms.txt con datos desactualizados; AI queries sobre VLX pueden recibir información incorrecta
+- [ ] **Verify:** Visitar `/llms.txt` — precios y slugs correctos; sin referencias a visualogyx.com desactualizadas
+- **Esfuerzo:** XS (<30 min)
+- **Commit label:** `seo: update llms.txt with current pricing and slugs`
+
+### C5 — Expandir interlinking contextual entre blog posts y páginas de producto
+- [ ] **Files:** Posts de blog en Payload CMS + páginas de producto relevantes
+- [ ] **Change:** Agregar enlaces contextuales en posts de blog hacia páginas de producto relacionadas. Actualmente hay escaso interlinking cross-content-type; el hub page tampoco referencia posts de blog relevantes por industria.
+- [ ] **Impact:** P1 — Señal de autoridad fragmentada; PageRank no fluye entre contenido y producto
+- [ ] **Verify:** Auditar 10 posts de blog — cada uno debe tener al menos 1 enlace a una página de producto relacionada
+- **Esfuerzo:** M (requiere SEO)
+- **Commit label:** `content: add contextual interlinking between blog posts and product pages`
+
+---
+
+## Wave 3 — Técnico y Performance (2-3 semanas)
+
+### T1 — Agregar `sizes` prop en imágenes sin ella
+- [ ] **Files:** `src/components/layout/Navbar.tsx` · `src/components/layout/Footer.tsx` · `src/components/sections/LogoBar.tsx` · `src/components/sections/VideoShowcase.tsx` · `src/components/sections/IntegrationsPreview.tsx`
+- [ ] **Change:** Agregar `sizes` apropiado en cada componente (ej: `sizes="(max-width: 768px) 100vw, 50vw"` para imágenes de ancho variable; `sizes="120px"` para logos fijos). Actualmente ninguno de estos componentes especifica `sizes`.
+- [ ] **Impact:** Sin `sizes`, el browser descarga imágenes más grandes de lo necesario; afecta LCP y CLS
+- [ ] **Verify:** Lighthouse en homepage — no reportar "Image elements do not have explicit width and height" ni "Properly size images"
+- **Esfuerzo:** S (2-3h)
+- **Commit label:** `perf: add sizes prop to Navbar, Footer, LogoBar, VideoShowcase, IntegrationsPreview images`
+
+### T2 — Corregir jerarquía de headings en homepage
+- [ ] **Files:** `src/components/sections/FeaturesAccordion.tsx` · `src/components/sections/StatsSection.tsx` · `src/components/ui/SectionHeading.tsx`
+- [ ] **Change:** Agregar prop `level` a `SectionHeading` para permitir renderizar `h3` en lugar de `h2` hardcoded. Convertir `<span>` usados como labels de subsección a elementos heading apropiados (`h3`).
+- [ ] **Impact:** P1 — Señales semánticas débiles para crawlers; accesibilidad comprometida
+- [ ] **Verify:** Usar herramienta de outline de headings — estructura H1→H2→H3 sin saltos en homepage
+- **Esfuerzo:** S (2-3h)
+- **Commit label:** `a11y: fix heading hierarchy on homepage (SectionHeading level prop)`
+
+### T3 — Eliminar imágenes duplicadas en /public/images/homepage/
+- [ ] **Files:** `public/images/homepage/seamless.webp` · `public/images/homepage/seamless-new.png` · `public/images/homepage/seamless-new.jpg`
+- [ ] **Change:** Solo `seamless-new.png` está referenciado en código. Eliminar `seamless.webp` y `seamless-new.jpg` después de auditar todas las referencias con grep.
+- [ ] **Impact:** Archivos no usados aumentan el repo y el build time
+- [ ] **Verify:** `grep -r "seamless.webp" src/` y `grep -r "seamless-new.jpg" src/` — 0 resultados
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `chore: remove unused duplicate images from public/images/homepage`
+
+### T4 — Promover CSP de Report-Only a enforcing
+- [ ] **File:** `next.config.ts`
+- [ ] **Change:** Revisar violation reports acumulados en el endpoint configurado, corregir directivas problemáticas, y cambiar `Content-Security-Policy-Report-Only` a `Content-Security-Policy` enforcing.
+- [ ] **Impact:** P1 — Sin protección real contra XSS/injection; el header de seguridad actual es inefectivo
+- [ ] **Verify:** `curl -I https://vlx.ai` — header `Content-Security-Policy` (sin -Report-Only) presente
+- **Esfuerzo:** M (4-8h de QA)
+- **Commit label:** `security: promote CSP from Report-Only to enforcing`
+
+### T5 — Cambiar redirects WordPress legacy de 301 a 410
+- [ ] **File:** `next.config.ts`
+- [ ] **Change:** Cambiar los redirects de `xmlrpc.php`, `wp-cron.php`, `wp-includes`, `wp-json`, `wp-content` de `301 a /` a respuesta `410 Gone`. Actualmente `/wp-admin` y `/wp-login.php` retornan 410 correctamente, pero las demás rutas WP hacen 301 a `/`.
+- [ ] **Impact:** 301 a homepage transfiere link equity a rutas sin valor; 410 comunica que el recurso está permanentemente eliminado
+- [ ] **Verify:** `curl -I https://vlx.ai/xmlrpc.php` — responde 410, no 301
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: change WordPress legacy redirects from 301 to 410`
+
+### T6 — Actualizar blog sitemap para usar `updatedAt` en lugar de `publishedAt`
+- [ ] **File:** `src/app/sitemap.ts`
+- [ ] **Change:** Usar `post.updatedAt` (fecha de última modificación) en lugar de `post.publishedAt` para el campo `lastModified` de los posts en el sitemap
+- [ ] **Impact:** Señala a Google cuándo fue la última actualización real del contenido, no la publicación original
+- [ ] **Verify:** Visitar `/sitemap.xml` — fechas de blog posts reflejan `updatedAt`
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: use updatedAt for blog post lastModified in sitemap`
+
+### T7 — Revisar `STATIC_CONTENT_DATE` y reemplazar por fechas específicas por página
+- [ ] **File:** `src/app/sitemap.ts`
+- [ ] **Change:** Reemplazar la constante global `STATIC_CONTENT_DATE = new Date("2026-03-30")` por fechas específicas por página basadas en el último cambio real de cada ruta
+- [ ] **Impact:** Sitemap reporta la misma fecha para todas las páginas estáticas; Google puede ignorar señales de freshness
+- [ ] **Verify:** Visitar `/sitemap.xml` — páginas estáticas con fechas variadas reflejando cambios reales
+- **Esfuerzo:** S (2-3h)
+- **Commit label:** `seo: replace STATIC_CONTENT_DATE with per-page lastModified dates`
+
+---
+
+## Wave 4 — Expansión de Contenido y Backlinks (ongoing)
+
+### E1 — Crear página `/compare/vlx-vs-gocanvas/`
+- [ ] **File:** Crear `src/app/(frontend)/compare/vlx-vs-gocanvas/page.tsx` + archivo de data de comparación
+- [ ] **Change:** Página de comparación VLX vs GoCanvas siguiendo el mismo patrón de las páginas compare existentes. GoCanvas es el competidor directo sin página de comparación; mayor volumen estimado de búsqueda entre los gaps.
+- [ ] **Impact:** Gap de keyword "VLX vs GoCanvas" sin cobertura; competidor directo mapeado en CLAUDE.md
+- [ ] **Verify:** `/compare/vlx-vs-gocanvas/` accesible, en sitemap, con metadata completa
+- **Esfuerzo:** M (requiere SEO + Dev)
+- **Commit label:** `content: add VLX vs GoCanvas comparison page`
+
+### E2 — Agregar LocalBusiness schema
+- [ ] **File:** `src/lib/schema.ts` + `src/app/(frontend)/layout.tsx` o `src/app/(frontend)/contact/page.tsx`
+- [ ] **Change:** Agregar `@type: LocalBusiness` con address (Aventura, FL), email (`info@vlx.ai`), y URL. Verificar primero si VLX tiene presencia física relevante (GBP verificado).
+- [ ] **Impact:** Sin LocalBusiness schema; Google Business Profile no conectado con el sitio
+- [ ] **Verify:** Google Rich Results Test — LocalBusiness schema válido
+- **Esfuerzo:** S (1-2h)
+- **Commit label:** `seo: add LocalBusiness schema`
+
+### E3 — Crear 3-5 case studies completos en Payload CMS
+- [ ] **File:** Payload CMS Admin — colección CaseStudies
+- [ ] **Change:** Crear case studies completos con métricas de clientes (ITI International confirmado en seed como punto de partida). Actualmente los case studies existen pero están incompletos.
+- [ ] **Impact:** Contenido linkable; potencial para outreach a clientes mencionados; señal de autoridad
+- [ ] **Verify:** `/case-studies/` muestra 3+ case studies completos con métricas reales
+- **Esfuerzo:** L (requiere Cliente + SEO)
+- **Commit label:** `content: add complete case studies with client metrics`
+
+### E4 — Outreach para backlinks en directorios de integraciones
+- [ ] **Acción:** Enviar solicitud de listing en directorios de apps de Salesforce AppExchange, SAP App Center, Oracle Cloud Marketplace, NetSuite SuiteApp — las 10 páginas de integración son credenciales para aplicar
+- [ ] **Impact:** Backlinks de alta autoridad desde dominios de los partners de integración
+- [ ] **Verify:** Ahrefs — nuevos backlinks desde dominios de Salesforce, SAP, Oracle dentro de 60 días
+- **Esfuerzo:** M (requiere Marketing)
+- **Commit label:** N/A (outreach, no cambio de código)
+
+### E5 — Optimizar perfiles en G2, Capterra, GetApp
+- [ ] **Acción:** Verificar y actualizar copy en G2 (`g2.com/products/vlx/reviews`), Capterra y GetApp con copy actualizado, screenshots actuales, y categorías correctas
+- [ ] **Impact:** Perfiles desactualizados afectan conversión; reviews y ratings impactan SoftwareApplication schema
+- [ ] **Verify:** Revisar perfiles en las 3 plataformas — copy actual, screenshots correctos, categorías alineadas con posicionamiento
+- **Esfuerzo:** M (requiere Marketing)
+- **Commit label:** N/A (outreach, no cambio de código)
+
+---
+
+## Wave 5 — ASO y Presencia en AI (ongoing)
+
+### A1 — Auditar y actualizar ficha en iOS App Store
+- [ ] **Acción:** Revisar título, descripción, keywords, y screenshots del app en iOS App Store. Verificar que "digital inspection" aparezca en título o keywords.
+- [ ] **Verify:** App Store listing actualizado; "digital inspection" visible en metadata del app
+- **Esfuerzo:** M (requiere Marketing)
+- **Commit label:** N/A
+
+### A2 — Auditar y actualizar ficha en Google Play
+- [ ] **Acción:** Revisar descripción, keywords, y screenshots del app en Google Play. Alinear con posicionamiento actual de vlx.ai.
+- [ ] **Verify:** Google Play listing actualizado; descripción alineada con copy del sitio
+- **Esfuerzo:** M (requiere Marketing)
+- **Commit label:** N/A
+
+### A3 — Alinear `aggregateRating` schema con datos reales de App Store
+- [ ] **File:** `src/lib/schema.ts:87-95`
+- [ ] **Change:** Actualizar `ratingCount` y `reviewCount` con datos verificados de G2+Capterra+App Store. Actualmente `ratingCount: "20"` pero el sitio afirma "4.9/5 across 12,000+ users" — el copy y el schema deben alinearse.
+- [ ] **Impact:** Inconsistencia entre copy del sitio y datos del schema puede confundir a Google
+- [ ] **Verify:** Schema refleja ratingCount real verificable de las fuentes declaradas
+- **Esfuerzo:** XS (<15 min)
+- **Commit label:** `seo: align aggregateRating schema with verified review counts`
+
+### A4 — Verificar presencia en respuestas de AI
+- [ ] **Acción:** Probar en Claude, ChatGPT y Perplexity: "What is the best digital inspection software for field operations?" y "VLX vs SafetyCulture for inspection management"
+- [ ] **Verify:** VLX aparece en respuestas a queries relacionados con digital inspections, asset verification, field operations software
+- **Esfuerzo:** S (requiere SEO)
+- **Commit label:** N/A (verificación manual)
+
+### A5 — Expandir `llms.txt` con secciones de productos, industrias y casos de uso
+- [ ] **File:** `public/llms.txt` o `src/app/(frontend)/llms.txt/route.ts`
+- [ ] **Change:** Agregar secciones expandidas de: productos (VLX, KYPiT, CountIt, InstaCount), industrias cubiertas (18 verticales), casos de uso principales, y al menos 2-3 case studies en formato conciso
+- [ ] **Impact:** llms.txt más completo mejora la probabilidad de que AI systems citen VLX correctamente
+- [ ] **Verify:** Visitar `/llms.txt` — secciones de productos, industrias, y casos de uso presentes
+- **Esfuerzo:** S (requiere SEO + Dev)
+- **Commit label:** `seo: expand llms.txt with products, industries, and use cases`
+
+---
+
+## Checklist de Verificación (ejecutar después de cada Wave)
+
+- [ ] `npm run build` — 0 errores, todas las páginas generan
+- [ ] Visitar `/sitemap.xml` — todas las URLs presentes incluyendo `/case-studies/`
+- [ ] Visitar `/robots.txt` — regla `Applebot allow: /` presente
+- [ ] Google Rich Results Test en blog post + homepage + integration page
+- [ ] Lighthouse en homepage (target 95+)
+- [ ] `curl -I` para rutas WP legacy — retornan 410
+- [ ] Verificar OG tags con opengraph.dev para top 5 páginas
+- [ ] Buscar "QUOTE" en producción — 0 resultados de testimonios placeholder
+
+---
+
+## Referencia de Archivos Clave
+
+| Archivo | Modificado en Wave |
+|---------|-------------------|
+| `src/app/sitemap.ts` | B1, T6, T7 |
+| `src/app/(frontend)/integrations/[slug]/page.tsx` | B2 |
+| `src/components/sections/HeroSection.tsx` | B3 |
+| `public/images/blog/` | B7 |
+| `src/app/robots.ts` | B8 |
+| `src/app/(frontend)/digital-inspections-software/page.tsx` | S1 |
+| `src/lib/schema.ts` | S3, S4, A3 |
+| `src/app/(frontend)/blog/[slug]/page.tsx` | S5, S8, S10 |
+| `src/app/(frontend)/pricing/page.tsx` | S6 |
+| `src/app/(frontend)/compare/*/page.tsx` | S7 |
+| `src/app/(frontend)/case-studies/[slug]/page.tsx` | S11 |
+| `src/app/(frontend)/layout.tsx` | C2 |
+| `src/components/layout/Navbar.tsx` | T1 |
+| `src/components/layout/Footer.tsx` | T1 |
+| `src/components/sections/LogoBar.tsx` | T1 |
+| `src/components/sections/VideoShowcase.tsx` | T1 |
+| `src/components/sections/IntegrationsPreview.tsx` | T1 |
+| `src/components/sections/FeaturesAccordion.tsx` | T2 |
+| `src/components/sections/StatsSection.tsx` | T2 |
+| `src/components/ui/SectionHeading.tsx` | T2 |
+| `next.config.ts` | T4, T5 |
+| `public/llms.txt` | C4, A5 |
+
+---
+
+---
+
+# REFERENCIA — ANÁLISIS DETALLADO DEL AUDIT
+
+> Las secciones a continuación son el análisis de respaldo del audit. No requieren modificación; son la fuente de evidencia para las tareas de los Waves anteriores.
+
+**Versión:** 2026-06-19 · **Auditor:** Laura Ceballos / Software Craft CR  
+**Rama verificada:** `origin/Hans-review` · **Método:** Inspección de código + análisis de arquitectura  
+**Fuente de verdad:** Codebase local (commit actual) + análisis de archivos estáticos
 
 > **Nota de metodología:** Este audit fue realizado contra el código fuente del repositorio. Las secciones que requieren acceso a GSC API, herramientas de backlinks, o datos live de crawling están marcadas como `[PROVISIONAL]`. Todos los hallazgos de código tienen evidencia de archivo:línea.
 
@@ -513,7 +944,7 @@ El CSP está en modo `Report-Only`, lo que significa que **no ofrece protección
 
 ### Rutas WordPress legacy
 - `/wp-admin` y `/wp-login.php` retornan 410 (correcto)
-- `xmlrpc.php`, `wp-cron.php`, `wp-includes`, `wp-json`, `wp-content` **aún hacen 301 a `/`** (según audit previo P1-7)
+- `xmlrpc.php`, `wp-cron.php`, `wp-includes`, `wp-json`, `wp-content`, `wp-login.php` **aún hacen 301 a `/`** (según audit previo P1-7)
 - **Acción:** Cambiar redirects de WordPress legacy a 410 (Gone)
 
 ---
@@ -647,79 +1078,6 @@ El sistema de routing mapea posts a diferentes prefijos según categoría:
 | Google Play Store | Verificar rating actual, descripción, keywords actualizada |
 | Consistencia de rating | Alinear aggregateRating del schema con data real de stores |
 | App name/keywords | Verificar que "digital inspection" aparezca en título/keywords del app |
-
----
-
-## SECCIÓN 17 — ROADMAP DE AJUSTES
-
-### Fase 0 — Blockers críticos (ejecutar antes de cualquier campaign)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| B1 | Agregar `/case-studies/` al sitemap | XS | Dev |
-| B2 | Eliminar HowTo schema de integrations | S | Dev |
-| B3 | Corregir hero opacity:0 animation | S | Dev |
-| B6 | Reemplazar testimonios placeholder | M | Cliente + Dev |
-| B7 | Re-encodear 2 imágenes blog >1MB | XS | Dev |
-| B8 | Agregar regla `Applebot allow` en robots.txt | XS | Dev |
-
-### Fase 1 — Schema y datos estructurados (1-2 semanas)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| S1 | Agregar CollectionPage/ItemList en hub `/digital-inspections-software/` | S | Dev |
-| S2 | Eliminar HowTo de integrations (ver B2) | S | Dev |
-| S3 | Corregir `foundingDate` a "2020-01-01" en Organization schema | XS | Dev |
-| S4 | Agregar `image` property a Organization schema | XS | Dev |
-| S5 | Agregar BreadcrumbList a blog posts | S | Dev |
-| S6 | Agregar BreadcrumbList a pricing page | XS | Dev |
-| S7 | Agregar BreadcrumbList a compare pages | XS | Dev |
-| S8 | Cambiar Article publisher de inline a `{"@id": ...}` reference | XS | Dev |
-| S9 | Agregar `duration` a VideoObject schema | XS | Dev |
-| S10 | Corregir author fallback en blog a `VLX Team` / Organization | XS | Dev |
-| S11 | Completar Article schema en case studies | S | Dev |
-
-### Fase 2 — Contenido y OG images (2-4 semanas)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| C1 | Crear OG images para top 10 páginas (hub, pricing, industry top 5, compare, about) | M | Dev/Design |
-| C2 | Agregar OG image explícita en homepage metadata | XS | Dev |
-| C3 | Agregar contenido único por industria en SuperTemplate (al menos 1 sección diferente por página) | L | SEO + Cliente |
-| C4 | Actualizar `llms.txt` con precios actuales y slugs correctos | XS | Dev |
-| C5 | Expandir interlinking contextual entre blog posts y páginas de producto | M | SEO |
-
-### Fase 3 — Técnico y performance (2-3 semanas)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| T1 | Agregar `sizes` prop en Navbar, Footer, LogoBar, VideoShowcase, IntegrationsPreview | S | Dev |
-| T2 | Corregir jerarquía de headings en homepage (SectionHeading nivel prop) | S | Dev |
-| T3 | Eliminar imágenes duplicadas en /public/images/homepage/ | XS | Dev |
-| T4 | Promover CSP de Report-Only a enforcing | M | Dev |
-| T5 | Cambiar redirects WP legacy (`xmlrpc.php`, etc.) de 301 a 410 | XS | Dev |
-| T6 | Actualizar blog sitemap para usar `updatedAt` en lugar de `publishedAt` | XS | Dev |
-| T7 | Revisar `STATIC_CONTENT_DATE` y reemplazar por fechas específicas por página | S | Dev |
-
-### Fase 4 — Expansión de contenido y backlinks (ongoing)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| E1 | Crear página `/compare/vlx-vs-gocanvas/` | M | SEO + Dev |
-| E2 | Agregar LocalBusiness schema (si VLX tiene presencia física relevante) | S | Dev |
-| E3 | Crear 3-5 case studies completos con métricas en Payload CMS | L | Cliente + SEO |
-| E4 | Outreach para backlinks en directorios de Salesforce, SAP, Oracle App Stores | M | Marketing |
-| E5 | Verificar y optimizar perfiles en G2, Capterra, GetApp con copy actualizado | M | Marketing |
-
-### Fase 5 — ASO y presencia en AI (ongoing)
-
-| ID | Acción | Esfuerzo | Propietario |
-|----|--------|----------|------------|
-| A1 | Auditar y actualizar ficha en iOS App Store | M | Marketing |
-| A2 | Auditar y actualizar ficha en Google Play | M | Marketing |
-| A3 | Alinear `aggregateRating` schema con datos reales de App Store | XS | Dev |
-| A4 | Verificar presencia en respuestas de ChatGPT, Claude, Perplexity | S | SEO |
-| A5 | Expandir `llms.txt` con secciones de productos, industrias y casos de uso | S | SEO + Dev |
 
 ---
 
