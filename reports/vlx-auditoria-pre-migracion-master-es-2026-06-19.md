@@ -111,7 +111,7 @@ La migración **protege y mejora** el sitio, pero rankear por términos comercia
 ---
 
 ## 7. Notas de herramientas / brechas de datos
-- **DataForSEO MCP devolvió 401** (sin autenticar) — requiere re-autenticación para extraer perfil de backlinks, volumen/dificultad de keywords y SERP de competidores en vivo. Esta auditoría usó datos reales de ranking de GSC en su lugar (mejor para el estado actual, pero sin profundidad de volumen/competidores).
+- **El perfil de backlinks, volumen/dificultad de keywords y SERP de competidores en vivo** son un análisis aparte, fuera del alcance de esta revisión pre-migración. Esta auditoría priorizó datos reales de ranking de GSC — lo mejor para el estado actual (sin profundidad de volumen/competidores de terceros).
 - **CrUX sin datos de campo** para vlx.ai (bajo el umbral de tráfico) — rendimiento evaluado con datos de laboratorio (PSI) + debería apoyarse en Vercel Speed Insights / PostHog RUM post-lanzamiento.
 - **Vercel preview = rama `dev`** (sin los micro-fixes de rendimiento del PR #11) — la auditoría de código corrió sobre `localhost:3000` (Hans-review, exacto); las métricas de laboratorio externas mejorarán algo en el build real.
 

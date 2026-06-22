@@ -113,7 +113,7 @@ The migration **protects and improves** the site, but ranking for commercial ter
 ---
 
 ## 7. Tooling notes / open data gaps
-- **DataForSEO MCP returned 401** (unauthenticated) — re-auth needed to pull backlink profile, keyword volume/difficulty, and live competitor SERP. This audit used real GSC ranking data instead (better for current state, but no volume/competitor depth).
+- **Backlink profile, keyword volume/difficulty, and live competitor SERP** are a separate deep-dive, out of scope for this pre-migration pass. This audit prioritized real GSC ranking data — best for current-state accuracy (without third-party volume/competitor depth).
 - **CrUX field data unavailable** for vlx.ai (below traffic threshold) — performance judged on lab (PSI) + should rely on Vercel Speed Insights / PostHog RUM post-launch.
 - **Vercel preview = `dev` branch** (lacks PR #11 perf micro-fixes) — code audit ran on `localhost:3000` (Hans-review, accurate); external lab metrics will improve slightly on the real build.
 
