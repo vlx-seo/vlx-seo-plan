@@ -37,6 +37,8 @@ Vercel production, mobile: **LCP ~6–7.6s** (target is 2.5s) · FCP ~2.8s · Pe
 2. Keep the hero preload + `fetchPriority` (already correct) — leave the image alone.
 3. Re-test mobile LCP **< 2.5s** in Lighthouse after each change, and watch FCP as the leading indicator.
 
+> ⚠️ **Validating the LCP can only happen on Vercel, once the changes are deployed and the page is navigable.** An LCP fix can't be confirmed until it's live on the deploy. The hero fade fix (`animate-hero-fade-in`) **is already on the current preview** and LCP is still ~6–7.6s — that's the evidence the FCP work above is the real lever. So: do the FCP work, **deploy the full latest dev to Vercel**, confirm the hub is navigable, then re-run Lighthouse mobile to confirm LCP < 2.5s. (Heads-up: the current preview is also missing the sitemap / use-case / H1 fixes — deploy the full dev for a clean, representative validation.)
+
 ## Paid landing pages — your call on destinations
 4 ad landing pages still **404** (GA4, last 12 months). Add redirects in `next.config.ts` — **you choose each destination** (you know the campaigns):
 

@@ -330,8 +330,8 @@ body{padding-top:62px}
   <div class="blockers-grid">
     <div id="task-AUD-1" class="blocker-card task-row" data-type="performance" data-prio="p1">
       <div class="b-id">⛔ AUD-1 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
-      <div class="b-title"><span class="t-en">Hub LCP 7.9s (slowest commercial page)</span><span class="t-es">LCP del hub 7.9s (página comercial más lenta)</span></div>
-      <div class="b-fix"><span class="t-en">Hub /digital-inspections-software/ has 7.9s mobile LCP — worse than the WP page it replaces (5.2s). Preload the LCP image; re-test on Hans-review build. This is the #1 head-term page.</span><span class="t-es">El hub tiene LCP móvil de 7.9s — peor que la página WP que reemplaza (5.2s). Precargar la imagen LCP; re-medir en build Hans-review. Es la página #1 del término principal.</span></div>
+      <div class="b-title"><span class="t-en">Hub LCP ~7.6s (slowest commercial page)</span><span class="t-es">LCP del hub ~7.6s (página comercial más lenta)</span></div>
+      <div class="b-fix"><span class="t-en">Hub /digital-inspections-software/ mobile LCP ~6–7.6s (target 2.5s). Root cause: a slow FCP (heavy DOM/CSS/JS to parse on mobile), NOT the hero image (already ~24KB, preloaded). Fix: defer below-the-fold DOM + purge unused CSS. ⚠️ Can only be validated once the full dev build is deployed to Vercel and navigable — then re-run Lighthouse mobile (LCP &lt; 2.5s).</span><span class="t-es">LCP móvil del hub ~6–7.6s (objetivo 2.5s). Causa: FCP lento (mucho DOM/CSS/JS por parsear en móvil), NO la imagen hero (ya ~24KB, precargada). Fix: diferir DOM below-the-fold + purgar CSS sin usar. ⚠️ Solo se puede validar cuando el build completo del dev esté subido a Vercel y navegable — ahí re-medir con Lighthouse móvil (LCP &lt; 2.5s).</span></div>
       <div class="b-footer">
         <span class="b-pill pill-effort">M · 2–3h</span>
         <div style="display:flex;align-items:center;gap:6px">
