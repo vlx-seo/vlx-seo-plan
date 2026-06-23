@@ -183,7 +183,8 @@ body { font-family:'Rubik',system-ui,sans-serif; background:#0a0f1a; display:fle
 /* ── Tooltips ── */
 .has-tip{position:relative;cursor:help}
 .has-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1E293B;border:1px solid rgba(255,87,34,.4);color:#E2E8F0;font-size:11px;font-weight:400;line-height:1.5;padding:10px 14px;border-radius:8px;width:260px;text-align:left;white-space:normal;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.5)}
-.has-tip:hover::after{opacity:1}
+.has-tip:hover::after,.has-tip.tip-open::after{opacity:1}
+.s-label .tip-icon{color:rgba(255,255,255,.45)}
 .tip-icon{font-size:10px;color:#64748B;margin-left:4px;vertical-align:middle}
 
 /* ── Lang / Details / Sort / Modal ── */
@@ -309,12 +310,12 @@ body{padding-top:62px}
     </div>
   </div>
   <div class="status-grid">
-    <div class="status-card green"><div class="s-label"><span class="t-en">SEO Health Score</span><span class="t-es">Salud SEO</span></div><div class="s-value">81 / 100</div><div class="s-sub"><span class="t-en">GO — with conditions</span><span class="t-es">ADELANTE — con condiciones</span></div></div>
-    <div class="status-card red"><div class="s-label"><span class="t-en">Hub LCP (mobile)</span><span class="t-es">LCP del hub (móvil)</span></div><div class="s-value">7.9 s</div><div class="s-sub"><span class="t-en">#1 commercial page · slower than WP</span><span class="t-es">Página comercial #1 · más lenta que WP</span></div></div>
-    <div class="status-card red"><div class="s-label"><span class="t-en">aggregateRating</span><span class="t-es">aggregateRating</span></div><div class="s-value"><span class="t-en">fabricated</span><span class="t-es">fabricado</span></div><div class="s-sub"><span class="t-en">4.9/20 hardcoded · manual-action risk</span><span class="t-es">4.9/20 fijo · riesgo acción manual</span></div></div>
-    <div class="status-card orange"><div class="s-label"><span class="t-en">Open must-fix</span><span class="t-es">Must-fix abiertos</span></div><div class="s-value"><span class="t-en">6 open</span><span class="t-es">6 abiertos</span></div><div class="s-sub"><span class="t-en">5 new + paid LPs · ~5h</span><span class="t-es">5 nuevos + LPs de pago · ~5h</span></div></div>
-    <div class="status-card green"><div class="s-label"><span class="t-en">Migration redirects</span><span class="t-es">Redirects migración</span></div><div class="s-value"><span class="t-en">52/54 · 1 hop</span><span class="t-es">52/54 · 1 salto</span></div><div class="s-sub"><span class="t-en">clean · 308 = 301 for Google</span><span class="t-es">limpios · 308 = 301 para Google</span></div></div>
-    <div class="status-card orange"><div class="s-label"><span class="t-en">GSC baseline (USA)</span><span class="t-es">Baseline GSC (USA)</span></div><div class="s-value"><span class="t-en">121 clicks</span><span class="t-es">121 clics</span></div><div class="s-sub"><span class="t-en">37.7k impr · pos 24.8 · protect</span><span class="t-es">37.7k impr · pos 24.8 · proteger</span></div></div>
+    <div class="status-card green has-tip" data-tip-en="Overall pre-migration health from the 2026-06-19 audit (12 dimensions). 81/100 means the new Next.js site is healthier than the current WordPress and is safe to launch once the open must-fixes are done." data-tip-es="Salud general pre-migración de la auditoría del 2026-06-19 (12 dimensiones). 81/100 significa que el nuevo sitio Next.js está más sano que el WordPress actual y es seguro lanzar una vez resueltos los must-fix abiertos."><div class="s-label"><span class="t-en">SEO Health Score</span><span class="t-es">Salud SEO</span><span class="tip-icon">ⓘ</span></div><div class="s-value">81 / 100</div><div class="s-sub"><span class="t-en">GO — with conditions</span><span class="t-es">ADELANTE — con condiciones</span></div></div>
+    <div class="status-card red has-tip" data-tip-en="LCP (Largest Contentful Paint) = how long until the hub's main content is visible on a phone. 7.9s is far over Google's 2.5s target. It's our #1 commercial page, so it's a launch blocker — and the cause is a slow first paint, not the image." data-tip-es="LCP (Largest Contentful Paint) = cuánto tarda en verse el contenido principal del hub en un celular. 7.9s está muy por encima del objetivo de Google (2.5s). Es nuestra página comercial #1, así que es un bloqueador — y la causa es un primer pintado lento, no la imagen."><div class="s-label"><span class="t-en">Hub LCP (mobile)</span><span class="t-es">LCP del hub (móvil)</span><span class="tip-icon">ⓘ</span></div><div class="s-value">7.9 s</div><div class="s-sub"><span class="t-en">#1 commercial page · slower than WP</span><span class="t-es">Página comercial #1 · más lenta que WP</span></div></div>
+    <div class="status-card red has-tip" data-tip-en="The site's structured data hardcoded a 4.9/5 rating from '20 reviews' that don't exist on the page. Google can penalize fake review markup, so it must use real Capterra/SoftwareAdvice counts or be removed. (Already fixed in dev.)" data-tip-es="Los datos estructurados del sitio fijaban una calificación de 4.9/5 con '20 reseñas' que no existen en la página. Google puede penalizar el marcado de reseñas falso, así que hay que usar conteos reales de Capterra/SoftwareAdvice o quitarlo. (Ya corregido en dev.)"><div class="s-label"><span class="t-en">aggregateRating</span><span class="t-es">aggregateRating</span><span class="tip-icon">ⓘ</span></div><div class="s-value"><span class="t-en">fabricated</span><span class="t-es">fabricado</span></div><div class="s-sub"><span class="t-en">4.9/20 hardcoded · manual-action risk</span><span class="t-es">4.9/20 fijo · riesgo acción manual</span></div></div>
+    <div class="status-card orange has-tip" data-tip-en="How many pre-launch issues from the audit are still unresolved. These should be closed before go-live — see the Blockers slide for each one. About 5 hours of work in total." data-tip-es="Cuántos problemas pre-lanzamiento de la auditoría siguen sin resolver. Deberían cerrarse antes del go-live — ver cada uno en la slide de Bloqueadores. Unas 5 horas de trabajo en total."><div class="s-label"><span class="t-en">Open must-fix</span><span class="t-es">Must-fix abiertos</span><span class="tip-icon">ⓘ</span></div><div class="s-value"><span class="t-en">6 open</span><span class="t-es">6 abiertos</span></div><div class="s-sub"><span class="t-en">5 new + paid LPs · ~5h</span><span class="t-es">5 nuevos + LPs de pago · ~5h</span></div></div>
+    <div class="status-card green has-tip" data-tip-en="Of the 54 old WordPress URLs, 52 redirect cleanly to the new site in a single hop (no chains). They return 308, which Google treats exactly like a 301, so link authority is preserved. The migration is safe." data-tip-es="De las 54 URLs viejas de WordPress, 52 redirigen limpiamente al sitio nuevo en un solo salto (sin cadenas). Dan 308, que Google trata igual que un 301, así que se preserva la autoridad de enlaces. La migración es segura."><div class="s-label"><span class="t-en">Migration redirects</span><span class="t-es">Redirects migración</span><span class="tip-icon">ⓘ</span></div><div class="s-value"><span class="t-en">52/54 · 1 hop</span><span class="t-es">52/54 · 1 salto</span></div><div class="s-sub"><span class="t-en">clean · 308 = 301 for Google</span><span class="t-es">limpios · 308 = 301 para Google</span></div></div>
+    <div class="status-card orange has-tip" data-tip-en="Baseline organic traffic from Google Search Console (USA, last 28 days): 121 clicks, 37.7k impressions, average position 24.8. This is the floor we must not lose after migrating — the number to protect and then grow." data-tip-es="Tráfico orgánico base de Google Search Console (USA, últimos 28 días): 121 clics, 37.7k impresiones, posición media 24.8. Es el piso que no debemos perder tras migrar — la cifra a proteger y luego hacer crecer."><div class="s-label"><span class="t-en">GSC baseline (USA)</span><span class="t-es">Baseline GSC (USA)</span><span class="tip-icon">ⓘ</span></div><div class="s-value"><span class="t-en">121 clicks</span><span class="t-es">121 clics</span></div><div class="s-sub"><span class="t-en">37.7k impr · pos 24.8 · protect</span><span class="t-es">37.7k impr · pos 24.8 · proteger</span></div></div>
   </div>
 </div>
 
@@ -1284,6 +1285,22 @@ function applyF(){var noF=TBF.prio.size===0&&TBF.type.size===0,total=0,shown=0;d
 document.addEventListener('click',function(e){if(!e.target.closest('.tb-dd'))document.querySelectorAll('.tb-ddpanel').forEach(function(p){p.classList.remove('open');});});
 if(typeof toggleLang==='function'){var _tl=toggleLang;toggleLang=function(){_tl.apply(this,arguments);tbPopulateNav();applyF();};}
 document.addEventListener('DOMContentLoaded',function(){tbPopulateNav();applyF();});
+</script>
+
+<script>
+(function(){
+  var tips=document.querySelectorAll('#slide-status .has-tip');
+  if(!tips.length)return;
+  tips.forEach(function(c){
+    c.addEventListener('click',function(e){
+      var open=c.classList.contains('tip-open');
+      tips.forEach(function(x){x.classList.remove('tip-open');});
+      if(!open)c.classList.add('tip-open');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tips.forEach(function(x){x.classList.remove('tip-open');});});
+})();
 </script>
 </body>
 </html>
