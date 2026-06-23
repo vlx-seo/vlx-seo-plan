@@ -7,7 +7,7 @@
 
 | Fix | Status |
 |---|---|
-| **Hub LCP** | ⚠️ **NOT resolved** — prod LCP still **7.6s** (Vercel, mobile PageSpeed). See below. |
+| **Hub LCP** | ⚠️ **NOT resolved** — prod LCP still **~6–7.6s** mobile (Vercel). Root cause corrected below: it's the FCP / render path, **not** image weight. |
 | Fabricated `aggregateRating` | ✅ removed |
 | Sitemap listing 5 redirecting categories | ✅ filtered to the 4 that return 200 |
 | 2 `/use-case/` 404s | ✅ redirected |
@@ -17,12 +17,25 @@
 | 6 industries in nav + footer | ✅ |
 | Page-specific OG images (top 10) | ✅ |
 
-## 🔴 Hub LCP — still a launch blocker
-Vercel production (mobile): **LCP 7.6s** · FCP 2.8s · Performance 66/100. Removing the `opacity:0` Framer wrapper helped FCP/text but **not** the LCP.
+## 🔴 Hub LCP — still a launch blocker (root cause corrected)
+Vercel production, mobile: **LCP ~6–7.6s** (target is 2.5s) · FCP ~2.8s · Performance 66/100. Confirmed with both PageSpeed Insights and a throttled field measurement (Slow-4G + 4× CPU). Removing the `opacity:0` Framer wrapper helped the text/FCP but **did not** fix the LCP.
 
-**Cause:** the LCP element is the hero image (`/images/industries/inspection-companies/hero.jpg`). It *is* preloaded (Next `priority`), but it's too heavy for throttled mobile (FCP 2.8s → LCP 7.6s gap).
+**LCP element = the hero image** (`/images/industries/inspection-companies/hero.jpg`) — confirmed via PerformanceObserver, not inferred.
 
-**Fix:** optimize the hero image — lighter mobile variant (AVIF/WebP, lower quality, don't ship 1080w+ to phones), add `fetchpriority="high"` on the `<img>`. Re-test mobile LCP **< 2.5s**.
+**What is NOT the bottleneck (don't spend time here):**
+- **Image weight / format.** The mobile variant Next serves is only **~24 KB** (`w=1080&q=75`) and downloads in ~1.5s. It is **already preloaded** (`<link rel="preload" as="image">`) and already has **`fetchPriority="high"`**. Compressing it further or switching to AVIF will **not** move LCP. (This corrects the earlier note — apologies, the first pass assumed image weight.)
+- **TTFB / server.** ~100 ms, served from Vercel edge cache (`x-vercel-cache: HIT`). The server is fast.
+- **Render-blocking bytes.** HTML is ~30 KB brotli, the 2 blocking CSS files ~17 KB brotli total — small.
+
+**The real cause: LCP is gated by a slow First Contentful Paint (~2.8s).** The page paints nothing until ~3–4.5s; the (light, preloaded) hero then paints ~1.5s after. LCP can't beat FCP, so **the lever is FCP, not the image.** With fast TTFB and small transfer, the FCP cost is **main-thread parse/render under mobile CPU throttle**, whose likely contributors are:
+- a **~240 KB (uncompressed) SSR DOM** — a lot of below-the-fold content rendered up front;
+- a CSS sheet that is small over the wire but **decompresses large to parse**;
+- **~21 JS chunks** hydrating on the main thread.
+
+**Fix (FCP levers — verify with Lighthouse "Reduce unused CSS/JS" + "Minimize main-thread work"):**
+1. **Shrink what the browser must parse before first paint** — defer/lazy-render the hub's below-the-fold sections and purge unused CSS so the initial DOM + critical CSS are smaller. This is the main lever.
+2. Keep the hero preload + `fetchPriority` (already correct) — leave the image alone.
+3. Re-test mobile LCP **< 2.5s** in Lighthouse after each change, and watch FCP as the leading indicator.
 
 ## Paid landing pages — your call on destinations
 4 ad landing pages still **404** (GA4, last 12 months). Add redirects in `next.config.ts` — **you choose each destination** (you know the campaigns):
@@ -35,5 +48,5 @@ Vercel production (mobile): **LCP 7.6s** · FCP 2.8s · Performance 66/100. Remo
 | `/isn-vlx/` | 7 | _(your call)_ |
 
 ## Before launch
-1. **Optimize the hero image** → hub LCP < 2.5s on mobile (the one real blocker left).
+1. **Bring the hub's FCP down** (defer below-the-fold DOM, purge unused CSS) → hub LCP < 2.5s on mobile. The one real blocker left — and the hero image is **already** optimized, so don't touch it.
 2. Add the 4 paid-LP redirects (destinations your call).
