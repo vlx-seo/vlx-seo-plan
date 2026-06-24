@@ -390,13 +390,13 @@ body{padding-top:62px}
     </div>
     <div id="task-B3" class="blocker-card task-row" data-type="technical" data-prio="p1">
       <div class="b-id">⛔ B3 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
-      <div class="b-title"><span class="t-en">Paid landing pages without redirects</span><span class="t-es">Landing pages de pago sin redirects</span></div>
-      <div class="b-fix"><span class="t-en">Audit (MIG-P1-1) confirms: map paid LPs (Capterra/G2, ~150 sessions/mo) to redirects. Day-1 404s on active campaigns = wasted ad spend. Verify via GA4 paid landing pages.</span><span class="t-es">La auditoría (MIG-P1-1) confirma: mapear las LPs de pago (Capterra/G2, ~150 sesiones/mes) a redirects. 404s el día 1 = gasto perdido. Verificar con landing pages pagas en GA4.</span></div>
+      <div class="b-title"><span class="t-en">Paid landing pages not migrated — need new landers</span><span class="t-es">Landing pages de pauta no migradas — faltan landers nuevos</span></div>
+      <div class="b-fix"><span class="t-en">4 ad landing pages return 200 on vlx.ai but 404 on the new site (not recreated): /landing-inspection-software-ads, -video, /mold-inspection-remediation-software-landing, /isn-vlx. They're paid-campaign destinations — don't 301 paid clicks to the generic hub (wastes spend). Hans decides what new dedicated landers/URLs to create for each, then points the ads + 301s the old URL. Full list in the Hans note.</span><span class="t-es">4 landing pages de pauta dan 200 en vlx.ai pero 404 en el sitio nuevo (no se recrearon): /landing-inspection-software-ads, -video, /mold-inspection-remediation-software-landing, /isn-vlx. Son destinos de campañas pagadas — no redirigir el tráfico de pauta al hub genérico (desperdicia gasto). Hans decide qué nuevos landers/URLs crear para cada una, luego apunta los anuncios + redirige la URL vieja. Lista completa en la nota de Hans.</span></div>
       <div class="b-footer">
         <span class="b-pill pill-effort">S · 1–2h</span>
         <div style="display:flex;align-items:center;gap:6px">
           <button class="b-done-btn " onclick="toggleDone('B3')">○</button>
-          <div class="b-owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('B3','Lau')">Lau</button><button class="owner-pill" data-owner="Hans" onclick="setOwner('B3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('B3','Abe')">Abe</button><button class="owner-pill" data-owner="Dani" onclick="setOwner('B3','Dani')">Dani</button></div>
+          <div class="b-owner-pills"><button class="owner-pill" data-owner="Lau" onclick="setOwner('B3','Lau')">Lau</button><button class="owner-pill active" data-owner="Hans" onclick="setOwner('B3','Hans')">Hans</button><button class="owner-pill" data-owner="Abe" onclick="setOwner('B3','Abe')">Abe</button><button class="owner-pill" data-owner="Dani" onclick="setOwner('B3','Dani')">Dani</button></div>
         </div>
       </div>
     </div>

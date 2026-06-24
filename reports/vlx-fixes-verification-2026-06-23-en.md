@@ -39,10 +39,10 @@ Vercel production, mobile: **LCP ~6–7.6s** (target is 2.5s) · FCP ~2.8s · Pe
 
 > ⚠️ **Validating the LCP can only happen on Vercel, once the changes are deployed and the page is navigable.** An LCP fix can't be confirmed until it's live on the deploy. The hero fade fix (`animate-hero-fade-in`) **is already on the current preview** and LCP is still ~6–7.6s — that's the evidence the FCP work above is the real lever. So: do the FCP work, **deploy the full latest dev to Vercel**, confirm the hub is navigable, then re-run Lighthouse mobile to confirm LCP < 2.5s. (Heads-up: the current preview is also missing the sitemap / use-case / H1 fixes — deploy the full dev for a clean, representative validation.)
 
-## Paid landing pages — your call on destinations
-4 ad landing pages still **404** (GA4, last 12 months). Add redirects in `next.config.ts` — **you choose each destination** (you know the campaigns):
+## Paid landing pages — you decide the new landing-page URLs to create
+These 4 ad landing pages return **200 on vlx.ai** but were **not migrated** to the new site (all 404 there). They're paid-campaign destinations, so they should **not** be 301'd to the generic hub — that wastes the paid clicks. **Decide what new dedicated landing page(s) and URL(s) to create** for each campaign on the new site; then point the ads at the new URL and 301 the old one to it.
 
-| Paid landing page | Paid sessions (last yr) | Redirect to → |
+| Paid landing page (vlx.ai) | Paid sessions (last 12 mo) | New landing-page URL to create → |
 |---|---|---|
 | `/landing-inspection-software-ads/` | 85 | _(your call)_ |
 | `/landing-inspection-software-video/` | 47 | _(your call)_ |
@@ -51,4 +51,4 @@ Vercel production, mobile: **LCP ~6–7.6s** (target is 2.5s) · FCP ~2.8s · Pe
 
 ## Before launch
 1. **Bring the hub's FCP down** (defer below-the-fold DOM, purge unused CSS) → hub LCP < 2.5s on mobile. The one real blocker left — and the hero image is **already** optimized, so don't touch it.
-2. Add the 4 paid-LP redirects (destinations your call).
+2. Decide + create the 4 paid-campaign landing pages (new URLs your call), then point the ads and 301 the old URLs to them.
