@@ -14,8 +14,10 @@
 | Homepage H1 "VerificationInspections" | ✅ clean SSR |
 | Blog pagination (crawlable) | ✅ path-based `/blog/page/N/` |
 | 4 industry H1s | ✅ keyword-led |
-| 6 industries in nav + footer | ✅ |
+| 6 industries in **header nav + footer** | ✅ |
 | Page-specific OG images (top 10) | ✅ |
+
+> **On "6 industries in header nav + footer" — what & why.** The 6 industry pages (vehicle, construction, safety, hospitality, mining, inspection-companies) are now linked from **both the header navigation menu and the footer**, sitewide — confirmed in `Navbar.tsx` and `Footer.tsx`. **Why it matters:** these are commercial pages targeting industry-specific keywords. Sitewide links keep them **one click from every page**, so Google crawls/re-crawls them reliably and internal link equity flows to them — a ranking signal that says "these pages are important." Before, they were under-linked / effectively buried, which caps how well they can rank and how fast they get indexed. **What for:** better crawlability + indexing + ranking of the industry pages, plus clearer navigation for users. Please keep them in **both** places (header and footer).
 
 ## 🔴 Hub LCP — still a launch blocker (root cause corrected)
 Vercel production, mobile: **LCP ~6–7.6s** (target is 2.5s) · FCP ~2.8s · Performance 66/100. Confirmed with both PageSpeed Insights and a throttled field measurement (Slow-4G + 4× CPU). Removing the `opacity:0` Framer wrapper helped the text/FCP but **did not** fix the LCP.
