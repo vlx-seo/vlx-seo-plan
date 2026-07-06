@@ -1,6 +1,6 @@
 # VLX SEO Audit — Plan de Correcciones 2026-06-19
 
-**Creado:** 2026-06-19 · **Actualizado:** 2026-07-01 (integrado review dev.vlx.ai) · **Dominio:** vlx.ai · **Auditor:** Laura Ceballos / Software Craft CR  
+**Creado:** 2026-06-19 · **Dominio:** vlx.ai · **Auditor:** Laura Ceballos / Software Craft CR  
 **Rama verificada:** `origin/Hans-review` · **Score actual:** Ver Dashboard de Estado  
 **Fuente:** Inspección de código + análisis de arquitectura (commit actual)
 
@@ -30,122 +30,6 @@ Al terminar cada sesión de trabajo, Claude debe:
 | Sesión | Fecha | Tareas Completadas | Notas |
 |--------|-------|-------------------|-------|
 | 0 | 2026-06-19 | Audit creado | Inspección completa de codebase rama Hans-review |
-| 1 | 2026-07-01 | Review dev.vlx.ai integrado | Ver **SEGUIMIENTO 2026-07-01** abajo. 4 must-fix confirmados resueltos · 1 sin resolver (LPs de pauta) · 2 parciales (LCP, blog SSR) · discrepancia oil-and-gas re-abierta · +6 hallazgos nuevos · errores visuales de blog clasificados pre/post-lanzamiento |
-
----
-
-## 🔄 SEGUIMIENTO 2026-07-01 — Review dev.vlx.ai (post-auditoría · pre-lanzamiento)
-
-**Fecha:** 2026-07-01 · **Auditora:** Laura Ceballos / Software Craft CR
-**Objeto:** Nueva versión del sitio en `https://dev.vlx.ai` (protegido con AWS ALB + Amazon Cognito)
-**Baseline:** esta misma auditoría (2026-06-19 · score 81/100 · "Adelante con condiciones")
-**Fuente MD completa:** `reports/REVIEW-DEV-VLX-AI-2026-07-01.md`
-
-> Esta sección **integra** el seguimiento del 2026-07-01 sobre la auditoría del 2026-06-19. No reemplaza el contenido previo: marca qué se corrigió, qué sigue abierto y qué se identificó nuevo. Los IDs entre paréntesis refieren a los blockers/tareas del dashboard (`index.html`) y de la Sección 2.
-
-### Nota metodológica (leer primero)
-- **Acceso:** `dev.vlx.ai` está tras AWS ALB + Cognito (OAuth2). El navegador ya tenía sesión activa; no hizo falta probar credenciales.
-- **Herramientas externas bloqueadas:** PageSpeed / Lighthouse / CrUX / crawlers públicos **NO** pueden auditar esta URL (sin cookie de Cognito). Toda métrica de performance de esta pasada viene de Navigation Timing API medido manualmente en el navegador autenticado, no de Lighthouse.
-- **GSC / GA4:** `dev.vlx.ai` no es propiedad verificada — sin baseline de tráfico real todavía (pre-lanzamiento).
-- **🔴 Duda de rama (validar con Hans/Abe):** el H1 de homepage ahora dice *"The AI-Native Enterprise Platform for [Inspections/…]"* (typewriter), un posicionamiento distinto al *"Run Your Inspection Business on VLX"* visto el 19-jun. Puede ser evolución de `Hans-review` o una rama/ambiente distinto. **Confirmar qué rama está desplegada en dev.vlx.ai** antes de dar por buena la comparación 1:1.
-- **Método:** crawler propio dentro del navegador autenticado (`fetch()` hereda la cookie) sobre las **185 URLs del sitemap** + pruebas puntuales de URLs viejas de WordPress.
-
-### Estado de los must-fix del 2026-06-19
-| Ítem (ID) | Estado 2026-07-01 | Evidencia |
-|---|---|---|
-| Hub LCP ~7.6s (AUD-1) | 🟡 Probablemente resuelto — **falta PSI** | Navigation Timing en `/digital-inspections-software/`: TTFB 82ms, load 354ms (órdenes de magnitud mejor). LCP exacto no verificable (PSI bloqueado por Cognito). **Sigue abierto hasta correr PSI real.** |
-| aggregateRating fabricado (AUD-2) | ✅ Confirmado resuelto | Barrido de las 185 páginas: `aggregateRating` no aparece en ninguna (lo quitaron). |
-| Sitemap listaba 5 categorías con 308 (AUD-3) | ✅ Confirmado resuelto | Las 8 URLs de categoría del sitemap dan 200 directo. |
-| 2 `/use-case/` con 404 (AUD-4) | ✅ Confirmado resuelto | Ambas → 200 (insurance / financial-services), destinos recomendados. |
-| H1 homepage sin espacio (AUD-5) | ✅ Resuelto (ver duda de rama) | HTML actual: "The AI-Native Enterprise Platform for Inspections". |
-| Landing pages de pauta (B3) | ❌ **Sigue abierto** | Las 13 LPs del `AUDIT-MIGRATIONS-EN-2026-05-28` siguen 404; `/lp/` está en robots.txt (disallow) pero **sin contenido**. Único bloqueador crítico sin resolver. |
-| Blog SSR + paginación (B2) | 🟡 Parcial — regresión nueva | 116 posts SSR OK, pero la paginación principal se rompió de otra forma (ver **NUEVO-1**). |
-| robots.txt Applebot allow (Sec.2 B8) | ✅ Confirmado | Postura IA intacta: Perplexity / OAI-SearchBot / Applebot permitidos; GPTBot / ClaudeBot / CCBot / Amazonbot bloqueados. |
-| OG images (Sec.2 B5 / tarea A10) | 🟡 Parcial | Las 10 top se hicieron (A10), pero **46/185** páginas siguen sin `og:image` (ver **NUEVO-3b**). |
-| Redirect `/oil-and-gas/` (dashboard B5) | ⛔ **Re-abierto — error en última versión de dev** | El dashboard lo marcaba resuelto (1 hop → 200), pero en dev.vlx.ai (2026-07-01) `/oil-and-gas/` y `/financial-institutions/` devuelven **404** (ver **NUEVO-2**). Se actualizó B5 en el dashboard a "abierto". |
-
-**Resumen must-fix:** 4 confirmados resueltos · 1 sin resolver (LPs de pauta) · 2 parciales (LCP, blog SSR/paginación) · 1 re-abierto (oil-and-gas 404).
-
-### Hallazgos NUEVOS (no estaban en la auditoría del 19-jun)
-- **NUEVO-1 · 🔴 Pre-lanzamiento — Paginación principal del blog contradictoria.** El sitemap lista `/blog/page/2…10/` (ruta limpia), pero esas 9 URLs redirigen a `/blog/?page=N`, que tiene `noindex,nofollow` + canonical → `/blog/`. Señal contradictoria + presupuesto de rastreo desperdiciado. La paginación de **categorías** sí quedó bien (200, index/follow, canonical propio). **Fix:** quitarlas del sitemap **o** servir contenido real en esa ruta (no redirigir a `?page=N` con noindex).
-- **NUEVO-2 · 🟡 Post-lanzamiento (higiene, re-verificar) — 2 slugs viejos de WordPress sin redirect.** `/oil-and-gas/` y `/financial-institutions/` → **404** (deberían → `/digital-inspections-software/oil-gas/` y `/financial-services/`). **Contradice** el estado "resuelto" de B5 en el dashboard → B5 re-abierto. Tráfico histórico bajo, pero es higiene de migración.
-- **NUEVO-3 · 🟡 Post-lanzamiento — Títulos/meta fuera de rango.** 39/185 con `title` vacío o >60c; 47/185 con `meta description` vacía o >160c.
-- **NUEVO-3b · 🟡 Post-lanzamiento — 46/185 sin `og:image`.** 12 páginas de industria/app, 11 posts de blog y 23 más (pricing, integrations, demo, checklists index, whats-new, security, developers…). Relaciona con Sec.2 B5 / tarea A10.
-- **NUEVO-4 · 🟢 Positivo — Compare pages ganaron schema.** `/compare/vlx-vs-safetyculture/` y `/compare/vlx-vs-goaudits/` pasaron de 0 schema a `Organization + WebSite + BreadcrumbList`. Falta schema específico de comparación/producto.
-- **NUEVO-5 · ⚪ Post-lanzamiento (baja) — Íconos decorativos sin `alt`.** 32/37 imágenes del hub sin atributo `alt` (íconos SVG junto a los links de industria). Ideal: `alt=""` explícito.
-- **NUEVO-6 · ⚪ Info — Sitemap creció 175 → 185 URLs.** 10 URLs nuevas desde el inventario del 19-jun (solo el conteo, no el detalle línea por línea).
-
-### Errores visuales en blog posts — clasificados (fuente: *GTM – VLX Marketing Site – Blog Posts Review*)
-> Solo se listan errores **visuales** (render / estilos / assets). Los de **HTML/estructura** (list structure, encabezados, meta) se excluyen por alcance y se corrigen aparte; además, corregir la estructura de listas depende del builder (pendiente). ~46 páginas afectadas.
-
-**🚫 Blockers pre-lanzamiento** (dañan UX / credibilidad / SEO al lanzar):
-- **V1 — Imágenes rotas (12 págs):** ej. construction-industry-trends, hotel-room-housekeeping, why-audits-failed, difference-qms-eqms.
-- **V3 — Contenido embebido/dinámico no carga (6 págs):** best-gemba-walk, sb-326-balcony-laws, hotel-maintenance, why-container-inspections, food-safety-checklist, y la "Sample Incident Report Template" de how-to-write-an-incident-report.
-- **V4 — CTAs rotos (2 págs):** what-to-look-for-when-renting-a-houses (no cargan links/estilos); photo-authentication-software (CTA final no funciona).
-- **V5 — H1 muestra `&amp;` literal (7 págs):** on-site-inspection-methods, inspection-software-that-prevents-fraud, financial-software-that-cuts-risk, 7-modern-inspection-methods, truck-inspection-checklist, how-to-write-an-incident-report, why-supply-chain-management-software-essential.
-- **V8 — Tabla no carga todos los datos (1 pág):** "Sample Forklift Daily Inspection Form" en el checklist de forklift (+ primer ítem de lista vacío).
-
-**🕒 Se pueden corregir después del lanzamiento** (cosmético / menor impacto):
-- **V2 — Íconos no cargan (2 págs):** 6s-lean-audit, brc-audit.
-- **V6 — Estilos de FAQ/listas no cargan (~14 págs):** iso-9001, food-safety, mold-inspection, house-insurance, hotel-maintenance, financial-software-that-cuts-risk, etc. (contenido legible, solo sin estilos).
-- **V7 — Espaciado / texto mal asentado (~8 págs):** understanding-qapi, boiler-maintenance, steel-pipes-oil-gas, pre-drywall, health-inspection-restaurants, etc.
-- **V9 — Otros defectos de render (4 págs):** texto no alineado con listas (strengthening-trust-…lending, evolution-of-audits); display roto con contenido dentro de `<!Doctype html>` (virtual-inspections-shaping-the-future — render break genuino); etiquetas `<code>` visibles (seeing-risk-before-it-spreads).
-
-### Lo que se confirma sólido (sin cambios para mal)
-- Sitemap 100% canonicalizado a `vlx.ai` (dominio de producción) aunque se sirve desde `dev.vlx.ai`.
-- robots.txt con postura IA deliberada intacta (ver AUD/Sec.2 B8).
-- SSR funcionando: todas las páginas devuelven HTML completo con H1/schema/links sin necesitar JS (fetch crudo = lo que ve Googlebot).
-
-### Próximos pasos (por prioridad)
-1. **Confirmar con Hans/Abe** qué rama/ambiente es dev.vlx.ai (el copy de homepage cambió vs. 19-jun).
-2. **[BLOQUEADOR] Arreglar las 13 landing pages de pauta** (B3) — único bloqueador crítico abierto; con inversión activa = dinero en 404.
-3. **[Pre-lanzamiento] Corregir `/blog/page/N/`** (NUEVO-1) — quitar del sitemap o servir contenido real (no redirigir a `?page=N` con noindex).
-4. **[Pre-lanzamiento] Errores visuales de blog** V1 / V3 / V4 / V5 / V8 (imágenes, embeds, CTAs, `&amp;` en H1, tabla).
-5. **[Post-lanzamiento] Agregar redirects** `/oil-and-gas/` y `/financial-institutions/` (NUEVO-2 · B5 re-abierto).
-6. **[Post-lanzamiento] Rellenar 46 `og:image`** (priorizar 12 industria), pasada de títulos/meta (~40-47 págs), y errores visuales V2 / V6 / V7 / V9.
-7. Cuando el sitio sea accesible sin Cognito, **correr PSI/Lighthouse real** en el hub para confirmar el LCP (AUD-1).
-
-### 🛠️ Prompt para el Claude de Hans — fixes urgentes pre-lanzamiento
-> Copiar-pegar el bloque de abajo en una sesión de Claude Code sobre el repo **VLX-Marketing**. También disponible como archivo suelto: `reports/prompt-hans-technical-fixes-2026-07-01-en.md`. Hacer primero los **blockers pre-lanzamiento**; la lista post-lanzamiento puede esperar.
-
-```text
-# VLX Pre-Launch URGENT Fixes (2026-07-01 follow-up) — for Hans/Abe + their Claude
-
-You are a senior dev in the VLX-Marketing repo (Next.js 15 App Router, src/app/(frontend), Payload CMS, Tailwind, Framer Motion). The site is PRE-LAUNCH on dev.vlx.ai (behind AWS ALB + Cognito); production is still WordPress. Market: USA + Canada, English. Implement each fix, verify, and report. Ask before destructive changes. These are the URGENT items from the 2026-07-01 review of dev.vlx.ai.
-
-STEP 0 — Confirm the deployed branch. The homepage H1 on dev.vlx.ai now reads "The AI-Native Enterprise Platform for [Inspections/…]" (typewriter), different from the Hans-review branch H1 "Run Your Inspection Business on VLX". Confirm which branch/environment is deployed to dev.vlx.ai before assuming file paths.
-
-PRE-LAUNCH BLOCKERS (must fix before launch):
-
-1. [CRITICAL] Paid landing pages still 404. The 13 paid LPs from AUDIT-MIGRATIONS-EN-2026-05-28 (Capterra / G2 / LinkedIn: /landing-inspection-software-capterra-a/, /landing-inspection-software-g2/, /landing-inspections-software-linkedin/, etc.) return 404 on the new site. /lp/ is disallowed in robots.txt but has no content. Per campaign, either create a dedicated lander (/lp/[campaign]/) OR 301 the old URL to the best-matching page — do NOT 404 paid clicks. Wire redirects in next.config.ts.
-
-2. [PRE-LAUNCH] Blog main pagination sends contradictory signals. sitemap.ts lists /blog/page/2…10/ (clean paths), but those redirect to /blog/?page=N, which is noindex,nofollow + canonical → /blog/. Either (a) remove /blog/page/N/ from the sitemap, or (b) serve real server-rendered content at /blog/page/N/ (index,follow, self-canonical). Category pagination already works — mirror it. Verify each /blog/page/N/ returns 200 index/follow, or is absent from the sitemap.
-
-3. [PRE-LAUNCH] Old WordPress slugs 404. /oil-and-gas/ and /financial-institutions/ return 404. Add redirects in next.config.ts → /digital-inspections-software/oil-gas/ and /digital-inspections-software/financial-services/.
-
-4. [PRE-LAUNCH · verify] Hub LCP. Audit 2026-06-19 measured 7.9s; the 2026-07-01 check saw TTFB 82ms / load event 354ms (likely fine) but could NOT run PSI (Cognito wall). Once dev is reachable without Cognito (or on a preview URL), run mobile Lighthouse/PSI on /digital-inspections-software/ and confirm LCP < 2.5s.
-
-5. [PRE-LAUNCH] Blog post VISUAL errors (source: GTM – VLX Marketing Site – Blog Posts Review). Fix rendering/assets, not HTML structure:
-   - Broken images (12 pages): e.g. construction-industry-trends, hotel-room-housekeeping, why-audits-failed, difference-qms-eqms. Fix asset paths / hosting so images load.
-   - Embedded/dynamic content not loading (6): best-gemba-walk, sb-326-balcony-laws, hotel-maintenance, why-container-inspections, food-safety-checklist, and the "Sample Incident Report Template" on how-to-write-an-incident-report.
-   - Broken CTAs (2): what-to-look-for-when-renting-a-houses (CTAs load no links/styles); photo-authentication-software (end CTA doesn't work).
-   - H1 shows a literal "&amp;" (7): on-site-inspection-methods, inspection-software-that-prevents-fraud, financial-software-that-cuts-risk, 7-modern-inspection-methods, truck-inspection-checklist, how-to-write-an-incident-report, why-supply-chain-management-software-essential. Fix the double-encoding of & → &amp; in the post title/metadata render.
-   - Table missing data (1): forklift checklist "Sample Forklift Daily Inspection Form" doesn't load all rows; its lists also have an empty first item.
-
-WHEN DONE (pre-launch gate):
-1. npm run build → 0 errors.
-2. curl -I the 13 paid LP URLs + /oil-and-gas/ + /financial-institutions/ → 301/200 (no 404).
-3. Every /blog/page/N/ in the sitemap → 200 index/follow, or removed from the sitemap.
-4. Spot-check the visual-error pages render correctly (images, embeds, CTAs, H1 text, table).
-5. Report done vs. needs-decision. Do NOT launch until 1–3 and 5 pass.
-
-POST-LAUNCH (can wait — do NOT block launch):
-- Icons not loading (6s-lean-audit, brc-audit); FAQ/list styles not loading (~14 pages); bad spacing (~8 pages); other render defects (text alignment; content inside a <!Doctype html> on virtual-inspections-shaping-the-future; visible <code> tags on seeing-risk-before-it-spreads).
-- Titles/meta out of range (39 titles empty/>60c, 47 meta empty/>160c); 46/185 pages missing og:image (prioritize the 12 industry pages); decorative hub icons missing alt.
-- Note: list-structure HTML fixes depend on the site builder (pending) — out of scope here.
-
-SEO note (Laura): 308 = 301 for Google — don't swap those. Prioritize the paid LPs, the blog-pagination signal, and the visual breakage.
-```
 
 ---
 
@@ -561,9 +445,9 @@ Después de completar Wave 0:
 | KPI | Estado | Valor |
 |-----|--------|-------|
 | Páginas en sitemap | ✅ | 200+ URLs, 9 tiers |
-| Páginas con OG image específica | ⚠️ | ~8 de 56+ páginas · 2026-07-01: aún faltan 46/185 |
-| Schemas JSON-LD activos | ⚠️ | 7 tipos, 4 con errores · 2026-07-01: aggregateRating eliminado; compare pages ganaron Organization+WebSite+BreadcrumbList |
-| robots.txt | ✅ | 2026-07-01: Applebot allow presente; postura IA intacta |
+| Páginas con OG image específica | ⚠️ | ~8 de 56+ páginas |
+| Schemas JSON-LD activos | ⚠️ | 7 tipos, 4 con errores |
+| robots.txt | ⚠️ | Regla Applebot faltante |
 | CSP | ❌ | Report-Only, no enforcing |
 | /case-studies/ en sitemap | ❌ | Ausente (solo slugs dinámicos) |
 | HowTo schema deprecated | ❌ | Activo en 10 páginas de integración |
@@ -609,8 +493,6 @@ Después de completar Wave 0:
 ---
 
 ## SECCIÓN 2 — BLOCKERS (B1–B10)
-
-> 🔄 **Estado post-review 2026-07-01:** varios de estos blockers cambiaron de estado tras el review de dev.vlx.ai. Ver la sección **SEGUIMIENTO 2026-07-01** arriba para el detalle (aggregateRating eliminado, Applebot allow confirmado, `og:image` aún 46/185, redirect `/oil-and-gas/` re-abierto por 404 en dev, etc.).
 
 ### B1 — /case-studies/ ausente del sitemap
 - **Estado:** ❌ ABIERTO
@@ -1209,6 +1091,6 @@ El sistema de routing mapea posts a diferentes prefijos según categoría:
 
 ---
 
-*Audit generado: 2026-06-19 · Última actualización: 2026-07-01 (integrado review dev.vlx.ai) · Próxima revisión recomendada: 2026-07-19*  
+*Audit generado: 2026-06-19 · Próxima revisión recomendada: 2026-07-19*  
 *Fuente: Inspección de código del repositorio VLX-Marketing (rama Hans-review)*  
 *Datos PROVISIONAL requieren validación contra GSC API, herramientas de backlinks, y verificación live HTTP*
