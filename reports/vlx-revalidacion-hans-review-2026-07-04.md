@@ -94,9 +94,75 @@ Son issues de **contenido en Payload CMS** (migración WP→Payload), **no de c�
 6. **Guardrail de longitud de title/description** — P2 / disciplina de CMS.
 7. **Hub LCP** — P1 (heredado del 19-jun). Medir en un deploy navegable (no re-medible en código).
 8. **H1 débiles menores** — `home-inspectors` y `asset-verification` (fuera del alcance del must-fix #8).
+9. **Admin de Payload CMS (`/admin`) roto en el entorno desplegado** — 🔴 bloqueador para editar contenido (detectado 2026-07-06, prueba en vivo sobre `dev.vlx.ai`). `https://dev.vlx.ai/admin` devuelve el 404 de marketing ("Page Not Found | VLX") en vez del login de Payload, mientras que `/api/*` sí responde (el backend está vivo) — lo más probable es un conflicto de `trailingSlash: true` vs el routing del admin de Payload. Sin el panel, el cliente no puede corregir los items de CMS de arriba (incluidas las 12 imágenes bloqueadoras). ⚙️ Desarrollador. **Ver el prompt listo para pegar en el Apéndice.**
 
 ---
 
 ## 5. Conclusión
 
 La versión anterior de la auditoría (**19-jun**) era válida. El equipo implementó correctamente los fixes técnicos. Los "errores adicionales" del review 1-jul provienen de **auditar un entorno con código desactualizado** (`dev.vlx.ai`); el código real del branch está en buen estado. El foco real queda en: **paid landers (bloqueador)** y **limpieza de contenido de blogs en el CMS**.
+
+---
+
+## Apéndice — Prompt para el equipo de desarrollo: arreglar la ruta `/admin` (Payload CMS)
+
+**Por qué:** el panel de administración de Payload está inaccesible en `dev.vlx.ai`, lo que bloquea todo el trabajo de contenido en el CMS de las secciones 3b y 4. Abajo el diagnóstico y, a continuación, un prompt listo para pegar que el desarrollador corre contra el repo `VLX-Marketing`. (El prompt va en inglés, como el resto de prompts para el equipo de Hans/Abe.)
+
+**Evidencia (prueba en vivo sobre `dev.vlx.ai`, 2026-07-06):**
+- `GET /admin` → redirect 308 a `/admin/` → renderiza el 404 del catch-all de marketing (`Page Not Found | VLX`). Igual con `/admin/login`.
+- `GET /api/users` → devuelve el error JSON de Payload `{"errors":[{"message":"You are not allowed to perform this action."}]}` → **el backend de Payload está desplegado y montado; solo falla la ruta de la UI del admin.**
+- `robots.txt` sigue listando `Disallow: /admin/` → la ruta se espera que exista.
+- El panel era accesible antes (el contenido se edita en Payload; hay un acceso directo a `/admin/` en GA4), así que esto parece una **regresión de este build**, no una ruta que nunca se desplegó.
+- Todos los links internos de marketing terminan en `/` → `trailingSlash: true` activo en runtime (confirmado en `next.config.ts` en auditorías previas).
+
+**Causa más probable:** con `trailingSlash: true`, Next.js redirige `/admin` → `/admin/`, y el route group del admin de Payload (`(payload)/admin/[[...segments]]`) no matchea con la barra final forzada, así que la petición cae en el catch-all `[...slug]` de marketing → 404. Los route handlers de `/api` toleran la barra final, por eso la REST API sí funciona.
+
+**Restricción dura:** **no** poner `trailingSlash` en `false`. Todo el SEO depende de `trailingSlash: true` — canonicals, el sitemap y las ~284 reglas de redirect asumen barra final. Un cambio global causaría regresiones de canonical/redirect en todo el sitio de marketing. El fix debe hacer que `/admin` funcione manteniendo `trailingSlash: true` en las rutas de marketing.
+
+**Prompt listo para pegar (correr en el repo `Visualogyx/VLX-Marketing`):**
+
+```
+The Payload CMS admin panel is unreachable on the deployed environment (dev.vlx.ai).
+Requesting https://dev.vlx.ai/admin (and /admin/login) returns our Next.js marketing
+404 page ("Page Not Found | VLX") instead of the Payload login screen.
+
+Confirmed facts:
+- The Payload backend IS running and mounted: GET /api/users returns a Payload JSON
+  error ({"errors":[{"message":"You are not allowed to perform this action."}]}).
+- robots.txt still has "Disallow: /admin/", so /admin is the expected route.
+- next.config.ts enforces `trailingSlash: true` globally. At runtime /admin issues a
+  308 redirect to /admin/, which then renders the marketing catch-all 404 — the
+  request never reaches Payload's admin route group.
+- The panel used to be reachable; this is a regression, not a missing deploy.
+
+Goal: restore the Payload admin panel at /admin on the deployed build WITHOUT changing
+the trailing-slash behavior of the marketing site.
+
+HARD CONSTRAINT: do NOT set `trailingSlash: false` globally. Canonicals, the sitemap,
+and the ~284 redirect rules all depend on `trailingSlash: true`; a global change would
+break SEO across the site. The admin (and /api) must work while marketing routes keep
+trailing slashes.
+
+Please:
+1. Reproduce and confirm the root cause of the /admin 404 (trailing-slash redirect vs
+   Payload's (payload)/admin/[[...segments]] route group, or any other cause you find).
+2. Implement a targeted fix. Candidate approaches (pick what's cleanest and correct for
+   Payload 3 + Next.js App Router):
+   - Use `skipTrailingSlashRedirect: true` in next.config.ts and reproduce the trailing
+     slash for marketing routes only (via middleware or redirects), leaving /admin and
+     /api untouched; OR
+   - Exclude /admin (and /api) from the trailing-slash redirect in middleware; OR
+   - Verify the Payload `routes.admin` config and that the (payload) route group is
+     actually included in the deployed build for this environment.
+3. Confirm the AWS ALB + Cognito layer in front of dev.vlx.ai is not stripping or
+   rewriting the /admin path.
+4. Verify: /admin loads the Payload login; after auth, collections (posts, media, etc.)
+   are editable; marketing routes still resolve with the trailing slash; canonicals,
+   sitemap.xml, and redirects are unchanged; /api/* still works; the pre-prod noindex
+   stays intact.
+
+Report the root cause, the exact files changed, and how you verified each acceptance
+criterion.
+```
+
+**Owner:** ⚙️ Abe (desarrollador). **Prioridad:** bloqueador para la remediación de contenido en el CMS (secciones 3b–4).

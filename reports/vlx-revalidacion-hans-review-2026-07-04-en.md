@@ -94,9 +94,75 @@ These are **content issues in Payload CMS** (WP→Payload migration), **not code
 6. **Title/description length guardrail** — P2 / CMS discipline.
 7. **Hub LCP** — P1 (inherited from June 19). Measure on a browsable deploy (not re-measurable in code).
 8. **Minor weak H1s** — `home-inspectors` and `asset-verification` (outside the scope of must-fix #8).
+9. **Payload CMS admin (`/admin`) broken on the deployed environment** — 🔴 blocker for content editing (discovered 2026-07-06, live test on `dev.vlx.ai`). `https://dev.vlx.ai/admin` returns the marketing 404 ("Page Not Found | VLX") instead of the Payload login, while `/api/*` responds (backend is alive) — most likely a `trailingSlash: true` vs Payload admin-routing conflict. Without the panel, the client cannot fix the CMS items above (including the 12 blocker images). ⚙️ Developer. **See the ready-to-paste prompt in the Appendix.**
 
 ---
 
 ## 5. Conclusion
 
 The previous version of the audit (**June 19**) was valid. The team implemented the technical fixes correctly. The "additional errors" from the July 1 review came from **auditing an environment with stale code** (`dev.vlx.ai`); the actual branch code is in good shape. The real focus remains on: **paid landers (blocker)** and **cleanup of blog content in the CMS**.
+
+---
+
+## Appendix — Prompt for the dev team: fix the `/admin` (Payload CMS) route
+
+**Why:** the Payload admin panel is currently unreachable on `dev.vlx.ai`, which blocks all the CMS content work listed in sections 3b and 4. Diagnosis below, followed by a ready-to-paste prompt for the developer to run against the `VLX-Marketing` repo.
+
+**Evidence (live test on `dev.vlx.ai`, 2026-07-06):**
+- `GET /admin` → 308 redirect to `/admin/` → renders the Next.js marketing catch-all 404 (`Page Not Found | VLX`). Same for `/admin/login`.
+- `GET /api/users` → returns the Payload JSON error `{"errors":[{"message":"You are not allowed to perform this action."}]}` → **the Payload backend is deployed and mounted; only the admin UI route fails.**
+- `robots.txt` still lists `Disallow: /admin/` → the route is expected to exist.
+- The panel was reachable historically (content is edited in Payload; a direct hit on `/admin/` appears in GA4), so this looks like a **regression on this build**, not a route that was never deployed.
+- Every internal marketing link ends in `/` → `trailingSlash: true` is in effect at runtime (confirmed in `next.config.ts` across prior audits).
+
+**Most likely cause:** with `trailingSlash: true`, Next.js redirects `/admin` → `/admin/`, and Payload's admin route group (`(payload)/admin/[[...segments]]`) does not match the enforced trailing slash, so the request falls through to the marketing `[...slug]` catch-all → 404. The `/api` route handlers tolerate the trailing slash, which is why the REST API still works.
+
+**Hard constraint:** do **not** simply flip `trailingSlash` to `false`. The whole SEO setup depends on `trailingSlash: true` — canonicals, the sitemap, and the ~284 redirect rules all assume trailing slashes. A global flip would cause canonical/redirect regressions across the entire marketing site. The fix must make `/admin` work while marketing routes keep `trailingSlash: true`.
+
+**Ready-to-paste prompt (run in the `Visualogyx/VLX-Marketing` repo):**
+
+```
+The Payload CMS admin panel is unreachable on the deployed environment (dev.vlx.ai).
+Requesting https://dev.vlx.ai/admin (and /admin/login) returns our Next.js marketing
+404 page ("Page Not Found | VLX") instead of the Payload login screen.
+
+Confirmed facts:
+- The Payload backend IS running and mounted: GET /api/users returns a Payload JSON
+  error ({"errors":[{"message":"You are not allowed to perform this action."}]}).
+- robots.txt still has "Disallow: /admin/", so /admin is the expected route.
+- next.config.ts enforces `trailingSlash: true` globally. At runtime /admin issues a
+  308 redirect to /admin/, which then renders the marketing catch-all 404 — the
+  request never reaches Payload's admin route group.
+- The panel used to be reachable; this is a regression, not a missing deploy.
+
+Goal: restore the Payload admin panel at /admin on the deployed build WITHOUT changing
+the trailing-slash behavior of the marketing site.
+
+HARD CONSTRAINT: do NOT set `trailingSlash: false` globally. Canonicals, the sitemap,
+and the ~284 redirect rules all depend on `trailingSlash: true`; a global change would
+break SEO across the site. The admin (and /api) must work while marketing routes keep
+trailing slashes.
+
+Please:
+1. Reproduce and confirm the root cause of the /admin 404 (trailing-slash redirect vs
+   Payload's (payload)/admin/[[...segments]] route group, or any other cause you find).
+2. Implement a targeted fix. Candidate approaches (pick what's cleanest and correct for
+   Payload 3 + Next.js App Router):
+   - Use `skipTrailingSlashRedirect: true` in next.config.ts and reproduce the trailing
+     slash for marketing routes only (via middleware or redirects), leaving /admin and
+     /api untouched; OR
+   - Exclude /admin (and /api) from the trailing-slash redirect in middleware; OR
+   - Verify the Payload `routes.admin` config and that the (payload) route group is
+     actually included in the deployed build for this environment.
+3. Confirm the AWS ALB + Cognito layer in front of dev.vlx.ai is not stripping or
+   rewriting the /admin path.
+4. Verify: /admin loads the Payload login; after auth, collections (posts, media, etc.)
+   are editable; marketing routes still resolve with the trailing slash; canonicals,
+   sitemap.xml, and redirects are unchanged; /api/* still works; the pre-prod noindex
+   stays intact.
+
+Report the root cause, the exact files changed, and how you verified each acceptance
+criterion.
+```
+
+**Owner:** ⚙️ Abe (developer). **Priority:** blocker for the CMS content remediation (sections 3b–4).
