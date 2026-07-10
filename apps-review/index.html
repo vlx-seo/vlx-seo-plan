@@ -1,0 +1,169 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VLX — Apps Review · Qué corregir en las tiendas</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#FF5722;--brand-dark:#E64A19;--dark:#0F172A;--ink:#263238;--muted:#546E7A;--bg:#f1f5f9;--line:#e2e8f0;
+        --crit:#DC2626;--crit-bg:#fef2f2;--crit-line:#fecaca;--high:#EA580C;--high-bg:#fff7ed;--high-line:#fed7aa;
+        --med:#CA8A04;--med-bg:#fefce8;--med-line:#fde68a;--done:#16A34A;--done-bg:#f0fdf4;--done-line:#bbf7d0;--ios:#0ea5e9;--play:#16A34A}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Rubik,system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  header{background:var(--dark);color:#fff;padding:26px 34px;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+  header .kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:6px}
+  header h1{margin:0 0 6px;font-size:23px;font-weight:700}
+  header .meta{color:#cbd5e1;font-size:12.5px}
+  header .meta code{background:#1e293b;padding:1px 6px;border-radius:5px;font-size:11.5px}
+  nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  nav a{font-size:12px;text-decoration:none;background:#1e293b;color:#e2e8f0;padding:6px 11px;border-radius:7px;transition:.15s}
+  nav a:hover{background:var(--brand);color:#fff}
+  main{max-width:960px;margin:0 auto;padding:28px 24px 70px}
+  .lead{font-size:14.5px;color:var(--muted);margin:0 0 22px;max-width:760px}
+  h2{font-size:19px;font-weight:700;margin:34px 0 4px;scroll-margin-top:130px;display:flex;align-items:center;gap:10px}
+  h2 .chip{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:6px}
+  .chip.ios{background:#e0f2fe;color:#0369a1}.chip.play{background:#dcfce7;color:#15803d}.chip.both{background:#f1e9fe;color:#7c3aed}
+  .sec-sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+  /* banner */
+  .banner{border-radius:12px;padding:16px 20px;margin:0 0 14px;display:flex;gap:13px;align-items:flex-start;font-size:13.5px}
+  .banner .ic{font-size:18px;flex-shrink:0;line-height:1.3}
+  .banner.crit{background:var(--crit-bg);border:1px solid var(--crit-line);color:#991b1b}
+  .banner.done{background:var(--done-bg);border:1px solid var(--done-line);color:#166534}
+  .banner strong{font-weight:700}
+  .banner code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;font-size:12px}
+  /* fix cards */
+  .fixes{display:flex;flex-direction:column;gap:9px;margin:6px 0 4px}
+  .fix{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 16px;border-left:4px solid var(--line)}
+  .fix.crit{border-left-color:var(--crit)}.fix.high{border-left-color:var(--high)}.fix.med{border-left-color:var(--med)}
+  .fix .id{font-size:12px;font-weight:700;color:var(--brand);flex-shrink:0;width:34px;padding-top:1px}
+  .fix .body{flex:1}
+  .fix .t{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:3px;display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+  .fix .d{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .fix .d code{background:#eef2f6;padding:1px 5px;border-radius:4px;font-size:11.5px;color:var(--brand-dark)}
+  .tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:5px}
+  .tag.p1{background:var(--crit-bg);color:var(--crit);border:1px solid var(--crit-line)}
+  .tag.p2{background:var(--high-bg);color:var(--high);border:1px solid var(--high-line)}
+  .tag.p3{background:var(--med-bg);color:var(--med);border:1px solid var(--med-line)}
+  .tag.field{background:#f1f5f9;color:#64748b;border:1px solid var(--line)}
+  .tag.new{background:#fdf2f8;color:#be185d;border:1px solid #fbcfe8}
+  /* ids table */
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:4px 0 8px;font-size:12.5px}
+  th{background:#f8fafc;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#64748b;text-align:left;padding:9px 13px;border-bottom:1px solid var(--line)}
+  td{padding:9px 13px;border-bottom:1px solid #eef2f6;color:var(--ink);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td code,td a{font-size:11.5px}
+  td a{color:var(--brand-dark);text-decoration:none}td a:hover{text-decoration:underline}
+  /* copy */
+  .copy{background:var(--dark);border-radius:10px;padding:13px 15px;margin:7px 0 13px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;line-height:1.6;color:#e2e8f0;white-space:pre-wrap;word-break:break-word}
+  .copy .lbl{display:block;font-family:Rubik,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--brand);margin-bottom:7px}
+  .copy .lim{color:#64748b}
+  footer{max-width:960px;margin:0 auto;padding:0 24px 50px;font-size:12px;color:#94a3b8}
+  footer a{color:var(--brand-dark)}
+  @media(max-width:640px){main{padding:20px 16px 50px}header{padding:20px 18px}}
+</style></head>
+<body>
+<header>
+  <div class="kicker">VLX SEO · Apps Review</div>
+  <h1>Perfiles de apps en las tiendas — qué corregir</h1>
+  <div class="meta">Checklist de configuración pendiente en <strong>App Store Connect</strong> + <strong>Google Play Console</strong> · Re-verificado en vivo <code>2026-07-09</code> · Apps: VLX · COUNTiT · KYPiT*</div>
+  <nav>
+    <a href="#ids">IDs reales</a>
+    <a href="#transversal">Transversal</a>
+    <a href="#play">Google Play</a>
+    <a href="#appstore">App Store</a>
+    <a href="#countit">COUNTiT</a>
+    <a href="#copy">Copy para pegar</a>
+  </nav>
+</header>
+<main>
+  <p class="lead">Solo lo que <strong>falta corregir</strong> desde la consola de cada tienda para mejorar el perfil de VLX y sus apps. Verificado ficha por ficha el 9-jul-2026. <em>*KYPiT no tiene app propia: se resuelve dentro de la ficha de VLX.</em></p>
+
+  <div class="banner done">
+    <span class="ic">✅</span>
+    <div><strong>Ya hecho — no tocar:</strong> los screenshots de Play (VLX y COUNTiT) ya tienen texto de beneficio + anotaciones · el ícono de VLX ya es el logo naranja branded · VLX Android se republicó el 8-jul-2026. Esto queda fuera del checklist de abajo.</div>
+  </div>
+
+  <div class="banner crit">
+    <span class="ic">🔴</span>
+    <div><strong>Hallazgo nuevo crítico — Data Safety de Play inconsistente:</strong> VLX en Play declara solo "Financial info" y COUNTiT "No data collected", pero en iOS ambas declaran ubicación, email, nombre, fotos/videos y crash data. Hay que rellenar el Data Safety de Play para que coincida con el App Privacy de iOS y con la política real — hoy es un riesgo de rechazo/penalización. <em>(ver T5 / P10)</em></div>
+  </div>
+
+  <!-- IDs -->
+  <h2 id="ids">📌 IDs reales de las apps <span class="chip both">referencia</span></h2>
+  <p class="sec-sub">Las apps de iOS sí existen y están activas (en junio se creía que no). Con estos IDs se actualizan los links del sitio.</p>
+  <table>
+    <thead><tr><th>App</th><th>App Store (iOS)</th><th>Google Play (Android)</th></tr></thead>
+    <tbody>
+      <tr><td>VLX (Visualogyx)</td><td><code>id1292658746</code> · <a href="https://apps.apple.com/us/app/vlx-visualogyx/id1292658746">ver ficha</a></td><td><code>com.visualogyx.app</code></td></tr>
+      <tr><td>COUNTiT</td><td><code>id1535897251</code> · <a href="https://apps.apple.com/us/app/countit-snap-count-share/id1535897251">ver ficha</a></td><td><code>com.visualogyx.countit.app</code></td></tr>
+      <tr><td>Developer</td><td>Visualogyx Inc — <code>id1254394073</code></td><td>Visualogyx Inc.</td></tr>
+    </tbody>
+  </table>
+  <div class="fixes">
+    <div class="fix crit"><div class="id">#1</div><div class="body"><div class="t">Actualizar los links de descarga en el sitio web <span class="tag p1">Esta semana</span></div><div class="d">Poner estos IDs reales de iOS en <code>/app/countit/</code> y <code>/app/kypit/</code>. La brecha "App Store no verificable" de junio ya está resuelta.</div></div></div>
+  </div>
+
+  <!-- Transversal -->
+  <h2 id="transversal">🔗 Transversal <span class="chip both">ambas tiendas</span></h2>
+  <p class="sec-sub">Identidad y consistencia de marca — se hace una vez y afecta las 4 fichas.</p>
+  <div class="fixes">
+    <div class="fix crit"><div class="id">T1</div><div class="body"><div class="t">Nombre del desarrollador → "VLX" <span class="tag p1">Esta semana</span></div><div class="d">Hoy figura "Visualogyx Inc." en <strong>ambas</strong> tiendas. Cambiar el display name a <code>VLX</code> (o "VLX (Visualogyx Inc.)" si Apple exige razón social).</div></div></div>
+    <div class="fix crit"><div class="id">T2</div><div class="body"><div class="t">Migrar URLs al dominio <code>vlx.ai</code> <span class="tag p1">Esta semana</span></div><div class="d">Privacy policy, support y marketing URL apuntan a <code>visualogyx.com</code> / <code>app.visualogyx.com</code>. Reemplazar por equivalentes en <code>vlx.ai</code> (Apple valida que respondan).</div></div></div>
+    <div class="fix high"><div class="id">T3</div><div class="body"><div class="t">Copyright al año actual</div><div class="d">COUNTiT dice "© 2023". Poner <code>© 2026 Visualogyx, Inc. DBA VLX</code>.</div></div></div>
+    <div class="fix high"><div class="id">T4</div><div class="body"><div class="t">Ícono de COUNTiT con identidad VLX</div><div class="d">Sigue genérico (formas geométricas azules). No comunica pertenencia a VLX. (El de VLX ya está OK.)</div></div></div>
+    <div class="fix crit"><div class="id">T5</div><div class="body"><div class="t">Corregir Data Safety en Play <span class="tag new">Nuevo</span> <span class="tag p1">Esta semana</span></div><div class="d">Rellenar el formulario Data Safety de Play (VLX y COUNTiT) para que coincida con el App Privacy de iOS y la política real. Hoy está incompleto (ver banner arriba).</div></div></div>
+  </div>
+
+  <!-- Play -->
+  <h2 id="play">🤖 Google Play Console <span class="chip play">Android</span></h2>
+  <p class="sec-sub">Ruta: Grow → Store presence → Main store listing (+ App content).</p>
+  <div class="fixes">
+    <div class="fix high"><div class="id">P1</div><div class="body"><div class="t">Título — quitar paréntesis <span class="tag field">máx 30</span></div><div class="d">De "VLX (Visualogyx)" a <code>VLX: Digital Inspections &amp; Audits</code>.</div></div></div>
+    <div class="fix crit"><div class="id">P2</div><div class="body"><div class="t">Descripción corta <span class="tag field">máx 80</span></div><div class="d">Es el texto que más pesa en ranking de Play. Copy listo abajo.</div></div></div>
+    <div class="fix crit"><div class="id">P3</div><div class="body"><div class="t">Descripción larga de COUNTiT <span class="tag field">máx 4.000</span></div><div class="d">Sigue en ~60 palabras. Reescribir con estructura + keywords aprovechando el máximo. En VLX: mencionar <strong>KYPiT</strong> (fraud detection) e <strong>Instacount</strong>, hoy ausentes.</div></div></div>
+    <div class="fix med"><div class="id">P4</div><div class="body"><div class="t">Feature graphic <span class="tag field">1024×500</span></div><div class="d">Verificar que exista y esté branded VLX.</div></div></div>
+    <div class="fix med"><div class="id">P6</div><div class="body"><div class="t">Video promocional (YouTube)</div><div class="d">Clip de 30–60s; Play lo muestra sobre los screenshots.</div></div></div>
+    <div class="fix med"><div class="id">P7</div><div class="body"><div class="t">Tags de categoría</div><div class="d">Agregar los 5 tags que permite Play (ej. Inspection, Field service, Inventory).</div></div></div>
+    <div class="fix high"><div class="id">P8</div><div class="body"><div class="t">Contact details → <code>vlx.ai</code></div><div class="d">Email de soporte, teléfono y website.</div></div></div>
+    <div class="fix high"><div class="id">P9</div><div class="body"><div class="t">"What's new" real <span class="tag field">máx 500</span></div><div class="d">Reemplazar "Bug fixes and miscellaneous improvements" por notas con features/keywords.</div></div></div>
+    <div class="fix med"><div class="id">P12</div><div class="body"><div class="t">Target audience · Ads · Content rating (IARC)</div><div class="d">Verificar y dejar al día en App content.</div></div></div>
+    <div class="fix med"><div class="id">P13</div><div class="body"><div class="t">Store listing experiments (A/B)</div><div class="d">Probar ícono o short description de COUNTiT — gratis y mejora conversión con datos.</div></div></div>
+  </div>
+
+  <!-- App Store -->
+  <h2 id="appstore">🍎 App Store Connect <span class="chip ios">iOS</span></h2>
+  <p class="sec-sub">En iOS el peso de ASO está en nombre + subtítulo + keyword field.</p>
+  <div class="fixes">
+    <div class="fix high"><div class="id">A1</div><div class="body"><div class="t">Nombre — quitar paréntesis <span class="tag field">máx 30</span></div><div class="d"><code>VLX — Digital Inspections</code> o <code>VLX Inspections &amp; Audits</code>.</div></div></div>
+    <div class="fix high"><div class="id">A2</div><div class="body"><div class="t">Subtítulo <span class="tag field">máx 30</span></div><div class="d">VLX → <code>Inspections, Audits &amp; Reports</code> · COUNTiT → <code>AI Object &amp; Inventory Counter</code>.</div></div></div>
+    <div class="fix crit"><div class="id">A3</div><div class="body"><div class="t">⭐ Keyword field <span class="tag field">máx 100 · oculto</span> <span class="tag p1">Esta semana</span></div><div class="d">El campo ASO de mayor impacto en iOS. Comas, sin espacios, sin repetir palabras del nombre/subtítulo ni la marca. Copy abajo.</div></div></div>
+    <div class="fix high"><div class="id">A4</div><div class="body"><div class="t">Promotional text <span class="tag field">máx 170</span></div><div class="d">Editable sin pasar por review — ideal para novedades. Copy abajo.</div></div></div>
+    <div class="fix med"><div class="id">A7</div><div class="body"><div class="t">App Preview (video, hasta 3)</div><div class="d">Al menos uno de 15–30s.</div></div></div>
+    <div class="fix med"><div class="id">A8</div><div class="body"><div class="t">Custom Product Pages (hasta 35)</div><div class="d">Páginas por industria/campaña (ej. "Insurance claims", "Warehouse counting") con screenshots propios.</div></div></div>
+    <div class="fix med"><div class="id">A9</div><div class="body"><div class="t">Categoría secundaria</div><div class="d">VLX (Business + Productivity), COUNTiT (Productivity + Utilities).</div></div></div>
+    <div class="fix high"><div class="id">A10</div><div class="body"><div class="t">Localizar a Español (ES / MX)</div><div class="d">VLX tiene 9 idiomas pero <strong>no español</strong>; COUNTiT solo inglés. Mercado LatAm + marca lo justifican.</div></div></div>
+    <div class="fix high"><div class="id">A13</div><div class="body"><div class="t">Version release notes reales</div><div class="d">Dejar de usar "Bug fixes…" en cada versión.</div></div></div>
+    <div class="fix med"><div class="id">A12</div><div class="body"><div class="t">In-App Events</div><div class="d">Publicar un evento (ej. Virtual Inspections / KYPiT) — aparece en ficha y búsqueda, tráfico gratis.</div></div></div>
+  </div>
+
+  <!-- COUNTiT -->
+  <h2 id="countit">📱 COUNTiT — la app más débil <span class="chip both">2.0★ · de pago · stale</span></h2>
+  <p class="sec-sub">iOS: 2.0★ (4 ratings), v1.3.2 de ago-2025, solo inglés. Play: $4.99, sin rating, descripción corta.</p>
+  <div class="fixes">
+    <div class="fix crit"><div class="id">C1</div><div class="body"><div class="t">Publicar una actualización (iOS)</div><div class="d">~10 meses sin update. Un release resetea la señal de "app abandonada" y permite volver a pedir reseñas.</div></div></div>
+    <div class="fix crit"><div class="id">C2</div><div class="body"><div class="t">Revisar el modelo de precio</div><div class="d">$4.99 de entrada en categoría freemium explica los volúmenes bajos. Evaluar free / freemium / trial (decisión de negocio).</div></div></div>
+    <div class="fix high"><div class="id">C3</div><div class="body"><div class="t">Estrategia de reseñas para salir del 2.0★</div><div class="d">Prompt in-app tras 3er conteo exitoso, y responder las reseñas negativas actuales desde la consola.</div></div></div>
+    <div class="fix high"><div class="id">C4</div><div class="body"><div class="t">Localizar a español</div><div class="d">Metadata + descripción, en ambas tiendas.</div></div></div>
+  </div>
+
+  <!-- Copy -->
+  <h2 id="copy">✂️ Copy listo para pegar</h2>
+  <p class="sec-sub">Textos para los campos de mayor impacto.</p>
+  <div class="copy"><span class="lbl">Play · Descripción corta — VLX <span class="lim">(≤80 car.)</span></span>Digital inspection &amp; audit software: templates, offline reports, compliance.</div>
+  <div class="copy"><span class="lbl">Play · Descripción corta — COUNTiT <span class="lim">(≤80 car.)</span></span>AI object counting app — count inventory, pallets &amp; assets from a photo.</div>
+  <div class="copy"><span class="lbl">iOS · Keyword field — VLX <span class="lim">(≤100 car., comas, sin espacios)</span></span>inspection,audit,checklist,field,report,template,compliance,QA,offline,forms,survey,safety</div>
+  <div class="copy"><span class="lbl">iOS · Keyword field — COUNTiT <span class="lim">(≤100 car., comas, sin espacios)</span></span>object,counting,inventory,pallet,warehouse,stock,tally,count,asset,AI,vision,logistics</div>
+  <div class="copy"><span class="lbl">iOS · Promotional text — VLX <span class="lim">(≤170 car.)</span></span>New: KYPiT fraud detection &amp; Virtual Inspections built in. Capture verifiable evidence offline and export reports in minutes.</div>
+</main>
+<footer>
+  VLX SEO · Apps Review — actualizado 2026-07-09. Complementa el reporte interno <code>CONFIG-TIENDAS-APPSTORE-PLAYSTORE-VLX-2026-07-09</code> y la auditoría <code>AUDIT-ASO-COUNTIT-KYPIT-2026-06-18</code>. · <a href="../">← Volver al SEO Plan</a>
+</footer>
+</body></html>
