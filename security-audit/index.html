@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>VLX Application Security Testing Report — Public Summary (Redacted)</title>
+  <style>
+    :root{--brand:#FF5722;--brand-dark:#E64A19;--text:#263238;--text-secondary:#546E7A;--surface:#fff;--surface-muted:#F8FAFC;--surface-dark:#1E293B;--surface-darker:#0F172A;--border:#E2E8F0;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);background:var(--surface-darker);line-height:1.6}
+    .redaction-banner{background:#7C3AED;color:#fff;text-align:center;padding:9px 24px;font-size:0.82rem}
+    .redaction-banner strong{color:#fff}
+    .page-header{background:var(--surface-darker);color:#fff;padding:40px 0 32px;border-bottom:3px solid var(--brand)}
+    .page-header .inner{max-width:1100px;margin:0 auto;padding:0 24px}
+    .page-header h1{font-size:1.9rem;font-weight:700;color:#fff;margin-bottom:8px}
+    .page-header h1 span{color:var(--brand)}
+    .meta-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+    .meta-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:6px 14px;font-size:0.8rem;color:#CBD5E1}
+    .meta-pill strong{color:#fff}
+    .navbar{position:sticky;top:0;z-index:50;background:var(--surface-dark);border-bottom:1px solid rgba(255,255,255,0.08)}
+    .navbar .inner{max-width:1100px;margin:0 auto;padding:0 12px;display:flex;flex-wrap:nowrap;gap:2px;overflow-x:auto}
+    .navbar a{color:#CBD5E1;font-size:0.78rem;font-weight:600;text-decoration:none;padding:11px 10px;white-space:nowrap;border-bottom:2px solid transparent}
+    .navbar a:hover{color:#fff;border-bottom-color:var(--brand)}
+    .container{max-width:1100px;margin:0 auto;padding:32px 24px}
+    .threat-banner{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-left:6px solid var(--red);border-radius:12px;padding:20px 24px;margin-bottom:28px}
+    .threat-level{font-size:1.5rem;font-weight:800;color:var(--red);letter-spacing:0.02em}
+    .threat-banner p{margin:0;font-size:0.9rem;color:var(--text-secondary)}
+    .distbar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:8px 0 28px;border:1px solid var(--border);font-size:0.78rem;font-weight:700;color:#fff}
+    .distbar div{display:flex;align-items:center;justify-content:center;min-width:44px}
+    .dashboard{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-bottom:32px}
+    .kpi-card{background:var(--surface);border-radius:10px;padding:18px;border:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+    .kpi-card .label{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary)}
+    .kpi-card .value{font-size:1.5rem;font-weight:700}
+    .kpi-card .sub{font-size:0.76rem;color:var(--text-secondary)}
+    .kpi-ok .value{color:var(--green)}.kpi-warn .value{color:var(--yellow)}.kpi-bad .value{color:var(--red)}.kpi-info .value{color:var(--blue)}.kpi-neutral .value{color:var(--text)}
+    .section{background:var(--surface);border-radius:12px;border:1px solid var(--border);margin-bottom:28px;overflow:hidden;scroll-margin-top:56px}
+    .section-header{padding:18px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;background:var(--surface-muted)}
+    .section-num{background:var(--brand);color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.82rem;flex-shrink:0}
+    .section-header h2{font-size:1.05rem;font-weight:700;color:var(--text)}
+    .section-body{padding:22px 26px}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:0.74rem;font-weight:600}
+    .badge-ok{background:#D1FAE5;color:#065F46}.badge-warn{background:#FEF3C7;color:#92400E}.badge-bad{background:#FEE2E2;color:#991B1B}.badge-info{background:#DBEAFE;color:#1E40AF}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:0.85rem}
+    th{background:var(--surface-darker);color:#fff;font-weight:600;text-align:left;padding:9px 13px;font-size:0.76rem;text-transform:uppercase;letter-spacing:0.04em}
+    td{padding:9px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:var(--surface-muted)}
+    .finding{border:1px solid var(--border);border-radius:10px;margin-bottom:18px;overflow:hidden;scroll-margin-top:56px}
+    .finding-header{display:flex;align-items:flex-start;gap:14px;padding:15px 20px;background:var(--surface-muted);border-bottom:1px solid var(--border)}
+    .finding-header.sev-high{border-left:6px solid var(--red)}
+    .finding-header.sev-med{border-left:6px solid var(--yellow)}
+    .finding-header.sev-low{border-left:6px solid var(--blue)}
+    .finding-id{font-size:0.82rem;font-weight:800;color:var(--brand);min-width:44px}
+    .finding-title{font-weight:600;font-size:0.96rem;color:var(--text);margin-bottom:6px}
+    .finding-tags{display:flex;flex-wrap:wrap;gap:6px}
+    .finding-body{padding:14px 20px}
+    .finding-body .row{display:grid;grid-template-columns:130px 1fr;gap:10px;font-size:0.85rem;padding:5px 0;border-bottom:1px solid var(--surface-muted)}
+    .finding-body .row:last-child{border-bottom:none}
+    .finding-body .row .lbl{font-weight:600;color:var(--text-secondary);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em;padding-top:2px}
+    .finding-body .row .val{color:var(--text-secondary)}
+    code{background:#F1F5F9;border:1px solid #CBD5E1;border-radius:4px;padding:1px 6px;font-size:0.79rem;font-family:'Courier New',monospace;color:#475569}
+    .tag{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:4px}
+    .tag-high{background:#FEE2E2;color:#991B1B}.tag-med{background:#FEF3C7;color:#92400E}.tag-low{background:#DBEAFE;color:#1E40AF}
+    .tag-cwe{background:#EDE9FE;color:#5B21B6}.tag-ast{background:#E2E8F0;color:#334155}.tag-open{background:#FEE2E2;color:#991B1B}.tag-ease{background:#F1F5F9;color:#475569}
+    .tag-code{background:#E0F2FE;color:#075985}.tag-runtime{background:#FEF9C3;color:#854D0E}
+    h3{font-size:0.95rem;font-weight:700;color:var(--text);margin:18px 0 10px}
+    h3:first-child{margin-top:0}
+    p{font-size:0.88rem;color:var(--text-secondary);margin-bottom:10px}
+    ul.plain{padding-left:18px;font-size:0.86rem;display:grid;gap:7px;margin-bottom:8px}
+    ul.plain li{color:var(--text-secondary)}ul.plain li strong{color:var(--text)}
+    ol.meth{padding-left:20px;font-size:0.86rem;display:grid;gap:5px;color:var(--text-secondary)}
+    ol.meth li strong{color:var(--text)}
+    .redact-note{background:#EDE9FE;border-left:4px solid #7C3AED;border-radius:4px;padding:12px 16px;font-size:0.83rem;color:#5B21B6;margin-bottom:8px}
+    .footer-bar{background:var(--surface-darker);color:#64748B;font-size:0.78rem;text-align:center;padding:24px;margin-top:20px}
+    .footer-bar strong{color:#94A3B8}
+    @media (max-width:640px){.finding-body .row{grid-template-columns:1fr;gap:2px}}
+  </style>
+</head>
+<body>
+
+<div class="redaction-banner">
+  🔒 <strong>Public redacted summary.</strong> Exploit paths, code references (file:line), payloads and proof-of-concept are intentionally omitted and provided only in the private full report delivered to Visualogyx.
+</div>
+
+<div class="page-header">
+  <div class="inner">
+    <h1>Application Security Testing Report — <span>Visualogyx (Public Summary)</span></h1>
+    <p style="color:#94A3B8;font-size:0.9rem;margin-top:6px;">Consolidated assessment — application code review + authenticated live-site assessment · CyberCube format · Redacted for public distribution</p>
+    <div class="meta-grid">
+      <div class="meta-pill"><strong>Client:</strong> Visualogyx Inc (VLX)</div>
+      <div class="meta-pill"><strong>By:</strong> Software Craft CR · Laura Ceballos</div>
+      <div class="meta-pill"><strong>Date:</strong> 14 Jul 2026</div>
+      <div class="meta-pill"><strong>Version:</strong> 1.0 (redacted)</div>
+      <div class="meta-pill"><strong>Method:</strong> White-box (code) + authenticated grey-box (site)</div>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar"><div class="inner">
+  <a href="#summary">Executive Summary</a>
+  <a href="#methodology">Methodology</a>
+  <a href="#threat">Threat</a>
+  <a href="#observations">Findings</a>
+  <a href="#revalidation">Revalidation</a>
+  <a href="#positives">Positives</a>
+  <a href="#conclusion">Conclusion</a>
+</div></nav>
+
+<div class="container">
+
+  <div class="section" id="summary">
+    <div class="section-header"><div class="section-num">1</div><h2>Executive Summary</h2></div>
+    <div class="section-body">
+      <div class="redact-note">This is a redacted public summary. Each finding lists the issue, severity, CWE, impact and recommendation. Specific code locations, exploit paths and proof-of-concept evidence are withheld and delivered separately to Visualogyx.</div>
+      <p>Visualogyx Inc engaged Software Craft CR to perform Application Security Testing of its new platform (a Next.js + Payload CMS rewrite replacing the legacy WordPress site). The assessment integrated two engagements: <strong>Part A</strong> — a white-box review of the application source code; and <strong>Part B</strong> — an authenticated assessment of the live development environment (gated behind AWS ALB + Cognito SSO).</p>
+      <p>The platform is, overall, well-engineered from a security standpoint: enforcing security headers, SSO-gated non-production environment, no secrets in source control, XSS-safe rich-text rendering, explicit access control on all content collections, no lead-PII persistence, and neutralized legacy WordPress paths. The assessment nonetheless identified <strong>18 findings</strong>, headlined by one High-severity privilege-escalation issue.</p>
+
+      <h3>Engagement Scope</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Part</th><th>Target</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>Application source code (new platform branch)</td><td>White-box review of the deployed application code (Next.js 15 + Payload CMS 3).</td></tr>
+          <tr><td>B</td><td>Development environment (authenticated)</td><td>Assessment of the running dev site and its admin console (behind AWS ALB + Cognito OIDC).</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="section" id="methodology">
+    <div class="section-header"><div class="section-num">2</div><h2>Approach &amp; Methodology</h2></div>
+    <div class="section-body">
+      <p>Tests were conducted against industry best practices (OWASP, SANS) and a 25-case Application Security Testing checklist, combining a white-box code review (Part A) with an authenticated grey-box assessment of the live site (Part B). Site testing was performed over the client's own authenticated session — the assessor did not handle or enter any credentials.</p>
+      <ol class="meth">
+        <li><strong>Requirements Gathering</strong> · <strong>Threat Modelling</strong> · <strong>Manual Testing</strong> (input validation, authn/authz, business logic, session, error handling, data protection, security config).</li>
+        <li><strong>Automated Testing</strong> · <strong>API &amp; Web Services Testing</strong> · <strong>Security Headers &amp; SSL/TLS</strong> · <strong>Vulnerability Assessment</strong>.</li>
+        <li><strong>Reporting &amp; Recommendations</strong> · <strong>Remediation Assistance</strong> · <strong>Reassessment</strong>.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="section" id="threat">
+    <div class="section-header"><div class="section-num">3</div><h2>Findings &amp; Recommendations Summary</h2></div>
+    <div class="section-body">
+      <div class="threat-banner">
+        <div>
+          <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);">Threat Meter · Threat Level</div>
+          <div class="threat-level">HIGH</div>
+        </div>
+        <p>Driven by one High-severity privilege-escalation finding. The remaining findings are Medium/Low and largely defense-in-depth.</p>
+      </div>
+
+      <h3>Vulnerability distribution (18)</h3>
+      <div class="distbar">
+        <div style="background:#7f1d1d;flex:1" title="Critical 0">C·0</div>
+        <div style="background:var(--red);flex:1" title="High 1">High·1</div>
+        <div style="background:var(--yellow);flex:4" title="Medium 4">Medium·4</div>
+        <div style="background:var(--blue);flex:13" title="Low 13">Low·13</div>
+      </div>
+
+      <div class="dashboard">
+        <div class="kpi-card kpi-neutral"><div class="label">Total findings</div><div class="value">18</div><div class="sub">All Open</div></div>
+        <div class="kpi-card kpi-bad"><div class="label">High</div><div class="value">1</div><div class="sub">Priv-esc</div></div>
+        <div class="kpi-card kpi-warn"><div class="label">Medium</div><div class="value">4</div><div class="sub">CSP·rate·XSS·auth</div></div>
+        <div class="kpi-card kpi-info"><div class="label">Low</div><div class="value">13</div><div class="sub">Defense-in-depth</div></div>
+        <div class="kpi-card kpi-ok"><div class="label">Dev environment</div><div class="value">Cognito SSO</div><div class="sub">Fully gated</div></div>
+        <div class="kpi-card kpi-ok"><div class="label">Secrets in git / API</div><div class="value">0</div><div class="sub">None exposed</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="observations">
+    <div class="section-header"><div class="section-num">4</div><h2>Findings (Redacted)</h2></div>
+    <div class="section-body">
+      <div class="redact-note">Code locations, vulnerable parameters, exploit paths and proof-of-concept are omitted from this public summary.</div>
+
+      <div class="finding"><div class="finding-header sev-high"><span class="finding-id">O-01</span><div>
+        <div class="finding-title">Privilege escalation — an editor can self-promote to admin</div>
+        <div class="finding-tags"><span class="tag tag-high">HIGH</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-915/269/285</span><span class="tag tag-ease">Ease: Medium</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The CMS user collection permits a lower-privileged account to modify a privilege-controlling field on its own record, allowing self-escalation to administrator.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">A low-privileged editor could obtain full administrative control (user management + write access to all content). Complete break of role separation.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Restrict write access to the role/privilege field to administrators via field-level access control.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-med"><span class="finding-id">O-02</span><div>
+        <div class="finding-title">Content-Security-Policy in Report-Only mode</div>
+        <div class="finding-tags"><span class="tag tag-med">MEDIUM</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-runtime">Runtime</span><span class="tag tag-cwe">CWE-693</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The Content-Security-Policy is delivered in report-only mode (not enforcing) and permits unsafe inline/eval script sources. Confirmed on the live environment.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">CSP provides no active mitigation against script injection; the policy is effectively inert.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Move to an enforcing CSP using nonces/hashes, add a violation-report endpoint, and remove unsafe-inline/unsafe-eval.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-med"><span class="finding-id">O-03</span><div>
+        <div class="finding-title">No rate limiting on public form endpoints</div>
+        <div class="finding-tags"><span class="tag tag-med">MEDIUM</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-400</span><span class="tag tag-ease">Ease: Medium</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The public contact/demo endpoints trigger outbound emails and notifications per request with no rate limiting (a limiter utility exists but is not applied).</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Potential email flooding of arbitrary addresses and quota/notification abuse. Gated by SSO on dev; applies to the public production site.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Apply per-IP/per-email rate limiting (return HTTP 429) backed by a shared store.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-med"><span class="finding-id">O-04</span><div>
+        <div class="finding-title">Stored XSS via unescaped structured-data (JSON-LD)</div>
+        <div class="finding-tags"><span class="tag tag-med">MEDIUM</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-79/116</span><span class="tag tag-ease">Ease: Medium</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">CMS-controlled fields are embedded into inline structured-data script blocks without adequate output encoding, allowing script-context breakout.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">A CMS editor could inject script that runs for all visitors of the affected pages (session/cookie theft). Author-trusted input → Medium.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">HTML-escape all values before embedding them in inline JSON-LD; centralize the encoding helper.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-med"><span class="finding-id">O-05</span><div>
+        <div class="finding-title">Weak CMS authentication configuration</div>
+        <div class="finding-tags"><span class="tag tag-med">MEDIUM</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-287/521</span><span class="tag tag-ease">Ease: Medium</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The CMS authentication uses defaults with no password-complexity policy, no email verification, no MFA and no explicit session/token expiration.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Weak/unverified credentials are permitted; widens the blast radius of O-01. Mitigated on dev by Cognito SSO; unhardened for any non-SSO deployment.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Enforce password rules, email verification, login lockout and token expiration; restrict admin access to privileged roles.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-06</span><div>
+        <div class="finding-title">Missing HSTS on load-balancer edge redirects</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-runtime">Runtime</span><span class="tag tag-cwe">CWE-319</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">Pre-authentication redirect responses issued at the load-balancer edge do not carry a Strict-Transport-Security header, though the application does.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">The first hop is not HSTS-protected, leaving a narrow SSL-stripping window on initial navigation.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Set HSTS at the load-balancer/edge so all responses (including redirects) carry it.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-07</span><div>
+        <div class="finding-title">Draft-preview secret handling</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-598/208/284</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">A static preview secret is transmitted in the URL and validated with a non-constant-time comparison; a collection identifier is not allow-listed.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Secret may leak via referrer/logs; endpoint can act as a slug existence oracle. Bounded — no document content is returned.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Move the secret out of the URL, use constant-time comparison, allow-list the collection, and rate-limit.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-08</span><div>
+        <div class="finding-title">CAPTCHA fails open in development mode</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-693/1188</span><span class="tag tag-ease">Ease: Medium</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">When the CAPTCHA secret is unset in development mode, verification passes automatically. It fails closed in production.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Any non-production deployment running in development mode silently disables CAPTCHA on all forms.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Gate the bypass behind an explicit opt-in flag; forward the client IP to the verification service.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-09</span><div>
+        <div class="finding-title">Hard-coded third-party indexing key in source</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-798</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">A third-party search-indexing key is hard-coded in source and committed to history.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Small blast radius — the key is only honored for the owning domain; the endpoint is otherwise authenticated.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Move the key to environment configuration, rotate it, and rename the public key file.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-10</span><div>
+        <div class="finding-title">Verbose upstream error reflection + unhandled parse</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-209</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">An indexing endpoint reflects raw upstream error bodies to the caller and does not guard request-body parsing.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Minor third-party internals disclosure (authenticated endpoint) and an unhandled error path.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Log upstream detail server-side, return a generic error, and guard parsing.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-11</span><div>
+        <div class="finding-title">Insecure empty-string fallback for critical secrets</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-1188</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">Critical secrets (signing secret, database URL, storage token) fall back to an empty string when unset instead of failing fast.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">A missing environment variable could initialize the CMS with an empty signing secret, weakening token/cookie signing.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Fail fast (throw) at startup when a critical environment variable is missing.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-12</span><div>
+        <div class="finding-title">Local test script logs a secret prefix</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-532</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">A local diagnostic script prints a partial API-key prefix to standard output.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Local script (not deployed); partial value only. Very low.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Print a boolean presence indicator instead of any key characters.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-13</span><div>
+        <div class="finding-title">Two content collections are publicly readable</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-284</span><span class="tag tag-ease">Ease: Easy</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">Taxonomy and media collections are fully public via the API; media has no publish gating.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Non-sensitive marketing data; draft-only media could be enumerable. No PII. Blocked by SSO on dev.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Acceptable to leave public; add read filtering if pre-launch assets must remain private.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-14</span><div>
+        <div class="finding-title">Deprecated X-XSS-Protection value</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-runtime">Runtime</span><span class="tag tag-cwe">CWE-693</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The legacy X-XSS-Protection header uses a value that is deprecated and ignored by modern browsers.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Negligible; legacy hardening nuance.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Disable the header (value 0) once an enforcing CSP is in place.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-15</span><div>
+        <div class="finding-title">Heading HTML assembled by string concatenation</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-79 (potential)</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">Several UI components build heading HTML by string interpolation and inject it as raw HTML.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Inputs are currently static/developer-controlled (not exploitable today); would become injectable if wired to dynamic data.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Render dynamic emphasis as framework nodes rather than injecting raw HTML.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-16</span><div>
+        <div class="finding-title">Outdated development-only dependency</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-code">Code</span><span class="tag tag-cwe">CWE-1035</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">A dev-only headless-browser dependency (used by scraping scripts) is several major versions behind.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Limited to the developer machine; not shipped in the production bundle.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Upgrade the dependency and run a dependency audit.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-17</span><div>
+        <div class="finding-title">Infrastructure disclosure via Server header</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-runtime">Runtime</span><span class="tag tag-cwe">CWE-200</span><span class="tag tag-ease">Ease: Easy</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">Edge responses disclose the load-balancer technology via the Server header.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Minor fingerprinting aid.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Suppress or normalize the Server header where possible.</span></div>
+      </div></div>
+
+      <div class="finding"><div class="finding-header sev-low"><span class="finding-id">O-18</span><div>
+        <div class="finding-title">Edge auth cookie without SameSite attribute</div>
+        <div class="finding-tags"><span class="tag tag-low">LOW</span><span class="tag tag-open">OPEN</span><span class="tag tag-runtime">Runtime</span><span class="tag tag-cwe">CWE-1275</span><span class="tag tag-ease">Ease: Hard</span></div>
+      </div></div><div class="finding-body">
+        <div class="row"><span class="lbl">Issue</span><span class="val">The load-balancer authentication cookie is set Secure and HttpOnly but without an explicit SameSite attribute.</span></div>
+        <div class="row"><span class="lbl">Impact</span><span class="val">Relies on the browser default; minor CSRF-surface nuance on the auth flow.</span></div>
+        <div class="row"><span class="lbl">Recommendation</span><span class="val">Set SameSite explicitly on the edge session cookie.</span></div>
+      </div></div>
+
+    </div>
+  </div>
+
+  <div class="section" id="revalidation">
+    <div class="section-header"><div class="section-num">5</div><h2>Revalidation of Prior (CyberCube) Findings</h2></div>
+    <div class="section-body"><div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Prior finding</th><th>Prior status</th><th>Status now</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>Username Enumeration</td><td>Open</td><td><span class="badge badge-ok">N/A · Closed</span> WordPress login removed; SSO via managed identity provider</td></tr>
+        <tr><td>02</td><td>Clickjacking</td><td>Closed</td><td><span class="badge badge-ok">Closed</span> frame-denial header enforcing</td></tr>
+        <tr><td>03</td><td>Improper Input Validation</td><td>Open</td><td><span class="badge badge-warn">Improved / partial</span> validation added; residual: rate limiting (O-03)</td></tr>
+        <tr><td>04</td><td>Missing CSP</td><td>Closed</td><td><span class="badge badge-warn">Partial</span> present but report-only (O-02)</td></tr>
+        <tr><td>05</td><td>Missing X-XSS-Protection</td><td>Closed</td><td><span class="badge badge-ok">Closed</span> present (deprecated value — O-14)</td></tr>
+        <tr><td>06</td><td>Missing HSTS</td><td>Closed</td><td><span class="badge badge-ok">Closed</span> on app; residual at edge (O-06)</td></tr>
+        <tr><td>07</td><td>Outdated CMS plugin</td><td>Open</td><td><span class="badge badge-ok">N/A</span> legacy CMS no longer in the stack</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:12px;"><strong>Net:</strong> the platform migration closed or neutralized most legacy findings and added strong controls (SSO-gated dev, HSTS, frame-denial). The most notable regression is CSP, present but only in report-only mode.</p>
+    </div>
+  </div>
+
+  <div class="section" id="positives">
+    <div class="section-header"><div class="section-num">6</div><h2>Positive Controls</h2></div>
+    <div class="section-body"><ul class="plain">
+      <li><span class="badge badge-ok">✅</span> Entire development environment gated behind managed SSO (AWS ALB + Cognito).</li>
+      <li><span class="badge badge-ok">✅</span> No secrets committed to source control; credentials sourced from environment configuration.</li>
+      <li><span class="badge badge-ok">✅</span> The API exposes no authentication secrets (no password hashes/salts).</li>
+      <li><span class="badge badge-ok">✅</span> No lead/PII persistence — contact/demo submissions are notification-only.</li>
+      <li><span class="badge badge-ok">✅</span> Explicit access control on all content collections; drafts hidden from anonymous readers.</li>
+      <li><span class="badge badge-ok">✅</span> CMS rich-text rendered safely (framework elements, not raw HTML).</li>
+      <li><span class="badge badge-ok">✅</span> Legacy CMS paths neutralized (return HTTP 410 Gone).</li>
+      <li><span class="badge badge-ok">✅</span> No SQL/command injection, open redirect or SSRF observed; CAPTCHA verified server-side.</li>
+      <li><span class="badge badge-ok">✅</span> No confidently-unpatched dependency CVE; framework version covers the notable 2025 advisories. Recommend a routine dependency audit.</li>
+    </ul></div>
+  </div>
+
+  <div class="section" id="conclusion">
+    <div class="section-header"><div class="section-num">7</div><h2>Conclusion</h2></div>
+    <div class="section-body">
+      <p>The consolidated assessment found a total of <strong>18 gaps: 0 Critical, 1 High, 4 Medium, 13 Low</strong>, all Open. The single High-severity issue (privilege escalation) should be remediated before launch, as it defeats CMS role separation. The Medium set (CSP enforcement, form rate limiting, structured-data XSS, authentication hardening) should follow.</p>
+      <p>The migration to the new platform behind managed SSO closed or neutralized most legacy findings and introduced strong baseline controls. Full technical detail, code references and proof-of-concept are provided in the private report delivered to Visualogyx.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-bar">
+  <strong>Application Security Testing Report — Visualogyx (Public Redacted Summary)</strong><br>
+  Software Craft CR · Laura Ceballos · 14 Jul 2026 · v1.0 · OWASP / SANS / CyberCube AST framework · Confidential — full detail delivered privately
+</div>
+
+</body>
+</html>
