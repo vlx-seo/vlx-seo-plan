@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Technical SEO Audit — New VLX site (Next.js) · Pre-launch</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#FF5722;--brand-dark:#C63A0A;--brand-light:#FF8A65;--brand-soft:rgba(255,87,34,.08);
+  --amber:#F59E0B;--amber-soft:rgba(245,158,11,.1);
+  --green:#16A34A;--green-soft:rgba(22,163,74,.1);
+  --yellow:#EAB308;--yellow-soft:rgba(234,179,8,.1);
+  --blue:#2563EB;--blue-soft:rgba(37,99,235,.08);
+  --red:#EF4444;--red-soft:rgba(239,68,68,.1);
+  --surface:#0F172A;--surface-2:#1E293B;--surface-3:#253347;
+  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.13);
+  --text:#F1F5F9;--text-muted:#94A3B8;--text-faint:#475569;
+  --sidebar:248px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:var(--text);display:flex;min-height:100vh;line-height:1.5}
+
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface-2);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo .brand{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:4px}
+.sidebar-logo .project{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.sidebar-logo .date{font-size:11px;color:var(--text-faint);margin-top:4px}
+.sidebar nav{padding:12px 0;flex:1}
+.nav-section{padding:16px 20px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.nav-link{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;color:var(--text-muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.03);border-left-color:var(--border-strong)}
+.nav-link.active{color:var(--text);background:var(--brand-soft);border-left-color:var(--brand)}
+.nav-link .nav-icon{font-size:14px;width:16px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;background:var(--brand);color:#fff}
+.nav-badge.amber{background:var(--amber);color:#000}
+.nav-badge.green{background:var(--green)}
+.nav-badge.red{background:var(--red)}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--text-faint)}
+
+.main{margin-left:var(--sidebar);flex:1;padding:0 0 80px}
+
+.section{padding:48px 56px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-overline{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-bottom:10px}
+.section-title{font-size:32px;font-weight:800;color:var(--text);line-height:1.15;margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text-muted);max-width:720px;line-height:1.6;margin-bottom:32px}
+
+#cover{background:linear-gradient(160deg,#0a0f1a 0%,#150a05 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+#cover::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)}
+#cover::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(255,87,34,.1) 0%,transparent 55%);pointer-events:none}
+.cover-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--brand);margin-bottom:24px}
+.cover-title{font-size:44px;font-weight:800;color:#fff;line-height:1.12;max-width:780px;margin-bottom:16px}
+.cover-title span{color:var(--brand)}
+.cover-desc{font-size:16px;color:var(--text-muted);max-width:660px;line-height:1.65;margin-bottom:48px}
+.cover-meta{display:flex;gap:40px;flex-wrap:wrap}
+.meta-block{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.meta-value{font-size:14px;font-weight:600;color:var(--text)}
+.cover-stats{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:820px}
+.cover-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:20px 24px}
+.cs-num{font-size:34px;font-weight:800;color:var(--brand);line-height:1}
+.cs-label{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.4}
+
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:14px;display:flex;gap:14px;align-items:flex-start}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.alert-text{font-size:12.5px;line-height:1.6;color:var(--text-muted)}
+.alert-text code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+.alert.critical{background:rgba(255,87,34,.1);border:1px solid rgba(255,87,34,.25)}
+.alert.critical .alert-title{color:#fb923c}
+.alert.warning{background:var(--amber-soft);border:1px solid rgba(245,158,11,.25)}
+.alert.warning .alert-title{color:#fbbf24}
+.alert.info{background:var(--blue-soft);border:1px solid rgba(37,99,235,.2)}
+.alert.info .alert-title{color:#93c5fd}
+.alert.success{background:var(--green-soft);border:1px solid rgba(22,163,74,.25)}
+.alert.success .alert-title{color:#4ade80}
+
+.blocker-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.blocker-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;gap:16px;align-items:flex-start}
+.blocker-card.open{border-left:3px solid var(--red)}
+.blocker-card.partial{border-left:3px solid var(--amber)}
+.blocker-card.resolved{border-left:3px solid var(--green)}
+.bl-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.bl-badge.open{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.bl-badge.partial{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.bl-badge.resolved{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(22,163,74,.25)}
+.bl-id{font-size:12px;font-weight:700;color:var(--brand);flex-shrink:0;width:34px}
+.bl-body{flex:1}
+.bl-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.bl-desc{font-size:12px;color:var(--text-muted);line-height:1.6}
+.bl-evidence{font-size:11.5px;color:var(--text-faint);margin-top:6px;font-family:monospace;line-height:1.6}
+
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.sum-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.sum-num{font-size:28px;font-weight:800;line-height:1}
+.sum-label{font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.4}
+.sum-num.brand{color:var(--brand)}
+.sum-num.amber{color:var(--amber)}
+.sum-num.green{color:var(--green)}
+.sum-num.red{color:var(--red)}
+
+.rec-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.rec-row{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.rec-check{font-size:16px;flex-shrink:0;margin-top:1px}
+.rec-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.rec-desc{font-size:12px;color:var(--text-muted);line-height:1.55}
+
+.hallazgos-table{width:100%;border-collapse:collapse}
+.hallazgos-table thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--text-faint);padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.hallazgos-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s;cursor:pointer}
+.hallazgos-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.hallazgos-table td{padding:12px;vertical-align:middle}
+.h-id{font-size:11px;font-weight:600;color:var(--text-faint);font-variant-numeric:tabular-nums}
+.h-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;display:inline-block;white-space:nowrap}
+.h-badge.critical{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.h-badge.medium{background:var(--amber-soft);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.h-badge.low{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+.h-badge.positive{background:var(--green-soft);color:#4ade80;border:1px solid rgba(22,163,74,.2)}
+.h-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.h-area{font-size:11px;color:var(--text-faint);margin-top:2px}
+.h-chevron{font-size:9px;color:var(--text-faint);transition:transform .2s;display:inline-block;margin-left:7px;vertical-align:middle;opacity:.6}
+.h-row.expanded .h-chevron{transform:rotate(90deg);opacity:1;color:var(--brand)}
+.h-expand-row{display:none}
+.h-expand-row.open{display:table-row}
+.h-expand-td{padding:0 !important;border-bottom:1px solid rgba(255,87,34,.15) !important}
+.h-expand-inner{padding:16px 16px 18px 40px;background:rgba(255,87,34,.04)}
+.h-expand-text{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.h-expand-text code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.metric-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+.metric-table th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:0 12px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.metric-table td{padding:11px 12px;vertical-align:top;font-size:12.5px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.metric-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+.metric-table code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.solid-list{display:flex;flex-direction:column;gap:10px}
+.solid-item{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text-muted);line-height:1.6}
+.solid-item .ic{color:#4ade80;flex-shrink:0}
+.limit-list{display:flex;flex-direction:column;gap:8px}
+.limit-item{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text-muted);line-height:1.6}
+.limit-item .ic{color:var(--text-faint);flex-shrink:0}
+
+.check-group{margin-bottom:22px}
+.check-group h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--brand);margin-bottom:10px}
+.check-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
+.check-list li{position:relative;padding:2px 0 2px 26px;font-size:12.5px;color:var(--text-muted);line-height:1.55}
+.check-list li:before{content:"☐";position:absolute;left:0;top:0;color:var(--brand);font-size:14px}
+.check-list li code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.roadmap-table{width:100%;border-collapse:collapse}
+.roadmap-table th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:0 12px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.roadmap-table td{padding:11px 12px;vertical-align:top;font-size:12.5px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.roadmap-table td:first-child{font-weight:700;color:var(--brand);white-space:nowrap;width:28px}
+.rt-impact{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
+.rt-impact.critical{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.rt-impact.high{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.rt-impact.medium{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+
+:target{scroll-margin-top:24px}
+@media(max-width:820px){.sidebar{display:none}.main{margin-left:0}.section{padding:32px 22px}.cover-stats,.summary-row{grid-template-columns:repeat(2,1fr)}.cover-title{font-size:32px}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">TheSEOLogyx / VLX</div>
+    <div class="project">New site (Next.js) — Pre-launch audit</div>
+    <div class="date">July 16, 2026</div>
+  </div>
+  <nav>
+    <div class="nav-section">Report</div>
+    <a class="nav-link active" onclick="navScrollTo('cover', this)"><span class="nav-icon">📋</span> Executive summary</a>
+    <a class="nav-link" onclick="navScrollTo('methodology', this)"><span class="nav-icon">⚠️</span> Methodology</a>
+    <a class="nav-link" onclick="navScrollTo('verdict', this)"><span class="nav-icon">🚦</span> Launch verdict <span class="nav-badge red">2</span></a>
+    <a class="nav-link" onclick="navScrollTo('indexing', this)"><span class="nav-icon">🔎</span> Indexing status</a>
+    <a class="nav-link" onclick="navScrollTo('performance', this)"><span class="nav-icon">⚡</span> Load speed</a>
+    <a class="nav-link" onclick="navScrollTo('findings', this)"><span class="nav-icon">🔍</span> All findings <span class="nav-badge amber">11</span></a>
+    <a class="nav-link" onclick="navScrollTo('keywords', this)"><span class="nav-icon">🔑</span> Keyword walkthrough</a>
+    <a class="nav-link" onclick="navScrollTo('solid', this)"><span class="nav-icon">🟢</span> Confirmed solid</a>
+    <a class="nav-link" onclick="navScrollTo('scope', this)"><span class="nav-icon">🧰</span> Scope & limits</a>
+    <a class="nav-link" onclick="navScrollTo('checklist', this)"><span class="nav-icon">✅</span> Post-launch checklist</a>
+    <a class="nav-link" onclick="navScrollTo('roadmap', this)"><span class="nav-icon">🚀</span> Next steps</a>
+  </nav>
+  <div class="sidebar-footer">
+    Prepared by <strong>Lau / TheSEOLogyx</strong><br>
+    Verified on dev.vlx.ai (= prod build)
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- 1. Cover -->
+<section class="section" id="cover">
+  <div class="cover-label">Technical SEO audit · Pre-launch</div>
+  <h1 class="cover-title">The new build is technically strong — but <span>2 P0 issues must be resolved before go-live.</span></h1>
+  <p class="cover-desc">Full-template audit of the new Next.js site (repo <strong>Visualogyx/VLX-Marketing</strong>). Verified live on <strong>dev.vlx.ai</strong>, which the team confirmed is the <strong>same build as prod.vlx.ai</strong> — both served behind AWS ALB + Amazon Cognito. Focus: load speed and anything that would block the production launch, without skipping the rest of the checklist.</p>
+
+  <div class="cover-meta">
+    <div class="meta-block"><span class="meta-label">Audited environment</span><span class="meta-value">dev.vlx.ai (= prod)</span></div>
+    <div class="meta-block"><span class="meta-label">Platform</span><span class="meta-value">Next.js · Cognito-gated</span></div>
+    <div class="meta-block"><span class="meta-label">Date</span><span class="meta-value">July 16, 2026</span></div>
+    <div class="meta-block"><span class="meta-label">URLs crawled</span><span class="meta-value">184 (sitemap)</span></div>
+  </div>
+
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="cs-num" style="color:#f87171">2</div><div class="cs-label">P0 blockers before launch (+1 infra risk)</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#fbbf24">182<span style="font-size:20px">/184</span></div><div class="cs-label">pages <code style="font-size:11px">index,follow</code> — must be validated at launch</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#f87171">5<span style="font-size:20px">/7</span></div><div class="cs-label">paid landing pages returning 404</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#4ade80">184</div><div class="cs-label">URLs return 200 · SSR working site-wide</div></div>
+  </div>
+</section>
+
+<!-- 2. Methodology -->
+<section class="section" id="methodology">
+  <div class="section-overline">Read before the rest</div>
+  <h2 class="section-title">Methodology &amp; scope</h2>
+  <p class="section-sub">Audit run live on 2026-07-16 with an in-browser <code>fetch()</code> crawler over the 184 sitemap URLs plus targeted probes. Both environments sit behind Cognito, which shapes what can and cannot be measured.</p>
+
+  <div class="alert info">
+    <span class="alert-icon">🔐</span>
+    <div class="alert-body">
+      <div class="alert-title">Access — dev = prod</div>
+      <div class="alert-text">The team confirmed <code>dev.vlx.ai</code> and <code>prod.vlx.ai</code> serve the same build. <code>prod.vlx.ai</code> blocked automated access, so the live verification was done on <code>dev.vlx.ai</code> and applies equally to prod. Both are gated by AWS ALB + Amazon Cognito (authenticated session required).</div>
+    </div>
+  </div>
+  <div class="alert warning">
+    <span class="alert-icon">🚫</span>
+    <div class="alert-body">
+      <div class="alert-title">External tools blocked by Cognito</div>
+      <div class="alert-text">PageSpeed Insights, Lighthouse, CrUX and any public crawler cannot reach the site — they don't hold the Cognito session cookie. All performance data comes from in-browser Performance APIs (lab, not field). <strong>Real field LCP/INP can only be measured with PageSpeed once Cognito is removed (post-launch).</strong></div>
+    </div>
+  </div>
+  <div class="alert warning">
+    <span class="alert-icon">🧰</span>
+    <div class="alert-body">
+      <div class="alert-title">Backlink / keyword tooling unavailable this session</div>
+      <div class="alert-text">Backlinks, keyword rankings, SERP and ASO could not be pulled live and are marked <strong>PROVISIONAL</strong> (they don't depend on the site code and were unchanged since the June audit).</div>
+    </div>
+  </div>
+  <div class="alert info">
+    <span class="alert-icon">📐</span>
+    <div class="alert-body">
+      <div class="alert-title">Client rule — indexing in pre-launch environments</div>
+      <div class="alert-text">Per the client (2026-07-16): pre-launch environments should serve <code>noindex, nofollow</code>. See the dedicated <em>Indexing status</em> section for the current state and the nuance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Verdict -->
+<section class="section" id="verdict">
+  <div class="section-overline">Go / No-go</div>
+  <h2 class="section-title">Launch verdict</h2>
+  <p class="section-sub">Yes — there are items to resolve before go-live: <strong>2 P0 blockers</strong> and <strong>1 infrastructure risk</strong>. Everything else is high-quality and ready.</p>
+
+  <div class="summary-row">
+    <div class="sum-card"><div class="sum-num red">2</div><div class="sum-label">P0 blockers</div></div>
+    <div class="sum-card"><div class="sum-num amber">4</div><div class="sum-label">P1 high (week 1)</div></div>
+    <div class="sum-card"><div class="sum-num" style="color:#ca8a04">5</div><div class="sum-label">P2–P3 lower</div></div>
+    <div class="sum-card"><div class="sum-num green">✓</div><div class="sum-label">SSR, schema, headers OK</div></div>
+  </div>
+
+  <div class="blocker-grid">
+    <div class="blocker-card open">
+      <span class="bl-badge open">P0 · Blocker</span>
+      <div class="bl-id">P0-1</div>
+      <div class="bl-body">
+        <div class="bl-title">Indexing is hard-coded per page, not per environment</div>
+        <div class="bl-desc">182/184 pages serve <code>index,follow</code> while <code>/blog/</code> and <code>/contact/</code> serve a fixed <code>noindex,nofollow</code>. Because there is no environment-based logic, those two will remain <code>noindex,nofollow</code> in production — de-indexing the blog index and cutting <code>nofollow</code> link flow to posts. (Currently harmless because Cognito blocks crawlers — see Indexing status.)</div>
+        <div class="bl-evidence">/blog/ → robots "noindex, nofollow" · /contact/ → "noindex, nofollow" · 182 others → "index, follow"</div>
+      </div>
+    </div>
+    <div class="blocker-card open">
+      <span class="bl-badge open">P0 · Blocker</span>
+      <div class="bl-id">P0-2</div>
+      <div class="bl-body">
+        <div class="bl-title">Paid landing pages returning 404</div>
+        <div class="bl-desc">5 of 7 known campaign LPs return 404, plus every <code>/lp/*</code> route. Only <code>g2</code> and <code>ads</code> resolve. With active paid campaigns on Capterra/G2/LinkedIn/Ads, the paid click lands on a 404 = wasted spend. <strong>Confirm with Hans which campaigns will be live at launch.</strong></div>
+        <div class="bl-evidence">404: /landing-inspection-software-capterra-a/ · /landing-inspections-software-linkedin/ · /landing-inspection-software-video/ · /mold-inspection-remediation-software-landing/ · /isn-vlx/ · /lp/capterra|g2|linkedin/ · /lp/ &nbsp;|&nbsp; 200: /landing-inspection-software-g2/ · /landing-inspection-software-ads/</div>
+      </div>
+    </div>
+    <div class="blocker-card partial">
+      <span class="bl-badge partial">Infra risk</span>
+      <div class="bl-id">⚠︎</div>
+      <div class="bl-body">
+        <div class="bl-title">Server instability during the audit</div>
+        <div class="bl-desc">Intermittent outages and hub TTFB swinging between ~85 ms (warm) and <strong>910 ms</strong> (cold). If this reflects production infrastructure, it's an availability and LCP risk at launch — validate with the infra team.</div>
+        <div class="bl-evidence">Hub TTFB observed: 85 ms → 910 ms across runs · intermittent connection drops</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Indexing status -->
+<section class="section" id="indexing">
+  <div class="section-overline">Client priority</div>
+  <h2 class="section-title">Indexing status — safe today, must be fixed for launch</h2>
+
+  <div class="alert success">
+    <span class="alert-icon">✅</span>
+    <div class="alert-body">
+      <div class="alert-title">Current state is safe — the site is NOT being indexed</div>
+      <div class="alert-text">Even though the <code>meta robots</code> configuration is wrong, <strong>the Amazon Cognito wall blocks search engines entirely</strong>, so no search engine is indexing the site right now. There is no live SEO damage — the current state is correct for a pre-launch environment.</div>
+    </div>
+  </div>
+  <div class="alert warning">
+    <span class="alert-icon">⚠️</span>
+    <div class="alert-body">
+      <div class="alert-title">Important for launch — every page must have index/follow correctly configured</div>
+      <div class="alert-text">Before the site is exposed, ensure <strong>all public pages have <code>index, follow</code> correctly set</strong> and that this is driven by the environment (pre-prod → <code>noindex,nofollow</code>; production → <code>index,follow</code>). In particular, fix <code>/blog/</code> and <code>/contact/</code>, which today carry a <em>fixed</em> <code>noindex,nofollow</code> and, if left unchanged, would leave the blog <strong>de-indexed</strong> in production.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Performance -->
+<section class="section" id="performance">
+  <div class="section-overline">Priority focus</div>
+  <h2 class="section-title">Load speed</h2>
+  <p class="section-sub">Infrastructure is fast when warm (TTFB ~85 ms, CLS 0, optimized images). The load-speed lever is the <strong>heavy JavaScript bundle plus a large SSR DOM</strong> — under real mobile CPU throttling this delays FCP and therefore LCP. Images are not the problem.</p>
+
+  <table class="metric-table">
+    <thead><tr><th>Metric (hub)</th><th>Value</th><th>Reading</th></tr></thead>
+    <tbody>
+      <tr><td>TTFB</td><td>85 ms (warm) … <strong style="color:#fbbf24">910 ms</strong> (cold)</td><td>Variable → server instability</td></tr>
+      <tr><td>SSR HTML</td><td>141 KB / 20 KB gzip (hub) · 352 KB / 43 KB (home)</td><td>Home is heavy — 1,776 DOM nodes</td></tr>
+      <tr><td><strong style="color:#fb923c">JavaScript</strong></td><td><strong>893 KB–1.46 MB / 274–445 KB gzip · 29–69 files</strong></td><td>Main FCP/LCP bottleneck</td></tr>
+      <tr><td>CSS</td><td>130–260 KB / 20–40 KB gzip</td><td>High</td></tr>
+      <tr><td>Images</td><td>~24 KB (lightweight hero)</td><td>✅ Not the problem</td></tr>
+      <tr><td>CLS</td><td>0</td><td>✅ Good</td></tr>
+      <tr><td>FCP / LCP</td><td>Not reliably measurable in automation (background tab skews paint)</td><td>Measure with PageSpeed post-Cognito</td></tr>
+    </tbody>
+  </table>
+  <div class="alert info" style="margin-top:18px">
+    <span class="alert-icon">📊</span>
+    <div class="alert-body">
+      <div class="alert-title">Historical context &amp; recommendation (P1)</div>
+      <div class="alert-text">The last real throttled measurement (PageSpeed, June, hub) was <strong>LCP ≈ 7.6 s</strong>, diagnosed as FCP/render-path limited — not the image. Current resource weights confirm the diagnosis persists. <strong>Fix:</strong> code-split and defer below-the-fold JS, purge unused JS/CSS, lighten the home page, then re-measure mobile LCP <code>&lt;2.5 s</code> with PageSpeed once the site is public.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. All findings -->
+<section class="section" id="findings">
+  <div class="section-overline">Full template coverage</div>
+  <h2 class="section-title">All findings</h2>
+  <p class="section-sub">Click any row for detail. P0 blockers are covered above; this table lists the remaining findings across every template dimension.</p>
+
+  <table class="hallazgos-table">
+    <thead><tr><th style="width:150px">Severity</th><th>Finding</th></tr></thead>
+    <tbody>
+      <tr class="h-row" data-id="F-og"><td><span class="h-badge critical">P1 · High</span></td><td><div class="h-title">46 pages missing <code>og:image</code> — including 12 industry pages<span class="h-chevron">▶</span></div><div class="h-area">Social tags (OG / Twitter)</div></td></tr>
+      <tr class="h-row" data-id="F-sitemap"><td><span class="h-badge medium">P2 · Medium</span></td><td><div class="h-title">8 sitemap URLs redirect instead of returning 200<span class="h-chevron">▶</span></div><div class="h-area">Sitemap hygiene</div></td></tr>
+      <tr class="h-row" data-id="F-meta"><td><span class="h-badge medium">P2 · Medium</span></td><td><div class="h-title">31 titles &amp; 32 meta descriptions out of range<span class="h-chevron">▶</span></div><div class="h-area">Content / On-page</div></td></tr>
+      <tr class="h-row" data-id="F-h1blog"><td><span class="h-badge low">P3 · Low</span></td><td><div class="h-title"><code>/blog/</code> has 2 H1 tags<span class="h-chevron">▶</span></div><div class="h-area">On-page / H1</div></td></tr>
+      <tr class="h-row" data-id="F-encoding"><td><span class="h-badge low">P3 · Low</span></td><td><div class="h-title">Text compression is gzip, not Brotli; no CSP header<span class="h-chevron">▶</span></div><div class="h-area">Server &amp; headers</div></td></tr>
+      <tr class="h-row" data-id="F-308"><td><span class="h-badge low">P3 · Low</span></td><td><div class="h-title">Redirects emit 308 instead of 301<span class="h-chevron">▶</span></div><div class="h-area">URL normalization</div></td></tr>
+      <tr class="h-row" data-id="F-oilgas"><td><span class="h-badge low">P3 · Low</span></td><td><div class="h-title">Top-level <code>/oil-gas/</code> returns 404; <code>/blog/?page=2</code> also 200<span class="h-chevron">▶</span></div><div class="h-area">URL normalization</div></td></tr>
+      <tr class="h-row" data-id="F-schema"><td><span class="h-badge positive">OK</span></td><td><div class="h-title">Schema coverage is comprehensive (hub already has CollectionPage)<span class="h-chevron">▶</span></div><div class="h-area">Schema / JSON-LD</div></td></tr>
+      <tr class="h-row" data-id="F-slugs"><td><span class="h-badge positive">Resolved</span></td><td><div class="h-title">Old WordPress slugs now redirect correctly<span class="h-chevron">▶</span></div><div class="h-area">Migrations</div></td></tr>
+      <tr class="h-row" data-id="F-pagination"><td><span class="h-badge positive">Resolved</span></td><td><div class="h-title">Blog pagination is now crawlable &amp; indexable<span class="h-chevron">▶</span></div><div class="h-area">Blog / Crawlability</div></td></tr>
+      <tr class="h-row" data-id="F-ai"><td><span class="h-badge positive">OK</span></td><td><div class="h-title">robots.txt AI posture intact; llms.txt present<span class="h-chevron">▶</span></div><div class="h-area">AI / GEO</div></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 6b. Keyword walkthrough -->
+<section class="section" id="keywords">
+  <div class="section-overline">On-page, per URL</div>
+  <h2 class="section-title">Keyword walkthrough</h2>
+  <p class="section-sub">Each priority page walked against the keyword-URL mapping: is the target keyword present in the title, H1 and meta? On-page targeting is <strong>strong — 11/12 industries now have keyword-led H1s</strong> (a big improvement over the April mapping, which flagged lost keywords). The items below are P2/P3 refinements — <strong>none block launch</strong>.</p>
+
+  <table class="metric-table">
+    <thead><tr><th>Page</th><th>Target keyword</th><th>Title</th><th>H1</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>/ (home)</td><td>digital inspections software</td><td>🟡</td><td>❌</td><td>H1 is brand-led ("AI-Native Enterprise Platform"); reinforce the KW at least in the title</td></tr>
+      <tr><td>/digital-inspections-software/ (hub)</td><td>digital inspections software</td><td>✅</td><td>✅</td><td>Perfect</td></tr>
+      <tr><td>…/oil-gas/</td><td>oil and gas inspection software</td><td>🟡</td><td>✅</td><td>H1 recovered the KW; align title</td></tr>
+      <tr><td>…/vehicle/</td><td>digital vehicle inspection software</td><td>✅</td><td>✅</td><td>Perfect</td></tr>
+      <tr><td>…/real-estate/</td><td>property inspection software for real estate</td><td>❌</td><td>✅</td><td>Align title to the H1's keyword</td></tr>
+      <tr><td>…/insurance/</td><td>insurance claims inspection software</td><td>🟡</td><td>✅</td><td>Good</td></tr>
+      <tr><td>…/financial-services/</td><td>virtual field inspection sw. for financial institutions</td><td>🟡</td><td>✅</td><td>H1 nails the mapping KW; "services" vs "institutions" in URL</td></tr>
+      <tr><td>…/manufacturing/</td><td>digital inspection software for manufacturing</td><td>✅</td><td>✅</td><td>Perfect</td></tr>
+      <tr><td>…/transportation-logistics/</td><td>transportation inspection software</td><td>🟡</td><td>🟡</td><td>Low-volume KW; acceptable</td></tr>
+      <tr><td>…/quality/</td><td>digital quality inspection software</td><td>❌</td><td>✅</td><td>Align title to the H1's keyword</td></tr>
+      <tr><td>…/virtual/</td><td>virtual inspection software</td><td>✅</td><td>✅</td><td>Good</td></tr>
+      <tr><td>…/mining/</td><td>mining inspection software</td><td>✅</td><td>✅</td><td>Perfect</td></tr>
+      <tr><td>…/hospitality/</td><td>hotel inspection software</td><td>❌</td><td>❌</td><td><strong>Gap:</strong> targets "hospitality", not "hotel" (where the volume is)</td></tr>
+      <tr><td>…/construction/</td><td>construction inspection software</td><td>🟡</td><td>✅</td><td>Good</td></tr>
+      <tr><td>…/safety/</td><td>safety inspection software</td><td>✅</td><td>✅</td><td>Good</td></tr>
+      <tr><td>…/home-inspectors/</td><td>home inspection software</td><td>✅</td><td>❌</td><td>Title has KW; make H1 keyword-led</td></tr>
+      <tr><td>…/service-companies/</td><td>service company inspection software</td><td>✅</td><td>🟡</td><td>Good</td></tr>
+      <tr><td>…/asset-verification/</td><td>asset verification software</td><td>✅</td><td>🟡</td><td>Good</td></tr>
+      <tr><td>…/field-operations/</td><td>field operations inspection software</td><td>✅</td><td>🟡</td><td>Good</td></tr>
+      <tr><td>…/inspection-companies/</td><td>inspection software for inspection companies</td><td>✅</td><td>🟡</td><td>H1 generic ("for Every Industry"); could target "inspection companies"</td></tr>
+      <tr><td>…/app/countit/</td><td>AI object counting app</td><td>✅</td><td>❌</td><td>H1 "Snap, Count &amp; Share" — not keyword-led (had 3,002 GSC impr, pos 12.6)</td></tr>
+      <tr><td>…/app/kypit/</td><td>KYPiT fraud detection</td><td>✅</td><td>✅</td><td>Brand + feature — OK</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rec-grid" style="margin-top:24px">
+    <div class="rec-row"><span class="rec-check">🟡</span><div><div class="rec-title">P2 · Three H1s are not keyword-led</div><div class="rec-desc">Home (brand-led, deliberate), home-inspectors ("…Before You Leave the Property") and countit ("Snap, Count &amp; Share"). Home is a brand choice; home-inspectors and countit already have the keyword in the title, so aligning the H1 is easy.</div></div></div>
+    <div class="rec-row"><span class="rec-check">🟡</span><div><div class="rec-title">P2 · Title ↔ H1 misalignment</div><div class="rec-desc">real-estate and quality have the right keyword in the H1 but the title opens with "Digital Inspection Software for…" instead of the specific KW ("Property Inspection Software", "Quality Inspection Software"). Align the titles.</div></div></div>
+    <div class="rec-row"><span class="rec-check">🟡</span><div><div class="rec-title">P2 · Hospitality keyword gap</div><div class="rec-desc">The page targets "hospitality", not "hotel" — where the volume sits (hotel maintenance 170, hotel inspection). Consider working "hotel" into the title/H1/body.</div></div></div>
+    <div class="rec-row"><span class="rec-check">⚪</span><div><div class="rec-title">P3 · Slug divergences vs the mapping — confirm intentional</div><div class="rec-desc"><code>oil-gas</code> (mapping wanted <code>oil-and-gas</code>), <code>insurance</code> (vs <code>insurance-claims</code>), <code>financial-services</code> (vs <code>financial-institutions</code>), and countit/kypit under <code>…/app/</code> (mapping wanted <code>/countit/</code> and <code>…/kypit/</code>). The mapping had keyword rationale for the longer slugs — confirm the change was deliberate.</div></div></div>
+    <div class="rec-row"><span class="rec-check">✅</span><div><div class="rec-title">No cannibalization detected</div><div class="rec-desc">Industry landings target "…software" keywords; checklists target "…checklist" keywords — clean intent separation.</div></div></div>
+  </div>
+</section>
+
+<!-- 7. Solid -->
+<section class="section" id="solid">
+  <div class="section-overline">No regressions</div>
+  <h2 class="section-title">Confirmed solid</h2>
+  <div class="solid-list">
+    <div class="solid-item"><span class="ic">✓</span> <strong style="color:var(--text)">SSR working site-wide</strong> — all 184 URLs return full HTML (H1, title, meta, schema, links) via raw <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">fetch()</code>, exactly what Googlebot sees.</div>
+    <div class="solid-item"><span class="ic">✓</span> <strong style="color:var(--text)">Sitemap 100% canonicalized to vlx.ai</strong> — correct for the production cutover.</div>
+    <div class="solid-item"><span class="ic">✓</span> <strong style="color:var(--text)">Security headers</strong> — HSTS, X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy all present.</div>
+    <div class="solid-item"><span class="ic">✓</span> <strong style="color:var(--text)">Homepage H1 clean</strong> — "The AI-Native Enterprise Platform for [Inspections/Compliance]"; the old "VerificationInspections" concatenation bug is gone. 12/12 industries keyword-led.</div>
+    <div class="solid-item"><span class="ic">✓</span> <strong style="color:var(--text)">CLS = 0</strong> and hero images optimized (~24 KB).</div>
+  </div>
+</section>
+
+<!-- 8. Scope & limits -->
+<section class="section" id="scope">
+  <div class="section-overline">What wasn't covered live</div>
+  <h2 class="section-title">Scope &amp; limits</h2>
+  <div class="limit-list">
+    <div class="limit-item"><span class="ic">—</span> <strong style="color:var(--text)">Real performance (Lighthouse/PSI/CrUX)</strong> — blocked by Cognito; measure at launch.</div>
+    <div class="limit-item"><span class="ic">—</span> <strong style="color:var(--text)">GSC/GA4 baseline</strong> — the new site is not a verified property yet (expected pre-launch).</div>
+    <div class="limit-item"><span class="ic">—</span> <strong style="color:var(--text)">Backlinks / keywords / SERP / competitors</strong> — PROVISIONAL (no backlink/keyword tooling this session); unchanged since June.</div>
+    <div class="limit-item"><span class="ic">—</span> <strong style="color:var(--text)">ASO / GMB</strong> — do not depend on the site code.</div>
+  </div>
+</section>
+
+<!-- 9. Post-launch checklist -->
+<section class="section" id="checklist">
+  <div class="section-overline">Client request</div>
+  <h2 class="section-title">Post-launch validation checklist</h2>
+  <p class="section-sub">Run in order as soon as Cognito is removed and the site is public on <code>vlx.ai</code>.</p>
+
+  <div class="check-group">
+    <h4>A · Indexing &amp; crawling (first hours)</h4>
+    <ul class="check-list">
+      <li><code>meta robots</code> = <strong>index, follow</strong> on all public pages (the opposite of pre-launch).</li>
+      <li>Confirm <code>/blog/</code> and <code>/contact/</code> are now <strong>index,follow</strong> — the pre-prod noindex did not propagate.</li>
+      <li><code>robots.txt</code> correct; AI posture intact; <code>Sitemap:</code> → <code>https://vlx.ai/sitemap.xml</code>.</li>
+      <li><code>sitemap.xml</code> returns 200 with no redirecting URLs (clean up the 8) and no 404s.</li>
+      <li>Canonicals point to <code>https://vlx.ai/…</code>. Submit sitemap in GSC + request indexing of home and hub. Submit key URLs via IndexNow/Bing.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>B · Redirects &amp; migration (day 0)</h4>
+    <ul class="check-list">
+      <li>Every vlx.ai (WordPress) URL with traffic/links resolves or redirects in 1 hop, no 404s.</li>
+      <li>Active paid landing pages resolve 200 (not 404).</li>
+      <li>Redirects are 301 (or 308), no A→B→C chains. <code>visualogyx.com</code> still redirects to <code>vlx.ai</code>.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>C · Real performance (day 0–1, Cognito removed)</h4>
+    <ul class="check-list">
+      <li>PageSpeed mobile on home, hub and top industry page → record LCP/INP/CLS/FCP/TTFB.</li>
+      <li>Confirm hub LCP &lt; 2.5 s (historical ~7.6 s; focus on reducing JS/FCP).</li>
+      <li>Check INP with the real JS bundle; confirm TTFB is stable (no ~900 ms spikes).</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>D · Analytics &amp; tracking (day 0)</h4>
+    <ul class="check-list">
+      <li>GA4 recording pageviews once per navigation (no GTM + direct double-counting).</li>
+      <li>Conversion events (Start Free Trial / Book a Demo) firing. GSC ↔ GA4 linked.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>E · Data &amp; monitoring (week 1)</h4>
+    <ul class="check-list">
+      <li>GSC coverage with no mass errors; sitemap "success".</li>
+      <li>Export GSC/GA4 baseline to measure migration impact.</li>
+      <li>Field Core Web Vitals (CrUX) populate ~28 days post-launch.</li>
+      <li>Monitor rankings and organic traffic vs the WordPress baseline.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>F · Schema &amp; social (week 1)</h4>
+    <ul class="check-list">
+      <li>Validate rich results (Organization, SoftwareApplication, FAQ, Article, Breadcrumb) in GSC.</li>
+      <li><code>og:image</code> ≥ 1200×630 on the 12 industries + key pages; validate in Meta/X/LinkedIn.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10. Roadmap -->
+<section class="section" id="roadmap">
+  <div class="section-overline">Prioritized</div>
+  <h2 class="section-title">Next steps</h2>
+  <table class="roadmap-table">
+    <thead><tr><th>#</th><th>Action</th><th style="width:110px">Impact</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Make indexing environment-driven (pre-prod <code>noindex,nofollow</code>; prod <code>index,follow</code>) and ensure <code>/blog/</code> is indexable in production.</td><td><span class="rt-impact critical">P0</span></td></tr>
+      <tr><td>2</td><td>Fix the paid landing pages returning 404 (confirm active campaigns with Hans first).</td><td><span class="rt-impact critical">P0</span></td></tr>
+      <tr><td>3</td><td>Validate server stability / TTFB with the infra team before go-live.</td><td><span class="rt-impact critical">Infra</span></td></tr>
+      <tr><td>4</td><td>Reduce/defer JavaScript (code-split, lazy below-the-fold, purge unused JS/CSS); re-measure LCP at launch.</td><td><span class="rt-impact high">P1</span></td></tr>
+      <tr><td>5</td><td>Add <code>og:image</code> to the 12 industry pages (then the rest of the 46).</td><td><span class="rt-impact high">P1</span></td></tr>
+      <tr><td>6</td><td>Remove the 8 redirecting URLs from the sitemap.</td><td><span class="rt-impact medium">P2</span></td></tr>
+      <tr><td>7</td><td>Clean up 31 titles / 32 meta descriptions out of range (prioritize press + industries).</td><td><span class="rt-impact medium">P2</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--text-faint);margin-top:22px">Audited live on 2026-07-16 (authenticated <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">fetch()</code> crawler over 184 URLs + probes + lab performance). Field LCP/INP pending PageSpeed post-Cognito. Backlinks/keywords/SERP/ASO: PROVISIONAL. Source doc: <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">AUDITORIA-PROD-VLX-AI-2026-07-16.md</code>. · Software Craft CR — Laura Ceballos</p>
+</section>
+
+</main>
+
+<script>
+const DESC = {
+  'F-og':'46 of 184 pages have no og:image, including the 12 commercial-intent industry pages (quality, virtual, field-operations, asset-verification, transportation-logistics, oil-gas, manufacturing, real-estate, home-inspectors, service-companies, vehicle) plus apps, integrations, demo, checklists, security, developers, press (all), case-studies and blog categories. Fix: add a page-specific og:image ≥1200×630, prioritizing the 12 industries. Twitter card summary_large_image is present where OG exists.',
+  'F-sitemap':'8 URLs listed in the sitemap redirect instead of returning 200: /case-studies/empowers-qa-team-…/ → /blog/…/, and /blog/product-updates-2026|2025/ + /blog/2020-2/ … /2024-2/ (7 stubs) → /whats-new/. Sitemaps should only list final 200 URLs. Fix: remove these 8 from the sitemap. (These are also the "7 blog posts without Article schema" — they are redirecting stubs, not real posts, so schema is actually complete for real posts.)',
+  'F-meta':'31 titles are empty or >60 chars (hub 71, several industries 64–67, press releases 78–103, blog pagination 68–69). 32 meta descriptions are >160 chars — notably /use-case/the-essential-hotel-room-housekeeping-checklist/ at 1,177 chars, press releases 272–352, and 10 industry pages 167–210. Recommend a cleanup pass, prioritizing press releases and the hub.',
+  'F-h1blog':'/blog/ renders 2 H1 tags; it should have exactly one. Low severity but worth correcting for on-page cleanliness.',
+  'F-encoding':'Responses use Content-Encoding: gzip — Brotli would give a better compression ratio for text (HTML/CSS/JS). No Content-Security-Policy header was observed. Both are P3 hardening improvements, not blockers.',
+  'F-308':'Redirects come from permanent:true in next.config.ts, which emits HTTP 308. Google treats 308 the same as 301 for SEO, so this does not block launch; converting to 301 is an optional convention.',
+  'F-oilgas':'Top-level /oil-gas/ returns 404 (low traffic; add a redirect if it ever had links). /blog/?page=2 also returns 200 alongside the clean /blog/page/2/ — verify the canonical consolidates the query-param variant.',
+  'F-schema':'Schema coverage is strong and should NOT be reported as missing. Home: Organization, WebSite, SoftwareApplication, FAQPage, VideoObject. Hub: Organization, WebSite, CollectionPage, SoftwareApplication, BreadcrumbList. Industries (18): Organization, WebSite, Service, FAQPage, BreadcrumbList. Blog posts: Article + BreadcrumbList + Organization + WebSite. Only gap: compare pages are unpublished (product decision) — P3.',
+  'F-slugs':'Old WordPress slugs now redirect correctly (they returned 404 on July 1): /oil-and-gas/ → /digital-inspections-software/oil-gas/ (200) and /financial-institutions/ → /digital-inspections-software/financial-services/ (200). Trailing-slash normalization also works (/checklists → /checklists/).',
+  'F-pagination':'Blog pagination is fixed: /blog/page/2/ returns 200 with index,follow and a self-referencing canonical (the July-1 "false positive" from an older build no longer applies). Category pagination also works.',
+  'F-ai':'robots.txt keeps the deliberate AI posture: Allow for OAI-SearchBot, PerplexityBot, Applebot, Claude-SearchBot/User; Disallow for GPTBot, ClaudeBot, CCBot, Bytespider, Google-Extended, Amazonbot, FacebookBot. llms.txt present (5.65 KB). Note: the pre-prod robots.txt has Allow: / — which reinforces the need for environment-based noindex (P0-1).'
+};
+
+function toggleExpand(row){
+  const id=row.dataset.id, data=DESC[id];
+  if(!data) return;
+  const isExpanded=row.classList.contains('expanded');
+  document.querySelectorAll('.h-row.expanded').forEach(r=>{
+    r.classList.remove('expanded');
+    const n=r.nextElementSibling;
+    if(n&&n.classList.contains('h-expand-row')) n.classList.remove('open');
+  });
+  if(!isExpanded){
+    row.classList.add('expanded');
+    let ex=row.nextElementSibling;
+    if(!ex||!ex.classList.contains('h-expand-row')){
+      ex=document.createElement('tr');
+      ex.className='h-expand-row';
+      const cols=row.querySelectorAll('td').length;
+      ex.innerHTML=`<td class="h-expand-td" colspan="${cols}"><div class="h-expand-inner"><div class="h-expand-text">${data}</div></div></td>`;
+      row.after(ex);
+    }
+    ex.classList.add('open');
+  }
+}
+document.querySelectorAll('.h-row').forEach(row=>row.addEventListener('click',()=>toggleExpand(row)));
+
+function navScrollTo(id,el){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+const sections=document.querySelectorAll('section[id]'), navLinks=document.querySelectorAll('.nav-link');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[onclick*="${entry.target.id}"]`);
+      if(a) a.classList.add('active');
+    }
+  });
+},{threshold:0.25});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>
