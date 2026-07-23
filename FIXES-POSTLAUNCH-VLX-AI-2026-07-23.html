@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte de correcciones — Auditoría post-lanzamiento vlx.ai (2026-07-23)</title>
+<style>
+  :root {
+    --brand: #FF5722; --brand-darker: #C63A0A;
+    --text: #263238; --text-2: #546E7A; --muted: #64757F;
+    --bg: #ffffff; --surface: #F8FAFC; --border: #e2e8f0;
+    --ok: #15803d; --warn: #b45309; --pending: #64757F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Rubik, Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.65;
+    max-width: 980px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem;
+  }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .25rem; }
+  h2 { font-size: 1.4rem; margin: 2.5rem 0 .75rem; padding-bottom: .35rem; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; color: var(--text); }
+  p, li { color: var(--text); }
+  a { color: var(--brand-darker); }
+  code { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: .1em .35em; font-size: .88em; font-family: "SF Mono", Consolas, "Roboto Mono", monospace; }
+  pre { background: #0F172A; color: #e2e8f0; border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto; }
+  pre code { background: none; border: none; color: inherit; padding: 0; }
+  .meta { color: var(--muted); font-size: .95rem; margin: 0 0 1.5rem; }
+  .meta strong { color: var(--text-2); }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .93rem; }
+  th, td { border: 1px solid var(--border); padding: .55rem .7rem; text-align: left; vertical-align: top; }
+  th { background: var(--surface); font-weight: 600; }
+  td code { white-space: nowrap; }
+  .tag { display: inline-block; font-weight: 700; border-radius: 4px; padding: .05em .45em; font-size: .85em; }
+  .callout { background: var(--surface); border-left: 4px solid var(--brand); border-radius: 0 8px 8px 0; padding: .9rem 1.1rem; margin: 1.25rem 0; }
+  .callout.warn { border-left-color: var(--warn); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+  .num { font-weight: 700; color: var(--brand-darker); white-space: nowrap; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<h1>Reporte de correcciones — Auditoría post-lanzamiento vlx.ai</h1>
+<p class="meta">
+  <strong>Fecha:</strong> 2026-07-23 &nbsp;·&nbsp;
+  <strong>Fuente:</strong> <a href="https://github.com/vlx-seo/vlx-seo-plan/blob/main/reports/AUDIT-POSTLAUNCH-VLX-AI-2026-07-22.md">AUDIT-POSTLAUNCH-VLX-AI-2026-07-22</a><br>
+  <strong>Rama / PR:</strong> <code>seo/postlaunch-audit-fixes</code> → <code>master</code> (repo <code>Visualogyx/VLX-Marketing</code>) &nbsp;·&nbsp;
+  <strong>Commit:</strong> <code>2c55d15</code> — 30 archivos
+</p>
+
+<h2>✅ Corregido (incluido en el PR)</h2>
+<table>
+  <thead>
+    <tr><th>#</th><th>Hallazgo</th><th>Cambio</th><th>Archivos</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">#2</td><td>Jerarquía de headings rota (WCAG 1.3.1 / 2.4.6)</td><td>Navbar <code>&lt;h4&gt;/&lt;h5&gt;</code> → <code>&lt;p&gt;</code> (mismas clases); se elimina <code>role="heading"</code> del Footer</td><td><code>Navbar.tsx</code>, <code>Footer.tsx</code></td></tr>
+    <tr><td class="num">#4</td><td>TOC del blog no crawleable</td><td><code>&lt;button onClick&gt;</code> → <code>&lt;a href="#id"&gt;</code> (scroll suave + hash; sitelinks "Jump to"; funciona sin JS)</td><td><code>BlogTOC.tsx</code></td></tr>
+    <tr><td class="num">#5</td><td>Sitemap listaba URLs con 308</td><td>Se excluyen posts <code>product-updates</code> y case studies duplicados que redirigen a /blog/</td><td><code>sitemap.ts</code></td></tr>
+    <tr><td class="num">#9</td><td><code>CollectionPage.numberOfItems</code> no coincidía</td><td><code>numberOfItems</code> deriva del mismo slice de 12 posts</td><td><code>blog/page.tsx</code></td></tr>
+    <tr><td class="num">#10</td><td><code>AggregateOffer</code> con precio incompleto</td><td><code>lowPrice</code> 35 → 29 (plan Pro anual)</td><td><code>schema.ts</code></td></tr>
+    <tr><td class="num">#11</td><td><code>SoftwareApplication</code> sin <code>@id</code> vinculada</td><td><code>@id</code> únicos en KYPiT/COUNTiT/integraciones, enlazados a <code>#software</code>/<code>#organization</code></td><td><code>kypit</code>, <code>countit</code>, <code>integrations/[slug]</code></td></tr>
+    <tr><td class="num">#12</td><td>Blog usaba <code>Article</code> genérico</td><td><code>Article</code> → <code>BlogPosting</code></td><td><code>blog/[slug]/page.tsx</code></td></tr>
+    <tr><td class="num">#13</td><td>GA4 + Meta Pixel no contaban navegaciones SPA</td><td>Pageview en cada cambio de ruta vía <code>usePathname()</code> (salta el mount inicial)</td><td><code>GoogleTag.tsx</code>, <code>MetaPixel.tsx</code></td></tr>
+    <tr><td class="num">#15</td><td>OG image 1200×629</td><td>Redimensionadas a 1200×630 (OG + Twitter, root y (frontend))</td><td>4× <code>opengraph/twitter-image.jpg</code></td></tr>
+    <tr><td class="num">#16</td><td>Slug <code>oil-gas</code> ≠ keyword "oil and gas"</td><td>Ruta renombrada a <code>/oil-and-gas/</code> + 301 del slug viejo; enlaces internos actualizados</td><td><code>next.config.ts</code>, ruta <code>oil-and-gas/</code>, +11 archivos</td></tr>
+  </tbody>
+</table>
+
+<h3>Nota sobre #3 (H1 del homepage)</h3>
+<div class="callout">
+Se implementó y luego <strong>se revirtió a petición</strong>. El H1 vuelve a <em>"The AI-Native Enterprise Platform for…"</em> con la rotación original del typewriter. <strong>No forma parte del PR.</strong>
+</div>
+
+<hr>
+
+<h2>⏳ Pendiente</h2>
+
+<h3>Infraestructura (no es código de la app — requiere acceso a AWS/DNS)</h3>
+<table>
+  <thead><tr><th>#</th><th>Tema</th><th>Acción</th></tr></thead>
+  <tbody>
+    <tr><td class="num">#1</td><td><code>/blog/page/N/</code> con N &gt; total devuelve <strong>200</strong> en vez de 404</td><td>El código ya tiene <code>notFound()</code>; es desfase de <strong>caché/edge</strong>. Redeploy + invalidar CloudFront y verificar con <code>curl -I …/blog/page/99/</code></td></tr>
+    <tr><td class="num">#7</td><td><code>http://vlx.ai</code> no fuerza HTTPS (200 en vez de 301)</td><td>Regla de redirección en el edge/ALB</td></tr>
+    <tr><td class="num">#8</td><td><code>www.visualogyx.com</code> sin SSL válido</td><td>Verificar backlinks y configurar 301 → vlx.ai</td></tr>
+    <tr><td class="num">#14</td><td>CSP en <code>Report-Only</code></td><td>Pasar a modo enforce tras estabilización (semana 2–4)</td></tr>
+    <tr><td class="num">#17</td><td>WAF/ALB puede lanzar 503 en crawls rápidos</td><td>Revisar umbral de rate-limit (no frenar a Googlebot)</td></tr>
+  </tbody>
+</table>
+
+<h3>Contenido / decisiones</h3>
+<table>
+  <thead><tr><th>#</th><th>Tema</th><th>Acción</th></tr></thead>
+  <tbody>
+    <tr><td class="num">#6</td><td>Slugs casi idénticos <code>7-modern-inspection-methods</code> vs <code>…-that-boost-efficiency-save-costs</code></td><td>Son dos posts distintos con tráfico propio; revisar en Payload si el contenido es duplicado. Si lo es → 301 del más débil al fuerte</td></tr>
+    <tr><td class="num">#18</td><td>Meta descriptions fuera de rango</td><td>~14 páginas con description 161–210 chars. Recortar a ≤160 con CTA (decisión de copy)</td></tr>
+  </tbody>
+</table>
+
+<h3>Pasos de despliegue (tras aprobar el PR)</h3>
+<ol>
+  <li>Merge del PR a <code>master</code> → deploy automático a AWS ECS (prod).</li>
+  <li><strong>Invalidar CloudFront</strong> (<code>aws cloudfront create-invalidation --distribution-id &lt;ID&gt; --paths "/*"</code>) — sin esto la CDN sigue sirviendo el HTML viejo.</li>
+  <li>Verificar: <code>curl -I https://vlx.ai/digital-inspections-software/oil-gas/</code> → <strong>301</strong> a <code>/oil-and-gas/</code>.</li>
+  <li>Reenviar <code>sitemap.xml</code> en GSC + IndexNow; validar schemas en Rich Results Test; refrescar OG en el Sharing Debugger de Facebook.</li>
+</ol>
+
+<hr>
+
+<h2>🛠️ Tarea propuesta — Herramienta de gestión de caché desde el sitio</h2>
+<p><strong>Objetivo:</strong> permitir purgar/invalidar la caché de CloudFront (y ver su estado) desde el propio admin del sitio, sin depender de la AWS CLI ni de que quien edita contenido tenga credenciales de AWS.</p>
+<p><strong>Motivación:</strong> hoy, cada despliegue o corrección no se refleja hasta invalidar CloudFront manualmente por línea de comandos. Esto crea fricción y hace que "arreglos ya desplegados" parezcan no aplicados (ver el análisis de caché abajo — es la causa raíz del #1).</p>
+<p><strong>Alcance sugerido (MVP):</strong></p>
+<ul>
+  <li>Acción protegida en el admin de Payload (detrás de auth) para disparar una invalidación de CloudFront: purga total (<code>/*</code>) o por rutas específicas (ej. <code>/blog/*</code>).</li>
+  <li>Idealmente, botón "purgar esta página" en el editor de cada post/página.</li>
+  <li>Mostrar estado de la última invalidación y los headers de caché actuales de una URL.</li>
+</ul>
+<p><strong>Consideraciones técnicas / de seguridad:</strong></p>
+<ul>
+  <li>AWS SDK con un <strong>rol IAM de alcance mínimo</strong> (<code>cloudfront:CreateInvalidation</code>/<code>GetInvalidation</code> sobre la distribución concreta). Nunca exponer credenciales en el cliente.</li>
+  <li><strong>Rate-limit</strong>: las invalidaciones cuestan después del tramo gratuito (1.000/mes); evitar purgas totales en bucle.</li>
+  <li>Registrar quién dispara cada purga (auditoría).</li>
+  <li>Revisar la política de redirects: los <code>permanent: true</code> (301) se cachean agresivamente; considerar <code>302</code> para reglas que puedan cambiar.</li>
+</ul>
+<p><strong>Prioridad:</strong> media. No bloquea el lanzamiento, pero elimina fricción operativa recurrente y reduce el riesgo de "se corrigió pero no se ve".</p>
+
+<hr>
+
+<h2>📌 ¿Por qué la caché estaría afectando al sitio?</h2>
+<p>El sitio tiene <strong>dos capas de caché</strong> que explican los síntomas observados:</p>
+
+<h3>1. CDN (CloudFront) — <code>Cache-Control: s-maxage=31536000</code></h3>
+<p>Las páginas se sirven con caché de CDN de <strong>hasta 1 año</strong>. Al desplegar un cambio, <strong>CloudFront sigue entregando el HTML viejo</strong> hasta una invalidación explícita. Consecuencias:</p>
+<ul>
+  <li>Correcciones ya desplegadas "no se ven" hasta invalidar.</li>
+  <li>Es la causa del <span class="num">#1</span>: el código ya devuelve <code>notFound()</code> para páginas fuera de rango, pero el edge sirve un 200 cacheado.</li>
+</ul>
+
+<h3>2. Navegador — redirects <code>permanent: true</code> (HTTP 301)</h3>
+<p>Los navegadores <strong>cachean los 301 de forma indefinida</strong>. Si existió una regla de paginación previa (documentada en <code>next.config.ts:905</code>, hubo una versión con <code>?page=</code> que rompía la paginación), cualquier navegador que la visitó <strong>guardó ese 301 para siempre</strong> y sigue redirigiendo <code>/blog/page/N/</code> → <code>/blog/</code> localmente, aunque el servidor ya esté corregido.</p>
+<ul>
+  <li>Fue exactamente lo observado: en incógnito la paginación funciona (200, sin redirect); con el 301 cacheado, "cualquier página redirige a la principal".</li>
+  <li>No hay forma sencilla de "des-cachear" un 301 desde el servidor: el usuario debe limpiar caché o esperar a que expire. Por eso conviene <code>302</code> en reglas temporales.</li>
+</ul>
+
+<div class="callout warn">
+<strong>Resumen:</strong> la caché no "daña" el sitio, pero desincroniza lo que ve el usuario respecto al estado real del servidor — de ahí el valor de una herramienta de invalidación accesible y de una política de redirects más cuidadosa.
+</div>
+
+<footer>Generado como parte de la remediación del audit post-lanzamiento de vlx.ai · 2026-07-23</footer>
+
+</body>
+</html>
