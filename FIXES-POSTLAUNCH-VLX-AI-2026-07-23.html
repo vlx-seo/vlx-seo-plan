@@ -1,155 +1,419 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reporte de correcciones — Auditoría post-lanzamiento vlx.ai (2026-07-23)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Post-launch audit fixes — New VLX site (Next.js)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --brand: #FF5722; --brand-darker: #C63A0A;
-    --text: #263238; --text-2: #546E7A; --muted: #64757F;
-    --bg: #ffffff; --surface: #F8FAFC; --border: #e2e8f0;
-    --ok: #15803d; --warn: #b45309; --pending: #64757F;
-  }
-  * { box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Rubik, Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text); background: var(--bg); line-height: 1.65;
-    max-width: 980px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem;
-  }
-  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .25rem; }
-  h2 { font-size: 1.4rem; margin: 2.5rem 0 .75rem; padding-bottom: .35rem; border-bottom: 2px solid var(--border); }
-  h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; color: var(--text); }
-  p, li { color: var(--text); }
-  a { color: var(--brand-darker); }
-  code { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: .1em .35em; font-size: .88em; font-family: "SF Mono", Consolas, "Roboto Mono", monospace; }
-  pre { background: #0F172A; color: #e2e8f0; border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto; }
-  pre code { background: none; border: none; color: inherit; padding: 0; }
-  .meta { color: var(--muted); font-size: .95rem; margin: 0 0 1.5rem; }
-  .meta strong { color: var(--text-2); }
-  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .93rem; }
-  th, td { border: 1px solid var(--border); padding: .55rem .7rem; text-align: left; vertical-align: top; }
-  th { background: var(--surface); font-weight: 600; }
-  td code { white-space: nowrap; }
-  .tag { display: inline-block; font-weight: 700; border-radius: 4px; padding: .05em .45em; font-size: .85em; }
-  .callout { background: var(--surface); border-left: 4px solid var(--brand); border-radius: 0 8px 8px 0; padding: .9rem 1.1rem; margin: 1.25rem 0; }
-  .callout.warn { border-left-color: var(--warn); }
-  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-  .num { font-weight: 700; color: var(--brand-darker); white-space: nowrap; }
-  footer { margin-top: 3rem; color: var(--muted); font-size: .85rem; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#FF5722;--brand-dark:#C63A0A;--brand-light:#FF8A65;--brand-soft:rgba(255,87,34,.08);
+  --amber:#F59E0B;--amber-soft:rgba(245,158,11,.1);
+  --green:#16A34A;--green-soft:rgba(22,163,74,.1);
+  --yellow:#EAB308;--yellow-soft:rgba(234,179,8,.1);
+  --blue:#2563EB;--blue-soft:rgba(37,99,235,.08);
+  --red:#EF4444;--red-soft:rgba(239,68,68,.1);
+  --surface:#0F172A;--surface-2:#1E293B;--surface-3:#253347;
+  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.13);
+  --text:#F1F5F9;--text-muted:#94A3B8;--text-faint:#475569;
+  --sidebar:248px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:var(--text);display:flex;min-height:100vh;line-height:1.5}
+
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface-2);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo .brand{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:4px}
+.sidebar-logo .project{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.sidebar-logo .date{font-size:11px;color:var(--text-faint);margin-top:4px}
+.sidebar nav{padding:12px 0;flex:1}
+.nav-section{padding:16px 20px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.nav-link{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;color:var(--text-muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.03);border-left-color:var(--border-strong)}
+.nav-link.active{color:var(--text);background:var(--brand-soft);border-left-color:var(--brand)}
+.nav-link .nav-icon{font-size:14px;width:16px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;background:var(--brand);color:#fff}
+.nav-badge.amber{background:var(--amber);color:#000}
+.nav-badge.green{background:var(--green)}
+.nav-badge.red{background:var(--red)}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);font-size:11px;color:var(--text-faint)}
+
+.main{margin-left:var(--sidebar);flex:1;padding:0 0 80px}
+
+.section{padding:48px 56px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-overline{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-bottom:10px}
+.section-title{font-size:32px;font-weight:800;color:var(--text);line-height:1.15;margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text-muted);max-width:720px;line-height:1.6;margin-bottom:32px}
+
+#cover{background:linear-gradient(160deg,#0a0f1a 0%,#150a05 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+#cover::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)}
+#cover::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(255,87,34,.1) 0%,transparent 55%);pointer-events:none}
+.cover-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--brand);margin-bottom:24px}
+.cover-title{font-size:44px;font-weight:800;color:#fff;line-height:1.12;max-width:820px;margin-bottom:16px}
+.cover-title span{color:var(--brand)}
+.cover-desc{font-size:16px;color:var(--text-muted);max-width:680px;line-height:1.65;margin-bottom:48px}
+.cover-meta{display:flex;gap:40px;flex-wrap:wrap}
+.meta-block{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint)}
+.meta-value{font-size:14px;font-weight:600;color:var(--text)}
+.cover-stats{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:820px}
+.cover-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:20px 24px}
+.cs-num{font-size:34px;font-weight:800;color:var(--brand);line-height:1}
+.cs-label{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.4}
+
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:14px;display:flex;gap:14px;align-items:flex-start}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.alert-text{font-size:12.5px;line-height:1.6;color:var(--text-muted)}
+.alert-text code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+.alert.critical{background:rgba(255,87,34,.1);border:1px solid rgba(255,87,34,.25)}
+.alert.critical .alert-title{color:#fb923c}
+.alert.warning{background:var(--amber-soft);border:1px solid rgba(245,158,11,.25)}
+.alert.warning .alert-title{color:#fbbf24}
+.alert.info{background:var(--blue-soft);border:1px solid rgba(37,99,235,.2)}
+.alert.info .alert-title{color:#93c5fd}
+.alert.success{background:var(--green-soft);border:1px solid rgba(22,163,74,.25)}
+.alert.success .alert-title{color:#4ade80}
+
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.sum-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.sum-num{font-size:28px;font-weight:800;line-height:1}
+.sum-label{font-size:11px;color:var(--text-faint);margin-top:5px;line-height:1.4}
+.sum-num.brand{color:var(--brand)}
+.sum-num.amber{color:var(--amber)}
+.sum-num.green{color:var(--green)}
+.sum-num.red{color:var(--red)}
+
+.rec-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.rec-row{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+.rec-check{font-size:16px;flex-shrink:0;margin-top:1px}
+.rec-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.rec-desc{font-size:12px;color:var(--text-muted);line-height:1.55}
+
+.hallazgos-table{width:100%;border-collapse:collapse}
+.hallazgos-table thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--text-faint);padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.hallazgos-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .1s;cursor:pointer}
+.hallazgos-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.hallazgos-table td{padding:12px;vertical-align:middle}
+.h-id{font-size:11px;font-weight:600;color:var(--text-faint);font-variant-numeric:tabular-nums}
+.h-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;display:inline-block;white-space:nowrap}
+.h-badge.critical{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.h-badge.medium{background:var(--amber-soft);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.h-badge.low{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+.h-badge.positive{background:var(--green-soft);color:#4ade80;border:1px solid rgba(22,163,74,.2)}
+.h-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.h-area{font-size:11px;color:var(--text-faint);margin-top:2px}
+.h-chevron{font-size:9px;color:var(--text-faint);transition:transform .2s;display:inline-block;margin-left:7px;vertical-align:middle;opacity:.6}
+.h-row.expanded .h-chevron{transform:rotate(90deg);opacity:1;color:var(--brand)}
+.h-expand-row{display:none}
+.h-expand-row.open{display:table-row}
+.h-expand-td{padding:0 !important;border-bottom:1px solid rgba(255,87,34,.15) !important}
+.h-expand-inner{padding:16px 16px 18px 40px;background:rgba(255,87,34,.04)}
+.h-expand-text{font-size:12.5px;color:var(--text-muted);line-height:1.7}
+.h-expand-text code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.metric-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+.metric-table th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:0 12px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.metric-table td{padding:11px 12px;vertical-align:top;font-size:12.5px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.metric-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+.metric-table code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.solid-list{display:flex;flex-direction:column;gap:10px}
+.solid-item{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text-muted);line-height:1.6}
+.solid-item .ic{color:#4ade80;flex-shrink:0}
+
+.check-group{margin-bottom:22px}
+.check-group h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--brand);margin-bottom:10px}
+.check-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
+.check-list li{position:relative;padding:2px 0 2px 26px;font-size:12.5px;color:var(--text-muted);line-height:1.55}
+.check-list li:before{content:"☐";position:absolute;left:0;top:0;color:var(--brand);font-size:14px}
+.check-list li code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+.roadmap-table{width:100%;border-collapse:collapse}
+.roadmap-table th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:0 12px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.roadmap-table td{padding:11px 12px;vertical-align:top;font-size:12.5px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.roadmap-table td:first-child{font-weight:700;color:var(--brand);white-space:nowrap;width:28px}
+.rt-impact{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
+.rt-impact.critical{background:rgba(255,87,34,.2);color:#fb923c;border:1px solid rgba(255,87,34,.3)}
+.rt-impact.high{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.rt-impact.medium{background:var(--yellow-soft);color:#ca8a04;border:1px solid rgba(234,179,8,.25)}
+
+:target{scroll-margin-top:24px}
+@media(max-width:820px){.sidebar{display:none}.main{margin-left:0}.section{padding:32px 22px}.cover-stats,.summary-row{grid-template-columns:repeat(2,1fr)}.cover-title{font-size:32px}}
 </style>
 </head>
 <body>
 
-<h1>Reporte de correcciones — Auditoría post-lanzamiento vlx.ai</h1>
-<p class="meta">
-  <strong>Fecha:</strong> 2026-07-23 &nbsp;·&nbsp;
-  <strong>Fuente:</strong> <a href="https://github.com/vlx-seo/vlx-seo-plan/blob/main/reports/AUDIT-POSTLAUNCH-VLX-AI-2026-07-22.md">AUDIT-POSTLAUNCH-VLX-AI-2026-07-22</a><br>
-  <strong>Rama / PR:</strong> <code>seo/postlaunch-audit-fixes</code> → <code>master</code> (repo <code>Visualogyx/VLX-Marketing</code>) &nbsp;·&nbsp;
-  <strong>Commit:</strong> <code>2c55d15</code> — 30 archivos
-</p>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">TheSEOLogyx / VLX</div>
+    <div class="project">New site (Next.js) — Post-launch fixes</div>
+    <div class="date">July 23, 2026</div>
+  </div>
+  <nav>
+    <div class="nav-section">Report</div>
+    <a class="nav-link active" onclick="navScrollTo('cover', this)"><span class="nav-icon">📋</span> Executive summary</a>
+    <a class="nav-link" onclick="navScrollTo('fixed', this)"><span class="nav-icon">✅</span> What was fixed <span class="nav-badge green">10</span></a>
+    <a class="nav-link" onclick="navScrollTo('reverted', this)"><span class="nav-icon">↩️</span> Reverted (H1)</a>
+    <a class="nav-link" onclick="navScrollTo('pending', this)"><span class="nav-icon">⏳</span> Pending <span class="nav-badge amber">7</span></a>
+    <a class="nav-link" onclick="navScrollTo('cache-tool', this)"><span class="nav-icon">🛠️</span> Cache-management tool</a>
+    <a class="nav-link" onclick="navScrollTo('cache-why', this)"><span class="nav-icon">📌</span> Why caching bites</a>
+    <a class="nav-link" onclick="navScrollTo('deploy', this)"><span class="nav-icon">🚀</span> Deploy checklist</a>
+    <a class="nav-link" onclick="navScrollTo('roadmap', this)"><span class="nav-icon">🧭</span> Next steps</a>
+  </nav>
+  <div class="sidebar-footer">
+    Prepared by <strong>Lau / TheSEOLogyx</strong><br>
+    PR: <code>seo/postlaunch-audit-fixes</code>
+  </div>
+</aside>
 
-<h2>✅ Corregido (incluido en el PR)</h2>
-<table>
-  <thead>
-    <tr><th>#</th><th>Hallazgo</th><th>Cambio</th><th>Archivos</th></tr>
-  </thead>
-  <tbody>
-    <tr><td class="num">#2</td><td>Jerarquía de headings rota (WCAG 1.3.1 / 2.4.6)</td><td>Navbar <code>&lt;h4&gt;/&lt;h5&gt;</code> → <code>&lt;p&gt;</code> (mismas clases); se elimina <code>role="heading"</code> del Footer</td><td><code>Navbar.tsx</code>, <code>Footer.tsx</code></td></tr>
-    <tr><td class="num">#4</td><td>TOC del blog no crawleable</td><td><code>&lt;button onClick&gt;</code> → <code>&lt;a href="#id"&gt;</code> (scroll suave + hash; sitelinks "Jump to"; funciona sin JS)</td><td><code>BlogTOC.tsx</code></td></tr>
-    <tr><td class="num">#5</td><td>Sitemap listaba URLs con 308</td><td>Se excluyen posts <code>product-updates</code> y case studies duplicados que redirigen a /blog/</td><td><code>sitemap.ts</code></td></tr>
-    <tr><td class="num">#9</td><td><code>CollectionPage.numberOfItems</code> no coincidía</td><td><code>numberOfItems</code> deriva del mismo slice de 12 posts</td><td><code>blog/page.tsx</code></td></tr>
-    <tr><td class="num">#10</td><td><code>AggregateOffer</code> con precio incompleto</td><td><code>lowPrice</code> 35 → 29 (plan Pro anual)</td><td><code>schema.ts</code></td></tr>
-    <tr><td class="num">#11</td><td><code>SoftwareApplication</code> sin <code>@id</code> vinculada</td><td><code>@id</code> únicos en KYPiT/COUNTiT/integraciones, enlazados a <code>#software</code>/<code>#organization</code></td><td><code>kypit</code>, <code>countit</code>, <code>integrations/[slug]</code></td></tr>
-    <tr><td class="num">#12</td><td>Blog usaba <code>Article</code> genérico</td><td><code>Article</code> → <code>BlogPosting</code></td><td><code>blog/[slug]/page.tsx</code></td></tr>
-    <tr><td class="num">#13</td><td>GA4 + Meta Pixel no contaban navegaciones SPA</td><td>Pageview en cada cambio de ruta vía <code>usePathname()</code> (salta el mount inicial)</td><td><code>GoogleTag.tsx</code>, <code>MetaPixel.tsx</code></td></tr>
-    <tr><td class="num">#15</td><td>OG image 1200×629</td><td>Redimensionadas a 1200×630 (OG + Twitter, root y (frontend))</td><td>4× <code>opengraph/twitter-image.jpg</code></td></tr>
-    <tr><td class="num">#16</td><td>Slug <code>oil-gas</code> ≠ keyword "oil and gas"</td><td>Ruta renombrada a <code>/oil-and-gas/</code> + 301 del slug viejo; enlaces internos actualizados</td><td><code>next.config.ts</code>, ruta <code>oil-and-gas/</code>, +11 archivos</td></tr>
-  </tbody>
-</table>
+<main class="main">
 
-<h3>Nota sobre #3 (H1 del homepage)</h3>
-<div class="callout">
-Se implementó y luego <strong>se revirtió a petición</strong>. El H1 vuelve a <em>"The AI-Native Enterprise Platform for…"</em> con la rotación original del typewriter. <strong>No forma parte del PR.</strong>
-</div>
+<!-- 1. Cover -->
+<section class="section" id="cover">
+  <div class="cover-label">Remediation report · Post-launch</div>
+  <h1 class="cover-title">10 of the audit's code findings are <span>fixed and staged in a PR.</span></h1>
+  <p class="cover-desc">Companion to <strong>AUDIT-POSTLAUNCH-VLX-AI-2026-07-22</strong>. The code-level findings were fixed on branch <strong>seo/postlaunch-audit-fixes</strong> of <strong>Visualogyx/VLX-Marketing</strong> (30 files, commit <code>2c55d15</code>). The remaining items are infrastructure (AWS/DNS) or content decisions, not app code. One finding (#3, homepage H1) was implemented and then reverted by request.</p>
 
-<hr>
+  <div class="cover-meta">
+    <div class="meta-block"><span class="meta-label">Repository</span><span class="meta-value">Visualogyx/VLX-Marketing</span></div>
+    <div class="meta-block"><span class="meta-label">Branch / PR</span><span class="meta-value">seo/postlaunch-audit-fixes</span></div>
+    <div class="meta-block"><span class="meta-label">Date</span><span class="meta-value">July 23, 2026</span></div>
+    <div class="meta-block"><span class="meta-label">Source audit</span><span class="meta-value">2026-07-22</span></div>
+  </div>
 
-<h2>⏳ Pendiente</h2>
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="cs-num" style="color:#4ade80">10</div><div class="cs-label">code findings fixed (in the PR)</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#fbbf24">5</div><div class="cs-label">infra items pending (AWS/DNS)</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#ca8a04">2</div><div class="cs-label">content decisions pending</div></div>
+    <div class="cover-stat"><div class="cs-num" style="color:#94A3B8">1</div><div class="cs-label">reverted by request (#3 H1)</div></div>
+  </div>
+</section>
 
-<h3>Infraestructura (no es código de la app — requiere acceso a AWS/DNS)</h3>
-<table>
-  <thead><tr><th>#</th><th>Tema</th><th>Acción</th></tr></thead>
-  <tbody>
-    <tr><td class="num">#1</td><td><code>/blog/page/N/</code> con N &gt; total devuelve <strong>200</strong> en vez de 404</td><td>El código ya tiene <code>notFound()</code>; es desfase de <strong>caché/edge</strong>. Redeploy + invalidar CloudFront y verificar con <code>curl -I …/blog/page/99/</code></td></tr>
-    <tr><td class="num">#7</td><td><code>http://vlx.ai</code> no fuerza HTTPS (200 en vez de 301)</td><td>Regla de redirección en el edge/ALB</td></tr>
-    <tr><td class="num">#8</td><td><code>www.visualogyx.com</code> sin SSL válido</td><td>Verificar backlinks y configurar 301 → vlx.ai</td></tr>
-    <tr><td class="num">#14</td><td>CSP en <code>Report-Only</code></td><td>Pasar a modo enforce tras estabilización (semana 2–4)</td></tr>
-    <tr><td class="num">#17</td><td>WAF/ALB puede lanzar 503 en crawls rápidos</td><td>Revisar umbral de rate-limit (no frenar a Googlebot)</td></tr>
-  </tbody>
-</table>
+<!-- 2. What was fixed -->
+<section class="section" id="fixed">
+  <div class="section-overline">In the PR</div>
+  <h2 class="section-title">What was fixed</h2>
+  <p class="section-sub">Click any row for detail. All ten are committed on <code>seo/postlaunch-audit-fixes</code> and validated by the CI build on the PR.</p>
 
-<h3>Contenido / decisiones</h3>
-<table>
-  <thead><tr><th>#</th><th>Tema</th><th>Acción</th></tr></thead>
-  <tbody>
-    <tr><td class="num">#6</td><td>Slugs casi idénticos <code>7-modern-inspection-methods</code> vs <code>…-that-boost-efficiency-save-costs</code></td><td>Son dos posts distintos con tráfico propio; revisar en Payload si el contenido es duplicado. Si lo es → 301 del más débil al fuerte</td></tr>
-    <tr><td class="num">#18</td><td>Meta descriptions fuera de rango</td><td>~14 páginas con description 161–210 chars. Recortar a ≤160 con CTA (decisión de copy)</td></tr>
-  </tbody>
-</table>
+  <table class="hallazgos-table">
+    <thead><tr><th style="width:150px">Finding</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr class="h-row" data-id="fix-2"><td><span class="h-badge critical">#2 · P1</span></td><td><div class="h-title">Broken heading hierarchy (WCAG 1.3.1 / 2.4.6)<span class="h-chevron">▶</span></div><div class="h-area">Accessibility · Navbar &amp; Footer</div></td></tr>
+      <tr class="h-row" data-id="fix-4"><td><span class="h-badge medium">#4 · P2</span></td><td><div class="h-title">Blog TOC not crawlable (buttons, not links)<span class="h-chevron">▶</span></div><div class="h-area">Blog · Internal linking</div></td></tr>
+      <tr class="h-row" data-id="fix-5"><td><span class="h-badge medium">#5 · P2</span></td><td><div class="h-title">Sitemap listed 8 redirecting (308) URLs<span class="h-chevron">▶</span></div><div class="h-area">Sitemap hygiene</div></td></tr>
+      <tr class="h-row" data-id="fix-9"><td><span class="h-badge medium">#9 · P2</span></td><td><div class="h-title">CollectionPage <code>numberOfItems</code> mismatch<span class="h-chevron">▶</span></div><div class="h-area">Schema / JSON-LD</div></td></tr>
+      <tr class="h-row" data-id="fix-10"><td><span class="h-badge medium">#10 · P2</span></td><td><div class="h-title">AggregateOffer price range incomplete<span class="h-chevron">▶</span></div><div class="h-area">Schema / JSON-LD</div></td></tr>
+      <tr class="h-row" data-id="fix-11"><td><span class="h-badge medium">#11 · P2</span></td><td><div class="h-title">SoftwareApplication nodes missing <code>@id</code><span class="h-chevron">▶</span></div><div class="h-area">Schema / JSON-LD</div></td></tr>
+      <tr class="h-row" data-id="fix-12"><td><span class="h-badge low">#12 · P2</span></td><td><div class="h-title">Blog posts used generic <code>Article</code><span class="h-chevron">▶</span></div><div class="h-area">Schema / JSON-LD</div></td></tr>
+      <tr class="h-row" data-id="fix-13"><td><span class="h-badge medium">#13 · P2</span></td><td><div class="h-title">GA4 &amp; Meta Pixel missed SPA navigations<span class="h-chevron">▶</span></div><div class="h-area">Analytics</div></td></tr>
+      <tr class="h-row" data-id="fix-15"><td><span class="h-badge low">#15 · P2</span></td><td><div class="h-title">OG image was 1200×629 (not 630)<span class="h-chevron">▶</span></div><div class="h-area">Social tags (OG / Twitter)</div></td></tr>
+      <tr class="h-row" data-id="fix-16"><td><span class="h-badge medium">#16 · P2</span></td><td><div class="h-title">Slug <code>oil-gas</code> ≠ keyword "oil and gas"<span class="h-chevron">▶</span></div><div class="h-area">URL / Keyword mapping</div></td></tr>
+    </tbody>
+  </table>
+</section>
 
-<h3>Pasos de despliegue (tras aprobar el PR)</h3>
-<ol>
-  <li>Merge del PR a <code>master</code> → deploy automático a AWS ECS (prod).</li>
-  <li><strong>Invalidar CloudFront</strong> (<code>aws cloudfront create-invalidation --distribution-id &lt;ID&gt; --paths "/*"</code>) — sin esto la CDN sigue sirviendo el HTML viejo.</li>
-  <li>Verificar: <code>curl -I https://vlx.ai/digital-inspections-software/oil-gas/</code> → <strong>301</strong> a <code>/oil-and-gas/</code>.</li>
-  <li>Reenviar <code>sitemap.xml</code> en GSC + IndexNow; validar schemas en Rich Results Test; refrescar OG en el Sharing Debugger de Facebook.</li>
-</ol>
+<!-- 3. Reverted -->
+<section class="section" id="reverted">
+  <div class="section-overline">Excluded on purpose</div>
+  <h2 class="section-title">#3 Homepage H1 — reverted</h2>
+  <div class="alert info">
+    <span class="alert-icon">↩️</span>
+    <div class="alert-body">
+      <div class="alert-title">Implemented, then reverted by request</div>
+      <div class="alert-text">The H1 was briefly changed to <em>"The AI-Native Digital Inspection Software for…"</em> to reintroduce the primary keyword, then reverted to the original <em>"The AI-Native Enterprise Platform for…"</em> with the original typewriter rotation. <strong>This change is NOT part of the PR.</strong> The keyword remains present in the page <code>&lt;title&gt;</code>.</div>
+    </div>
+  </div>
+</section>
 
-<hr>
+<!-- 4. Pending -->
+<section class="section" id="pending">
+  <div class="section-overline">Not app code / needs a decision</div>
+  <h2 class="section-title">Pending</h2>
+  <p class="section-sub">These were out of scope for the code PR: five are infrastructure (AWS/DNS) and two are content decisions.</p>
 
-<h2>🛠️ Tarea propuesta — Herramienta de gestión de caché desde el sitio</h2>
-<p><strong>Objetivo:</strong> permitir purgar/invalidar la caché de CloudFront (y ver su estado) desde el propio admin del sitio, sin depender de la AWS CLI ni de que quien edita contenido tenga credenciales de AWS.</p>
-<p><strong>Motivación:</strong> hoy, cada despliegue o corrección no se refleja hasta invalidar CloudFront manualmente por línea de comandos. Esto crea fricción y hace que "arreglos ya desplegados" parezcan no aplicados (ver el análisis de caché abajo — es la causa raíz del #1).</p>
-<p><strong>Alcance sugerido (MVP):</strong></p>
-<ul>
-  <li>Acción protegida en el admin de Payload (detrás de auth) para disparar una invalidación de CloudFront: purga total (<code>/*</code>) o por rutas específicas (ej. <code>/blog/*</code>).</li>
-  <li>Idealmente, botón "purgar esta página" en el editor de cada post/página.</li>
-  <li>Mostrar estado de la última invalidación y los headers de caché actuales de una URL.</li>
-</ul>
-<p><strong>Consideraciones técnicas / de seguridad:</strong></p>
-<ul>
-  <li>AWS SDK con un <strong>rol IAM de alcance mínimo</strong> (<code>cloudfront:CreateInvalidation</code>/<code>GetInvalidation</code> sobre la distribución concreta). Nunca exponer credenciales en el cliente.</li>
-  <li><strong>Rate-limit</strong>: las invalidaciones cuestan después del tramo gratuito (1.000/mes); evitar purgas totales en bucle.</li>
-  <li>Registrar quién dispara cada purga (auditoría).</li>
-  <li>Revisar la política de redirects: los <code>permanent: true</code> (301) se cachean agresivamente; considerar <code>302</code> para reglas que puedan cambiar.</li>
-</ul>
-<p><strong>Prioridad:</strong> media. No bloquea el lanzamiento, pero elimina fricción operativa recurrente y reduce el riesgo de "se corrigió pero no se ve".</p>
+  <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--brand);margin:0 0 12px">Infrastructure (AWS / DNS)</h4>
+  <table class="metric-table">
+    <thead><tr><th style="width:52px">#</th><th>Issue</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>#1</td><td><code>/blog/page/N/</code> beyond the last page returns <strong>200</strong> instead of 404</td><td>Code already calls <code>notFound()</code>; it's a CDN/edge cache lag. Redeploy + invalidate CloudFront, verify with <code>curl -I …/blog/page/99/</code></td></tr>
+      <tr><td>#7</td><td><code>http://vlx.ai</code> does not force HTTPS (200, not 301)</td><td>Add a 301 at the edge/ALB</td></tr>
+      <tr><td>#8</td><td><code>www.visualogyx.com</code> has no valid SSL (dangling)</td><td>Check backlinks; 301 → vlx.ai</td></tr>
+      <tr><td>#14</td><td>CSP is in <code>Report-Only</code></td><td>Switch to enforce mode after stabilization (week 2–4)</td></tr>
+      <tr><td>#17</td><td>WAF/ALB may 503 legitimate crawlers under fast crawls</td><td>Review the rate-limit threshold so Googlebot isn't throttled</td></tr>
+    </tbody>
+  </table>
 
-<hr>
+  <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--brand);margin:26px 0 12px">Content / decisions</h4>
+  <table class="metric-table">
+    <thead><tr><th style="width:52px">#</th><th>Issue</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>#6</td><td>Near-duplicate slugs <code>7-modern-inspection-methods</code> vs <code>…-that-boost-efficiency-save-costs</code></td><td>Two distinct posts, both with traffic. Review in Payload whether content duplicates; if so, 301 the weaker into the stronger</td></tr>
+      <tr><td>#18</td><td>Meta descriptions out of range</td><td>~14 pages at 161–210 chars (none missing). Trim to ≤160 with a CTA (copy decision)</td></tr>
+    </tbody>
+  </table>
+</section>
 
-<h2>📌 ¿Por qué la caché estaría afectando al sitio?</h2>
-<p>El sitio tiene <strong>dos capas de caché</strong> que explican los síntomas observados:</p>
+<!-- 5. Cache-management tool -->
+<section class="section" id="cache-tool">
+  <div class="section-overline">Proposed task</div>
+  <h2 class="section-title">In-site cache-management tool</h2>
+  <p class="section-sub">Let editors purge/invalidate CloudFront (and inspect cache state) from the site's own admin, without the AWS CLI or personal AWS credentials.</p>
 
-<h3>1. CDN (CloudFront) — <code>Cache-Control: s-maxage=31536000</code></h3>
-<p>Las páginas se sirven con caché de CDN de <strong>hasta 1 año</strong>. Al desplegar un cambio, <strong>CloudFront sigue entregando el HTML viejo</strong> hasta una invalidación explícita. Consecuencias:</p>
-<ul>
-  <li>Correcciones ya desplegadas "no se ven" hasta invalidar.</li>
-  <li>Es la causa del <span class="num">#1</span>: el código ya devuelve <code>notFound()</code> para páginas fuera de rango, pero el edge sirve un 200 cacheado.</li>
-</ul>
+  <div class="alert info">
+    <span class="alert-icon">🎯</span>
+    <div class="alert-body">
+      <div class="alert-title">Why it's worth building</div>
+      <div class="alert-text">Today, every deploy or content fix stays invisible until someone invalidates CloudFront by hand on the CLI. That friction is exactly why "already-deployed fixes" look unapplied — see <em>Why caching bites</em> below (it's the root cause of #1).</div>
+    </div>
+  </div>
 
-<h3>2. Navegador — redirects <code>permanent: true</code> (HTTP 301)</h3>
-<p>Los navegadores <strong>cachean los 301 de forma indefinida</strong>. Si existió una regla de paginación previa (documentada en <code>next.config.ts:905</code>, hubo una versión con <code>?page=</code> que rompía la paginación), cualquier navegador que la visitó <strong>guardó ese 301 para siempre</strong> y sigue redirigiendo <code>/blog/page/N/</code> → <code>/blog/</code> localmente, aunque el servidor ya esté corregido.</p>
-<ul>
-  <li>Fue exactamente lo observado: en incógnito la paginación funciona (200, sin redirect); con el 301 cacheado, "cualquier página redirige a la principal".</li>
-  <li>No hay forma sencilla de "des-cachear" un 301 desde el servidor: el usuario debe limpiar caché o esperar a que expire. Por eso conviene <code>302</code> en reglas temporales.</li>
-</ul>
+  <div class="rec-grid">
+    <div class="rec-row"><span class="rec-check">🧩</span><div><div class="rec-title">MVP scope</div><div class="rec-desc">Auth-protected action in the Payload admin to trigger a CloudFront invalidation: full purge (<code>/*</code>) or by path (e.g. <code>/blog/*</code>). Ideally a "purge this page" button in each post/page editor. Show the last invalidation status and a URL's current cache headers.</div></div></div>
+    <div class="rec-row"><span class="rec-check">🔐</span><div><div class="rec-title">Security</div><div class="rec-desc">AWS SDK with a <strong>least-privilege IAM role</strong> (<code>cloudfront:CreateInvalidation</code> / <code>GetInvalidation</code> on the one distribution). Never expose credentials client-side. Log who triggers each purge.</div></div></div>
+    <div class="rec-row"><span class="rec-check">💸</span><div><div class="rec-title">Cost / rate-limit</div><div class="rec-desc">Invalidations bill after the free tier (1,000/month) — avoid looped full purges; prefer path-scoped invalidations.</div></div></div>
+    <div class="rec-row"><span class="rec-check">↪️</span><div><div class="rec-title">Redirect policy (related)</div><div class="rec-desc"><code>permanent: true</code> (301) is cached aggressively; use <code>302</code> for rules that may change, so browser caches aren't poisoned.</div></div></div>
+  </div>
+  <p style="font-size:12px;color:var(--text-faint);margin-top:16px"><strong>Priority:</strong> medium. Doesn't block launch, but removes recurring operational friction and the "fixed-but-not-visible" risk.</p>
+</section>
 
-<div class="callout warn">
-<strong>Resumen:</strong> la caché no "daña" el sitio, pero desincroniza lo que ve el usuario respecto al estado real del servidor — de ahí el valor de una herramienta de invalidación accesible y de una política de redirects más cuidadosa.
-</div>
+<!-- 6. Why caching bites -->
+<section class="section" id="cache-why">
+  <div class="section-overline">Root-cause analysis</div>
+  <h2 class="section-title">Why caching is affecting the site</h2>
+  <p class="section-sub">Two caching layers explain the symptoms observed (fixes not showing; "every blog page redirects home" on one machine).</p>
 
-<footer>Generado como parte de la remediación del audit post-lanzamiento de vlx.ai · 2026-07-23</footer>
+  <div class="alert warning">
+    <span class="alert-icon">🌐</span>
+    <div class="alert-body">
+      <div class="alert-title">1. CDN (CloudFront) — <code>Cache-Control: s-maxage=31536000</code></div>
+      <div class="alert-text">Pages are cached at the CDN for up to <strong>1 year</strong>. After a deploy, CloudFront keeps serving the old HTML until an explicit invalidation. Consequences: deployed fixes "don't show" until purged; and it's the cause of <strong>#1</strong> — the code already returns 404 for out-of-range pages, but the edge serves a cached 200.</div>
+    </div>
+  </div>
+  <div class="alert warning">
+    <span class="alert-icon">🧭</span>
+    <div class="alert-body">
+      <div class="alert-title">2. Browser — <code>permanent: true</code> redirects (HTTP 301)</div>
+      <div class="alert-text">Browsers cache 301s <strong>indefinitely</strong>. An earlier pagination redirect (documented at <code>next.config.ts:905</code>, a <code>?page=</code> variant that broke pagination) got cached by any browser that hit it, so that browser keeps redirecting <code>/blog/page/N/</code> → <code>/blog/</code> locally even though the server is now correct. In a clean/incognito browser, pagination works (200, no redirect).</div>
+    </div>
+  </div>
+  <div class="alert info">
+    <span class="alert-icon">💡</span>
+    <div class="alert-body">
+      <div class="alert-title">Takeaway</div>
+      <div class="alert-text">Caching doesn't "break" the site — it desyncs what a user sees from the server's real state. A cached 301 can't be un-cached from the server side (the user must clear cache or wait for expiry). Hence the value of an accessible invalidation tool and a more careful redirect policy (<code>302</code> for temporary rules).</div>
+    </div>
+  </div>
+</section>
 
+<!-- 7. Deploy checklist -->
+<section class="section" id="deploy">
+  <div class="section-overline">After the PR merges</div>
+  <h2 class="section-title">Deploy checklist</h2>
+
+  <div class="check-group">
+    <h4>A · Ship</h4>
+    <ul class="check-list">
+      <li>Merge the PR to <code>master</code> → auto-deploy to AWS ECS (prod).</li>
+      <li><strong>Invalidate CloudFront</strong> (<code>aws cloudfront create-invalidation --distribution-id &lt;ID&gt; --paths "/*"</code>) — without this the CDN keeps serving old HTML.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>B · Verify</h4>
+    <ul class="check-list">
+      <li><code>curl -I https://vlx.ai/digital-inspections-software/oil-gas/</code> → <strong>301</strong> to <code>/oil-and-gas/</code>.</li>
+      <li>Blog pagination pages return 200 and show distinct posts; out-of-range pages return 404.</li>
+    </ul>
+  </div>
+  <div class="check-group">
+    <h4>C · SEO propagation</h4>
+    <ul class="check-list">
+      <li>Resubmit <code>sitemap.xml</code> in GSC + IndexNow; request indexing of <code>/oil-and-gas/</code>.</li>
+      <li>Validate schemas (BlogPosting, SoftwareApplication, AggregateOffer, CollectionPage) in the Rich Results Test.</li>
+      <li>Refresh the OG image cache in the Facebook Sharing Debugger / LinkedIn Post Inspector.</li>
+      <li>Confirm in GA4 Realtime that SPA navigations now register as pageviews.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 8. Roadmap -->
+<section class="section" id="roadmap">
+  <div class="section-overline">Prioritized</div>
+  <h2 class="section-title">Next steps</h2>
+  <table class="roadmap-table">
+    <thead><tr><th>#</th><th>Action</th><th style="width:110px">Impact</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Merge the PR and invalidate CloudFront so the 10 fixes go live.</td><td><span class="rt-impact critical">Now</span></td></tr>
+      <tr><td>2</td><td>Fix #1 at the edge: ensure out-of-range pagination pages return 404 (redeploy + purge).</td><td><span class="rt-impact high">Infra</span></td></tr>
+      <tr><td>3</td><td>Force <code>http://vlx.ai</code> → HTTPS (#7) and resolve <code>www.visualogyx.com</code> (#8).</td><td><span class="rt-impact high">Infra</span></td></tr>
+      <tr><td>4</td><td>Review whether the two <code>7-modern-inspection-methods</code> posts duplicate (#6).</td><td><span class="rt-impact medium">Content</span></td></tr>
+      <tr><td>5</td><td>Trim the ~14 long meta descriptions to ≤160 chars (#18).</td><td><span class="rt-impact medium">Content</span></td></tr>
+      <tr><td>6</td><td>Build the in-site cache-management tool.</td><td><span class="rt-impact medium">P2</span></td></tr>
+      <tr><td>7</td><td>Move CSP to enforce (#14); review WAF rate-limit (#17).</td><td><span class="rt-impact medium">Infra</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--text-faint);margin-top:22px">Companion to <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">AUDIT-POSTLAUNCH-VLX-AI-2026-07-22.md</code>. Fixes on branch <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">seo/postlaunch-audit-fixes</code> (Visualogyx/VLX-Marketing), commit <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">2c55d15</code>. · Software Craft CR — Laura Ceballos</p>
+</section>
+
+</main>
+
+<script>
+const DESC = {
+  'fix-2':'Navbar mega-menu emitted &lt;h4&gt;"By Use Case"/"By Industry"&lt;/h4&gt; and an &lt;h5&gt; card title before any page &lt;h1&gt;; the Footer column labels used role="heading" aria-level=2. Both broke the document outline (WCAG 1.3.1 / 2.4.6). Fix: those become &lt;p&gt; with identical classes (no visual change); role="heading" removed from the Footer. Files: Navbar.tsx, Footer.tsx.',
+  'fix-4':'BlogTOC used &lt;button onClick&gt; + IntersectionObserver, so the table of contents was invisible to crawlers and dead without JS. Fix: each entry is now a real &lt;a href="#id"&gt; that preventDefaults for smooth scroll and updates the URL hash — crawlable, works without JS, and eligible for "Jump to" sitelinks. File: BlogTOC.tsx.',
+  'fix-5':'The sitemap listed 8 URLs that 308-redirect: product-updates posts (product-updates-2026, the 2020-2…2024-2 archives) canonicalize to /whats-new/, and duplicate case studies redirect to /blog/. Fix: exclude product-updates posts and the redirecting case-study slugs so only final 200 URLs are listed. File: sitemap.ts.',
+  'fix-9':'The /blog/ CollectionPage declared numberOfItems = allPosts.length (e.g. 55) but listed only 12 itemListElement entries — Google flags the mismatch as a low-quality signal. Fix: both the count and the array now derive from the same 12-item slice. File: blog/page.tsx.',
+  'fix-10':'The AggregateOffer hard-coded lowPrice 35 / highPrice 55, ignoring the annual plans. Fix: lowPrice → 29 (Pro annual), highPrice 55 (Pro+ monthly), matching the purchasable range on /pricing/. File: schema.ts.',
+  'fix-11':'KYPiT, COUNTiT and the per-integration SoftwareApplication nodes had no @id, so multiple nodes were ambiguous in the knowledge graph. Fix: unique @id on each (#kypit-software, #countit-software, per-slug for integrations) linked to the canonical #software / #organization via isPartOf / sameAs / provider. Files: kypit, countit, integrations/[slug].',
+  'fix-12':'Blog posts used the generic Article type. Fix: switched to BlogPosting (a subtype of Article, better E-E-A-T signal for editorial content); author/datePublished/dateModified already present. Content-type posts (checklists/forms/reports) keep Article. File: blog/[slug]/page.tsx.',
+  'fix-13':'GA4 (GoogleTag.tsx) and Meta Pixel (MetaPixel.tsx) fired a pageview only on initial mount, so App Router (SPA) navigations went uncounted. Fix: a usePathname() effect fires a pageview on each route change, skipping the initial mount to avoid double-counting the first load.',
+  'fix-15':'og:image / twitter:image were physically 1200×629 (the standard is 630). Fix: the four static images (opengraph-image.jpg + twitter-image.jpg, root and (frontend)) resized to exactly 1200×630.',
+  'fix-16':'The industry page slug was /oil-gas/, but the target keyword is "oil and gas" (the H1 already used "Oil and Gas"). Fix: the route was renamed to /oil-and-gas/, a 301 added from the old slug, and all internal links + slug references updated. Files: next.config.ts, the renamed route, and 11 link files.'
+};
+
+function toggleExpand(row){
+  const id=row.dataset.id, data=DESC[id];
+  if(!data) return;
+  const isExpanded=row.classList.contains('expanded');
+  document.querySelectorAll('.h-row.expanded').forEach(r=>{
+    r.classList.remove('expanded');
+    const n=r.nextElementSibling;
+    if(n&&n.classList.contains('h-expand-row')) n.classList.remove('open');
+  });
+  if(!isExpanded){
+    row.classList.add('expanded');
+    let ex=row.nextElementSibling;
+    if(!ex||!ex.classList.contains('h-expand-row')){
+      ex=document.createElement('tr');
+      ex.className='h-expand-row';
+      const cols=row.querySelectorAll('td').length;
+      ex.innerHTML=`<td class="h-expand-td" colspan="${cols}"><div class="h-expand-inner"><div class="h-expand-text">${data}</div></div></td>`;
+      row.after(ex);
+    }
+    ex.classList.add('open');
+  }
+}
+document.querySelectorAll('.h-row').forEach(row=>row.addEventListener('click',()=>toggleExpand(row)));
+
+function navScrollTo(id,el){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+const sections=document.querySelectorAll('section[id]'), navLinks=document.querySelectorAll('.nav-link');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`.nav-link[onclick*="${entry.target.id}"]`);
+      if(a) a.classList.add('active');
+    }
+  });
+},{threshold:0.25});
+sections.forEach(s=>observer.observe(s));
+</script>
 </body>
 </html>
