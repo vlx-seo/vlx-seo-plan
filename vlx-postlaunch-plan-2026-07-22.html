@@ -355,14 +355,14 @@ body.show-details .btn-d-on{display:inline}
       </div>
     </div>
     <!-- B5 -->
-    <div id="task-B5" class="blocker-card high task-row">
+    <div id="task-B5" class="blocker-card high task-row done">
       <div class="b-id">⛔ B5 · <span class="t-en">Critical</span><span class="t-es">Crítico</span></div>
       <div class="b-title"><span class="t-en">oil-gas slug mismatch — redirect inverted (308 not 301)</span><span class="t-es">Slug oil-gas mal redireccionado — dirección invertida (308 en vez de 301)</span></div>
       <div class="b-fix"><span class="t-en">Production canonical = /oil-and-gas/ (has traffic + GSC data). Dev redirects oil-and-gas → oil-gas via 308 — WRONG direction, WRONG code. Fix: rename dev folder oil-gas → oil-and-gas (Option A, recommended) so slugs match production. No redirect needed. Do NOT leave the 308 — it destroys accumulated SEO equity.</span><span class="t-es">Canónica de producción = /oil-and-gas/ (tiene tráfico + datos GSC). El dev redirige oil-and-gas → oil-gas con 308 — dirección INCORRECTA, código INCORRECTO. Fix: renombrar carpeta dev oil-gas → oil-and-gas para que coincida con producción. Sin redirect necesario. No dejar el 308 — destruye el equity SEO acumulado.</span></div>
       <div class="b-footer">
         <span class="b-pill pill-effort">XS · 0.5h</span>
         <div style="display:flex;align-items:center;gap:6px">
-          <button class="b-done-btn" onclick="toggleDone('B5')">○</button>
+          <button class="b-done-btn is-done" onclick="toggleDone('B5')">✓</button>
           <div class="b-owner-pills">
             <button class="owner-pill" data-owner="Lau" onclick="setOwner('B5','Lau')">Lau</button>
             <button class="owner-pill" data-owner="Hans" onclick="setOwner('B5','Hans')">Hans</button>
