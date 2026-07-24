@@ -158,7 +158,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
     <a class="nav-link active" onclick="navScrollTo('cover', this)"><span class="nav-icon">📋</span> Executive summary</a>
     <a class="nav-link" onclick="navScrollTo('fixed', this)"><span class="nav-icon">✅</span> What was fixed <span class="nav-badge green">10</span></a>
     <a class="nav-link" onclick="navScrollTo('reverted', this)"><span class="nav-icon">↩️</span> Reverted (H1)</a>
-    <a class="nav-link" onclick="navScrollTo('pending', this)"><span class="nav-icon">⏳</span> Pending <span class="nav-badge amber">7</span></a>
+    <a class="nav-link" onclick="navScrollTo('pending', this)"><span class="nav-icon">⏳</span> Pending <span class="nav-badge amber">8</span></a>
+    <a class="nav-link" onclick="navScrollTo('h1-screenshot', this)"><span class="nav-icon">⌨️</span> H1 in screenshots</a>
     <a class="nav-link" onclick="navScrollTo('cache-tool', this)"><span class="nav-icon">🛠️</span> Cache-management tool</a>
     <a class="nav-link" onclick="navScrollTo('cache-why', this)"><span class="nav-icon">📌</span> Why caching bites</a>
     <a class="nav-link" onclick="navScrollTo('deploy', this)"><span class="nav-icon">🚀</span> Deploy checklist</a>
@@ -257,6 +258,29 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
   </table>
 </section>
 
+<!-- 4b. H1 in screenshots -->
+<section class="section" id="h1-screenshot">
+  <div class="section-overline">New observation · cosmetic</div>
+  <h2 class="section-title">Homepage H1 looks "incomplete" in screenshots</h2>
+  <p class="section-sub">Not a content bug — the hero H1 uses a letter-by-letter typewriter animation, so static captures can freeze it mid-word.</p>
+
+  <div class="alert info">
+    <span class="alert-icon">⌨️</span>
+    <div class="alert-body">
+      <div class="alert-title">Behavior &amp; impact</div>
+      <div class="alert-text">The hero H1 rotates words (Inspections/Compliance/Audits…) letter by letter with a blinking cursor (<code>animate-blink</code>). GSC, screenshot tools and social/OG share previews can capture it mid-word — making the page look unloaded or the text cut off. <strong>Cosmetic / perception only: no indexing impact</strong> — the server HTML already contains the full word. Minor risk in social previews and screenshot-based QA. Root cause: the animated <code>HeroTypewriter</code> component has no guaranteed static "complete" state at capture time.</div>
+    </div>
+  </div>
+
+  <div class="rec-grid">
+    <div class="rec-row"><span class="rec-check">1</span><div><div class="rec-title">Honor <code>prefers-reduced-motion</code></div><div class="rec-desc">Render the full word static (no animation) for users/bots that request it — this also covers many crawlers and capture tools.</div></div></div>
+    <div class="rec-row"><span class="rec-check">2</span><div><div class="rec-title">Guarantee a "resting state"</div><div class="rec-desc">The rotating word must be complete (never mid-word) and the blinking cursor excluded from the meaningful text, so any capture shows a whole word.</div></div></div>
+    <div class="rec-row"><span class="rec-check">3</span><div><div class="rec-title">Investigate main-thread saturation</div><div class="rec-desc">Screenshots/timers froze during the audit — check for long-running scripts / costly animations and optimize to avoid render blocking.</div></div></div>
+    <div class="rec-row"><span class="rec-check">4</span><div><div class="rec-title">Rely on the static OG image</div><div class="rec-desc">Use the static 1200×630 OG image (fix #15) for social previews instead of an animated render.</div></div></div>
+  </div>
+  <p style="font-size:12px;color:var(--text-faint);margin-top:16px"><strong>Status:</strong> pending — tracked as <strong>PL6</strong> in the plan dashboard. Not part of the current code PR.</p>
+</section>
+
 <!-- 5. Cache-management tool -->
 <section class="section" id="cache-tool">
   <div class="section-overline">Proposed task</div>
@@ -353,6 +377,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--surface);color:va
       <tr><td>5</td><td>Trim the ~14 long meta descriptions to ≤160 chars (#18).</td><td><span class="rt-impact medium">Content</span></td></tr>
       <tr><td>6</td><td>Build the in-site cache-management tool.</td><td><span class="rt-impact medium">P2</span></td></tr>
       <tr><td>7</td><td>Move CSP to enforce (#14); review WAF rate-limit (#17).</td><td><span class="rt-impact medium">Infra</span></td></tr>
+      <tr><td>8</td><td>Homepage H1 typewriter: honor prefers-reduced-motion + guarantee a complete resting word so screenshots don't freeze mid-word (PL6).</td><td><span class="rt-impact medium">P3</span></td></tr>
     </tbody>
   </table>
   <p style="font-size:12px;color:var(--text-faint);margin-top:22px">Companion to <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">AUDIT-POSTLAUNCH-VLX-AI-2026-07-22.md</code>. Fixes on branch <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">seo/postlaunch-audit-fixes</code> (Visualogyx/VLX-Marketing), commit <code style="background:rgba(255,255,255,.08);padding:1px 4px;border-radius:3px">2c55d15</code>. · Software Craft CR — Laura Ceballos</p>

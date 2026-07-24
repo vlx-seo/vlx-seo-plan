@@ -53,6 +53,24 @@ Implemented and then **reverted by request**. The H1 is back to *"The AI-Native 
 
 ---
 
+## 🖥️ New observation — Homepage H1 typewriter looks "incomplete" in screenshots
+
+**Behavior:** The hero H1 uses a letter-by-letter typewriter animation that rotates words (Inspections/Compliance/Audits…) with a blinking cursor (`animate-blink`). Any static capture — Google Search Console, screenshot tools, social/OG share previews — can freeze the H1 mid-word, giving the false impression that the page didn't fully load or that the text is cut off.
+
+**Real impact:** Cosmetic / perception only. **No indexing impact** — the server-rendered HTML already contains the full word. Minor risk in social/OG previews and in screenshot-based QA reviews.
+
+**Root cause:** Animated text component (typewriter with `animate-blink`) in the H1, with no guaranteed static "complete" state at the instant of capture. See `HeroTypewriter.tsx`.
+
+**Recommended fixes (priority order):**
+1. **Honor `prefers-reduced-motion`** — render the full word static (no animation) for users/bots that request it; this also covers many crawlers and capture tools.
+2. **Guarantee a "resting state"** where the rotating word is complete (never mid-word) and the blinking cursor is not part of the meaningful text, so any capture shows a whole word.
+3. **Investigate main-thread saturation** — screenshots/timers froze during the audit; look for long-running scripts / costly animations and optimize to avoid render blocking.
+4. **Rely on the static OG image** (already 1200×630, see #15) for social previews instead of depending on an animated render.
+
+**Status:** Pending — newly identified, tracked as **PL6** in the [plan dashboard](https://vlx-seo.github.io/vlx-seo-plan/vlx-postlaunch-plan-2026-07-22.html). Not part of the current code PR.
+
+---
+
 ## 🛠️ Proposed task — In-site cache-management tool
 
 **Goal:** let editors purge/invalidate the CloudFront cache (and see cache state) from the site's own admin, without relying on the AWS CLI or requiring personal AWS credentials.
