@@ -10,7 +10,8 @@
 
 | # | Item | Owner | Decision needed? |
 |---|---|---|---|
-| 1 | The speed numbers we're all looking at aren't final yet | Hans | No — context |
+| 0 | **Desktop already passes — this is a mobile-only problem** | Everyone | No — context |
+| 1 | The mobile numbers aren't final yet | Hans | No — context |
 | 2 | Brotli compression is off → **18% smaller downloads, measured** | Vivek | No — just enable it |
 | 3 | HTTP/3 — please confirm whether it's on | Vivek | No — confirm |
 | 4 | 110 KB of legacy browser code we probably don't need | Christophe | **Yes — accept ~1% risk** |
@@ -22,20 +23,58 @@ code. Item 6 is a one-line code change but the call isn't ours.
 
 ---
 
-## 1. The speed numbers we're looking at aren't the real ones yet
+## 0. Why this is a mobile problem, and desktop needs nothing
+
+*(Context for everyone — this is the reason every other section talks about phones)*
+
+Your own screenshots answer this, and the answer is unusually clear. Same site, same day,
+same 68 URLs:
+
+| | Mobile | Desktop |
+|---|---|---|
+| **Core Web Vitals (real users)** | **Failed** | **Passed** ✅ |
+| INP — responsiveness to taps/clicks | **221 ms** ⚠️ | 95 ms ✅ |
+| LCP — main content appears | 1.9 s ✅ | 1.5 s ✅ |
+| CLS — layout stability | 0.01 ✅ | 0.08 ✅ |
+| TTFB — server response | 0.9 s ⚠️ | 1.1 s ⚠️ |
+| Search Console URL verdicts | 0 good, **68 need improvement** | **68 good**, 0 need improvement |
+| Lighthouse score (lab simulation) | 70 | 72 |
+
+Three things follow from this table, and they shape the whole document:
+
+**1. Desktop already passes. There is nothing to fix there.** All 68 URLs are green in Search
+Console and have been green all year. Any work aimed at desktop would be effort spent on
+something that isn't broken.
+
+**2. On mobile, INP is the *only* failing metric.** LCP and CLS are green with room to spare —
+they're actually better on mobile than the desktop CLS. So "focus on mobile responsiveness"
+isn't a choice among several problems. It's the one thing that's broken.
+
+**3. The lab score and reality disagree, and that's the important part.** The Lighthouse
+scores are almost the same — 70 mobile, 72 desktop. If you judged by those, you'd conclude
+both platforms are equally mediocre and both need work. But the real-user verdicts are
+*opposite*: desktop passes, mobile fails. **The simulation cannot tell those two apart.** That
+is why we're not planning against the 70.
+
+One exception worth noting, because it's the only metric that's amber on *both*: **TTFB, the
+server response time.** That's infrastructure rather than page code, and it's exactly what the
+compression and HTTP/3 items in sections 2 and 3 address. So that work benefits desktop too —
+it's the one part of this plan that isn't mobile-only.
+
+---
+
+## 1. The mobile numbers aren't final yet
 
 *(Context for Hans — no action needed)*
 
-There are two ways to measure site speed and they're easy to confuse.
+To be precise about which number is which, because both kinds appear in the same screenshot:
 
-**The first is a simulation.** That's where the score we've been discussing comes from. The
-tool loads the page once, on a virtual slow phone, under lab conditions. It's a useful
-diagnostic — like an X-ray — but it's a single run on a device that doesn't exist.
+- **The 221 ms INP is real field data** — actual visitors, collected by Chrome. That one is
+  genuine and it's what Google ranks on.
+- **The 70 is a lab simulation** — one page load on a virtual throttled phone. Useful as a
+  diagnostic, but as shown above it can't distinguish a passing platform from a failing one.
 
-**The second is what actually happened to real visitors.** Google collects the experience of
-people who visit from Chrome and averages it. **This second one is what Google uses for
-ranking**, not the simulation. The two routinely disagree, which is why we'd rather not make
-calls based on the first.
+So the concern isn't that the 221 ms is wrong. It's *when* it was measured.
 
 ### There's also a timing problem
 
