@@ -1,0 +1,243 @@
+# VLX — Mobile load speed: what we found and what we recommend
+
+**Date:** 30 July 2026
+**Author:** Laura Ceballos — Software Craft CR
+**Scope:** vlx.ai production, mobile responsiveness
+
+---
+
+## Summary
+
+| # | Item | Owner | Decision needed? |
+|---|---|---|---|
+| 1 | The speed numbers we're all looking at aren't final yet | Hans | No — context |
+| 2 | Brotli compression is off → **18% smaller downloads, measured** | Vivek | No — just enable it |
+| 3 | HTTP/3 — please confirm whether it's on | Vivek | No — confirm |
+| 4 | 110 KB of legacy browser code we probably don't need | Christophe | **Yes — accept ~1% risk** |
+| 5 | PostHog loads during page load instead of after | Christophe | No — we'll do it |
+| 6 | Session replay records what visitors type into forms | Hans | **Yes — privacy** |
+
+Items 2 and 3 are infrastructure and don't touch the codebase at all. Items 4 and 5 are
+code. Item 6 is a one-line code change but the call isn't ours.
+
+---
+
+## 1. The speed numbers we're looking at aren't the real ones yet
+
+*(Context for Hans — no action needed)*
+
+There are two ways to measure site speed and they're easy to confuse.
+
+**The first is a simulation.** That's where the score we've been discussing comes from. The
+tool loads the page once, on a virtual slow phone, under lab conditions. It's a useful
+diagnostic — like an X-ray — but it's a single run on a device that doesn't exist.
+
+**The second is what actually happened to real visitors.** Google collects the experience of
+people who visit from Chrome and averages it. **This second one is what Google uses for
+ranking**, not the simulation. The two routinely disagree, which is why we'd rather not make
+calls based on the first.
+
+### There's also a timing problem
+
+Google calculates that average over a **rolling 28-day window**. The new site launched on
+**22 July**. So today's number blends roughly 3 days of the new site with 25 days of the old
+WordPress site.
+
+**The first clean reading of the new site arrives around 19 August.** Any conclusion drawn
+before then is mostly measuring the previous site.
+
+### The finding that changes the picture
+
+We pulled the full 25-week history. **The mobile responsiveness problem did not start with
+the new site:**
+
+| When | What was in production | Responsiveness |
+|---|---|---|
+| February → early April | Old WordPress | normal |
+| **18 April** | **Old WordPress** | **starts degrading** |
+| Late April | Old WordPress | **worst point of the year** |
+| May → June | Old WordPress | still poor |
+| Today | New Next.js site | **better than the old site's worst point** |
+
+The degradation began on **18 April**, three months before launch, with the old site live.
+And the old site got measurably worse than where we are today.
+
+**The new site also clearly improved two other things** Google measures: the time until the
+main content appears dropped by about 35%, and server response time roughly halved.
+
+**Bottom line:** the new site didn't cause this. It inherited an existing problem and
+improved several things along the way. The remaining issue is worth fixing — we just
+shouldn't judge the result until real data lands around 19 August.
+
+---
+
+## 2. Brotli compression is off — 18% smaller downloads, no code, no risk
+
+*(For Vivek — infrastructure)*
+
+We asked whether the caching-and-compression plugins that used to speed up the WordPress site
+have an equivalent here. Two answers:
+
+**Caching is already maxed out.** Pages are generated once and served from CloudFront with a
+one-year cache instruction. That's more aggressive than any WordPress plugin. Nothing to
+improve.
+
+**Compression is only half done.** The server compresses with **gzip**. There's a newer
+method, **brotli**, built by Google specifically for the web and supported by every modern
+browser for years. We tested it and **the site isn't using it**: when a browser requests
+brotli, the server returns the file uncompressed.
+
+We compressed the site's actual production files with both methods to measure the real
+difference — not an estimate:
+
+| | gzip (today) | brotli | Difference |
+|---|---:|---:|---:|
+| 12 largest JavaScript files | 965 KB | 791 KB | **171 KB less (18.1%)** |
+
+**Every visitor would download 18% less**, on every page, on every device.
+
+- **No code change.** It's a setting in the CloudFront distribution.
+- **No risk.** If a browser doesn't support brotli, the server keeps serving gzip
+  automatically. Nothing breaks for anyone.
+- **No cost** — it actually reduces egress traffic.
+
+Reproduce it:
+
+```bash
+curl -s -H "Accept-Encoding: br"   -o /dev/null -w "%{size_download}\n" https://vlx.ai/digital-inspections-software/
+curl -s -H "Accept-Encoding: gzip" -o /dev/null -w "%{size_download}\n" https://vlx.ai/digital-inspections-software/
+```
+
+Today the brotli request returns **149,211 bytes** (uncompressed) and the gzip request
+returns **20,684 bytes**. Brotli should be the smaller of the two, not the larger.
+
+**This is the best effort-to-result ratio in this document.**
+
+---
+
+## 3. Is HTTP/3 enabled?
+
+*(For Vivek — confirmation)*
+
+We couldn't verify this from our side. HTTP/3 reduces response time mainly on unstable mobile
+connections, and **54% of the site's traffic is mobile**, so it's worth confirming. If it's
+off in CloudFront, enabling it is another no-code, no-risk improvement.
+
+---
+
+## 4. 110 KB of legacy browser code — one decision needed
+
+*(For Christophe — needs a go-ahead)*
+
+When a modern site is built, **compatibility code** gets added so it also runs on older
+browsers.
+
+The build currently ships **112,594 bytes** of that code to every visitor, targeting browsers
+from **2018**. Compressed it's about 39 KB to download — but the phone still has to
+**decompress, parse and execute the full 110 KB** before it can respond to a tap. That
+processing work is what users feel, and compression doesn't help with it.
+
+### Do we still need it? We checked your own analytics
+
+Twelve months of GA4, segmented to the US and Canada:
+
+- **54% of traffic is mobile** (Android 28.0%, iOS 25.9%) — which is exactly where the
+  problem is.
+- **Windows 7 and 8 are 0.70% of traffic** (113 sessions in a year). That's the real
+  constraint: on those machines Chrome and Edge can't go past version 109 (2023).
+- **Old iPhones and iPads are negligible.** Supporting iOS 15 and up covers **99.2%** of all
+  iOS traffic. Everything older than that totals **28 sessions in a full year**.
+
+### Recommendation
+
+Target browsers from 2023 onward, **keeping Windows 7 working**:
+
+```json
+"browserslist": [
+  "chrome >= 109", "edge >= 109", "and_chr >= 109", "android >= 109",
+  "safari >= 15", "ios_saf >= 15", "firefox >= 115", "samsung >= 21"
+]
+```
+
+**What we gain:** the phone has far less to process before it can respond — the exact problem
+we're trying to solve.
+
+**What it costs:** nothing in data, functionality, reports or money.
+
+**The risk, stated plainly:** someone on a very old Android device — 2016 or earlier — could
+see a broken page. That's roughly **1% of traffic**. This is the one thing we need signed
+off. If you'd rather not accept that 1%, we can set a more conservative floor for a smaller
+gain.
+
+We'll measure the exact byte saving on a build and report the number before shipping.
+
+---
+
+## 5. PostHog loads during page load instead of after
+
+*(For Christophe — no decision needed, we'll handle it)*
+
+We measured what happens when someone taps a button, using real taps on a CPU-throttled
+mobile browser. The result was clear:
+
+**The site's own code is fast.** The handler that responds to a tap runs in **3 to 9
+milliseconds**. The delay is that the phone is busy with something else and can't get to the
+tap yet. It's a queue, not slowness. About two seconds in, the problem disappears entirely.
+
+PostHog is the heaviest single thing loading in that window. The cause is in our code, not in
+PostHog: it's imported statically in four files, and one of them (`src/lib/analytics.ts`) is
+imported by 18 components including `CTABanner`, `FAQSection` and `SuperTemplate` — which
+appear on nearly every page. That pulls PostHog into the initial bundle sitewide.
+
+Also worth noting: `posthog-js/react` is imported to wrap the whole app in a provider, but
+**nothing in the codebase uses the `usePostHog()` hook or that context**. It can be removed
+outright.
+
+**The fix loses no data.** Every tracking call happens in response to a user action, so
+loading PostHog on demand captures exactly the same events. It just stops competing with the
+page for the phone's attention. We'll put this in its own commit so it can be reverted
+independently if anything looks off in your event stream.
+
+---
+
+## 6. Session replay is recording what visitors type into forms
+
+*(For Hans — privacy decision)*
+
+**Session replay stays.** We understand the team uses it to make UX decisions and prioritise
+improvements, and that's worth more than a few milliseconds. We're accepting that cost
+deliberately and finding speed elsewhere.
+
+**But one part should be turned off.** The recording currently captures **the text visitors
+type into forms**, including the demo request form.
+
+We can disable **only the typed-text capture while keeping the full replay**. You'd still see
+where people navigate, what they tap, where they hesitate and where they drop off —
+everything that's useful for UX decisions. The only thing that stops being stored is the
+literal content of what they type.
+
+**One thing you should know:** the current configuration attempts to protect credit-card
+fields, but **that protection isn't working.** Because of how it's written, only password
+fields are actually masked — every other field is recorded in plain text. The fix covers all
+fields, not just passwords.
+
+Implementation note, since this is subtler than it looks: setting `maskAllInputs: true` is
+**not sufficient on its own**. rrweb's masking logic delegates to `maskInputFn` when one is
+defined, and the current function returns the raw text for anything that isn't a password. So
+`maskAllInputs` must be set to `true` **and** the existing `maskInputFn` removed. Changing
+only the boolean would leave everything recorded in the clear while appearing fixed.
+
+---
+
+## What we're doing next, regardless
+
+- Reducing the legacy browser code, once item 4 is signed off.
+- Moving PostHog out of the initial bundle (item 5) — no decision needed.
+- Applying the form-privacy fix (item 6) once approved.
+- Re-measuring after 19 August, when Google's first clean reading of the new site lands.
+
+We'll report measured numbers, not estimates.
+
+---
+
+*Laura Ceballos · Software Craft CR · 30 July 2026*
