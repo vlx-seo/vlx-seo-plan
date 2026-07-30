@@ -12,14 +12,14 @@
 |---|---|---|---|
 | 0 | **Desktop already passes — this is a mobile-only problem** | Everyone | No — context |
 | 1 | The mobile numbers aren't final yet | Hans | No — context |
-| 2 | Brotli compression is off → **18% smaller downloads, measured** | Vivek | No — just enable it |
+| 2 | **Brotli compression is off → 18% smaller downloads, measured. Highest-value item here.** | Vivek | No — just enable it |
 | 3 | HTTP/3 — please confirm whether it's on | Vivek | No — confirm |
-| 4 | 110 KB of legacy browser code we probably don't need | Hans + Abe | **Yes — accept ~1% risk** |
+| 4 | Legacy browser code — checked and ruled out, no action | — | No — closed |
 | 5 | PostHog loads during page load instead of after | Abe | No — we'll do it |
 | 6 | Session replay records what visitors type into forms | Hans | **Yes — privacy** |
 
-Items 2 and 3 are infrastructure and don't touch the codebase at all. Items 4 and 5 are
-code. Item 6 is a one-line code change but the call isn't ours.
+Items 2 and 3 are infrastructure and don't touch the codebase at all. Item 5 is code. Item 6 is
+a one-line code change but the call isn't ours. **Only item 6 needs a decision from anyone.**
 
 ---
 
@@ -164,67 +164,38 @@ off in CloudFront, enabling it is another no-code, no-risk improvement.
 
 ---
 
-## 4. 110 KB of legacy browser code — one decision needed
+## 4. Legacy browser code — we checked this and it's a non-issue
 
-*(For Hans and Abe — this one needs a decision)*
+*(No action needed — recording it so nobody spends time on it later)*
 
-### What this actually is
+This looked like a significant win and it isn't. Worth writing down so it doesn't get
+re-proposed.
 
-When the site is built, the build tool adds **polyfills**: small patches that hand-write a
-feature into browsers that don't have it natively.
+The build produces a 112,594-byte `polyfills` file — compatibility code that hand-writes modern
+JavaScript features into older browsers. The obvious conclusion is that every visitor downloads
+and executes 110 KB they mostly don't need, and that constraining which browsers we support
+would remove it.
 
-A concrete example. Modern JavaScript has an instruction, `.at(-1)`, for taking the last item
-in a list. Chrome 92 and newer support it. Chrome 64 doesn't — there, the page breaks. A
-polyfill is a patch that says *"if this browser lacks `.at()`, here's a hand-built version."*
+**We tested that instead of assuming it.** We set an explicit browser target of 2023-and-newer,
+rebuilt, and the polyfills file came out *byte-for-byte identical* — same size, same content
+hash. Total shared JavaScript didn't move either.
 
-**The build tool decides how many patches to include based on the oldest browser you tell it to
-support.** Right now nobody has told it anything, so it defaults to assuming 2018 browsers and
-includes hundreds of these patches. If we tell it 2023, almost all of them become unnecessary,
-because those browsers already ship the features natively.
+The reason is in how Next serves it:
 
-**And everyone pays for them.** Someone visiting on a brand-new iPhone downloads and executes
-exactly the same patches they don't need — like shipping every customer a trunk full of
-adapters for eight years' worth of fuel pumps, including the customers whose pump already fits.
-
-The build currently ships **112,594 bytes** of that code to every visitor, targeting browsers
-from **2018**. Compressed it's about 39 KB to download — but the phone still has to
-**decompress, parse and execute the full 110 KB** before it can respond to a tap. That
-processing work is what users feel, and compression doesn't help with it.
-
-### Do we still need it? We checked your own analytics
-
-Twelve months of GA4, segmented to the US and Canada:
-
-- **54% of traffic is mobile** (Android 28.0%, iOS 25.9%) — which is exactly where the
-  problem is.
-- **Windows 7 and 8 are 0.70% of traffic** (113 sessions in a year). That's the real
-  constraint: on those machines Chrome and Edge can't go past version 109 (2023).
-- **Old iPhones and iPads are negligible.** Supporting iOS 15 and up covers **99.2%** of all
-  iOS traffic. Everything older than that totals **28 sessions in a full year**.
-
-### Recommendation
-
-Target browsers from 2023 onward, **keeping Windows 7 working**:
-
-```json
-"browserslist": [
-  "chrome >= 109", "edge >= 109", "and_chr >= 109", "android >= 109",
-  "safari >= 15", "ios_saf >= 15", "firefox >= 115", "samsung >= 21"
-]
+```html
+<script src="/_next/static/chunks/polyfills-....js" noModule="">
 ```
 
-**What we gain:** the phone has far less to process before it can respond — the exact problem
-we're trying to solve.
+`noModule` means **any browser supporting ES modules ignores that file completely** — never
+downloaded, never parsed, never executed. That's every browser since 2018. So a modern phone was
+never paying for it, and it contributes nothing to the responsiveness problem. The file is also a
+fixed Next asset rather than something generated from a browser-target list, which is why
+constraining the target changed nothing.
 
-**What it costs:** nothing in data, functionality, reports or money.
-
-**The risk, stated plainly:** someone on a very old Android device — 2016 or earlier — could
-see a broken page. That's roughly **1% of traffic**. This is the one thing we need signed
-off, and it's a business call rather than a technical one: Hans, it's whether we're willing to
-trade a broken experience for ~1% of visitors against a faster site for the other 99%. If the
-answer is no, we can set a more conservative floor for a smaller gain.
-
-We'll measure the exact byte saving on a build and report the number before shipping.
+**Conclusion: nothing to gain, nothing to decide, no risk to accept.** For the record, had it
+been worth doing, twelve months of GA4 for the US and Canada showed the real constraint would
+have been Windows 7 and 8 at 0.70% of traffic, with iOS 15-and-up covering 99.2% of iOS traffic.
+Those numbers are sound — they just have nothing to spend themselves on here.
 
 ---
 
@@ -286,7 +257,6 @@ only the boolean would leave everything recorded in the clear while appearing fi
 
 ## What we're doing next, regardless
 
-- Reducing the legacy browser code, once item 4 is signed off.
 - Moving PostHog out of the initial bundle (item 5) — no decision needed.
 - Applying the form-privacy fix (item 6) once approved.
 - Re-measuring after 19 August, when Google's first clean reading of the new site lands.
