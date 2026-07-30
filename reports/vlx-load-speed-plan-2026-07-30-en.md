@@ -14,8 +14,8 @@
 | 1 | The mobile numbers aren't final yet | Hans | No — context |
 | 2 | Brotli compression is off → **18% smaller downloads, measured** | Vivek | No — just enable it |
 | 3 | HTTP/3 — please confirm whether it's on | Vivek | No — confirm |
-| 4 | 110 KB of legacy browser code we probably don't need | Christophe | **Yes — accept ~1% risk** |
-| 5 | PostHog loads during page load instead of after | Christophe | No — we'll do it |
+| 4 | 110 KB of legacy browser code we probably don't need | Hans + Abe | **Yes — accept ~1% risk** |
+| 5 | PostHog loads during page load instead of after | Abe | No — we'll do it |
 | 6 | Session replay records what visitors type into forms | Hans | **Yes — privacy** |
 
 Items 2 and 3 are infrastructure and don't touch the codebase at all. Items 4 and 5 are
@@ -166,10 +166,25 @@ off in CloudFront, enabling it is another no-code, no-risk improvement.
 
 ## 4. 110 KB of legacy browser code — one decision needed
 
-*(For Christophe — needs a go-ahead)*
+*(For Hans and Abe — this one needs a decision)*
 
-When a modern site is built, **compatibility code** gets added so it also runs on older
-browsers.
+### What this actually is
+
+When the site is built, the build tool adds **polyfills**: small patches that hand-write a
+feature into browsers that don't have it natively.
+
+A concrete example. Modern JavaScript has an instruction, `.at(-1)`, for taking the last item
+in a list. Chrome 92 and newer support it. Chrome 64 doesn't — there, the page breaks. A
+polyfill is a patch that says *"if this browser lacks `.at()`, here's a hand-built version."*
+
+**The build tool decides how many patches to include based on the oldest browser you tell it to
+support.** Right now nobody has told it anything, so it defaults to assuming 2018 browsers and
+includes hundreds of these patches. If we tell it 2023, almost all of them become unnecessary,
+because those browsers already ship the features natively.
+
+**And everyone pays for them.** Someone visiting on a brand-new iPhone downloads and executes
+exactly the same patches they don't need — like shipping every customer a trunk full of
+adapters for eight years' worth of fuel pumps, including the customers whose pump already fits.
 
 The build currently ships **112,594 bytes** of that code to every visitor, targeting browsers
 from **2018**. Compressed it's about 39 KB to download — but the phone still has to
@@ -205,8 +220,9 @@ we're trying to solve.
 
 **The risk, stated plainly:** someone on a very old Android device — 2016 or earlier — could
 see a broken page. That's roughly **1% of traffic**. This is the one thing we need signed
-off. If you'd rather not accept that 1%, we can set a more conservative floor for a smaller
-gain.
+off, and it's a business call rather than a technical one: Hans, it's whether we're willing to
+trade a broken experience for ~1% of visitors against a faster site for the other 99%. If the
+answer is no, we can set a more conservative floor for a smaller gain.
 
 We'll measure the exact byte saving on a build and report the number before shipping.
 
@@ -214,7 +230,7 @@ We'll measure the exact byte saving on a build and report the number before ship
 
 ## 5. PostHog loads during page load instead of after
 
-*(For Christophe — no decision needed, we'll handle it)*
+*(For Abe — no decision needed, we'll handle it)*
 
 We measured what happens when someone taps a button, using real taps on a CPU-throttled
 mobile browser. The result was clear:
