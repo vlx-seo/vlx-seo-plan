@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>VLX Service Wireframes — Home, Quality, Inventory.ai</title>
-<meta name="description" content="Drawn wireframes (desktop and mobile) for three new VLX services, with working mechanisms and the launch SEO architecture.">
+<meta name="description" content="Drawn wireframes with real titles, H1/H2 hierarchy, keyword mapping and the URL architecture decision for three new VLX services.">
 <style>
   /* ═══════ TOKENS — inherited from vlx.ai tailwind.config.ts ═══════
      Rubik is the production face; this page uses the system stack. */
@@ -30,6 +30,7 @@
     --hatch: rgba(38, 50, 56, .05);
     --ok: #059669;
     --warn: #B45309;
+    --bad: #B91C1C;
     --f-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --f-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
     --r: 12px;
@@ -44,7 +45,7 @@
       --line: #26364F; --line-2: #3E5271;
       --wire: #354863; --wire-2: #4E668A;
       --hatch: rgba(231,236,242,.055);
-      --ok: #34D399; --warn: #FBBF24;
+      --ok: #34D399; --warn: #FBBF24; --bad: #F87171;
       --shadow: 0 1px 3px rgba(0,0,0,.5); --shadow-lift: 0 12px 30px rgba(0,0,0,.6);
     }
   }
@@ -55,7 +56,7 @@
     --line: #26364F; --line-2: #3E5271;
     --wire: #354863; --wire-2: #4E668A;
     --hatch: rgba(231,236,242,.055);
-    --ok: #34D399; --warn: #FBBF24;
+    --ok: #34D399; --warn: #FBBF24; --bad: #F87171;
     --shadow: 0 1px 3px rgba(0,0,0,.5); --shadow-lift: 0 12px 30px rgba(0,0,0,.6);
   }
 
@@ -99,6 +100,9 @@
   th { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); background: var(--ground-2); font-weight: 500; white-space: nowrap; }
   tr:last-child td { border-bottom: 0; }
   td code { font-family: var(--f-mono); font-size: 12.5px; background: var(--ground-3); padding: 2px 5px; border-radius: 4px; white-space: nowrap; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .good { color: var(--ok); font-weight: 600; }
+  .weak { color: var(--bad); font-weight: 600; }
   ul.tight { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 14.5px; }
   ul.tight li { margin-bottom: 7px; }
   ul.tight b { color: var(--ink); font-weight: 600; }
@@ -106,6 +110,7 @@
   .callout { border: 1px solid var(--line); border-left: 3px solid var(--brand-ink); border-radius: 0 var(--r) var(--r) 0; padding: 15px 18px; background: var(--ground-2); margin-top: 20px; }
   .callout .ct { font-weight: 600; font-size: 14.5px; }
   .callout .cb { font-size: 14px; color: var(--ink-2); margin-top: 6px; }
+  .callout.verdict { border-left-color: var(--ok); }
 
   .tree { font-family: var(--f-mono); font-size: 13px; line-height: 1.95; color: var(--ink-2); background: var(--ground-2); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; margin-top: 22px; overflow-x: auto; }
   .tree b { color: var(--ink); font-weight: 600; }
@@ -129,7 +134,7 @@
   .wnav .items i { width: 40px; height: 7px; border-radius: 3px; background: var(--wire); display: block; }
   .wnav .cta { width: 62px; height: 20px; border-radius: 999px; background: var(--brand-ink); }
 
-  .wsec { position: relative; padding: 22px 26px; border-bottom: 1px dashed var(--wire); }
+  .wsec { position: relative; padding: 24px 26px; border-bottom: 1px dashed var(--wire); }
   .wsec:last-child { border-bottom: 0; }
   .wsec.muted { background: var(--ground-2); }
   .wsec.dark { background: var(--dark); }
@@ -138,7 +143,7 @@
   .wsec.dark > .sid, .wsec.dark2 > .sid { color: var(--brand); }
   .wsec > .snote { position: absolute; right: 8px; top: 8px; font-family: var(--f-mono); font-size: 9px; color: var(--ink-3); letter-spacing: .04em; }
   .wsec.dark > .snote, .wsec.dark2 > .snote { color: var(--on-dark-2); }
-  .wsec .inner { padding-top: 6px; }
+  .wsec .inner { padding-top: 8px; }
 
   .g { display: grid; gap: 16px; }
   .g.c2 { grid-template-columns: 1fr 1fr; }
@@ -150,10 +155,21 @@
   .center { text-align: center; }
   .stackv { display: grid; gap: 10px; }
 
-  .wh { font-weight: 700; letter-spacing: -.01em; font-size: 19px; line-height: 1.2; color: var(--ink); }
-  .wh.xl { font-size: 26px; }
+  .wh { font-weight: 700; letter-spacing: -.01em; font-size: 19px; line-height: 1.25; color: var(--ink); }
+  .wh.xl { font-size: 25px; }
   .wh.sm { font-size: 15px; }
   .dark .wh, .dark2 .wh { color: #fff; }
+  /* heading-level tag */
+  .hl { font-family: var(--f-mono); font-size: 8.5px; font-weight: 700; letter-spacing: .07em; padding: 2px 5px; border-radius: 4px; background: var(--brand-soft); color: var(--brand-ink); margin-right: 7px; vertical-align: 3px; white-space: nowrap; }
+  .dark .hl, .dark2 .hl { background: rgba(255,87,34,.24); color: #FFB59B; }
+  .hl.h3t { background: var(--ground-3); color: var(--ink-3); }
+  .dark .hl.h3t, .dark2 .hl.h3t { background: rgba(255,255,255,.1); color: var(--on-dark-2); }
+  /* secondary-keyword annotation */
+  .kw { font-family: var(--f-mono); font-size: 9.5px; line-height: 1.6; color: var(--ink-3); border-left: 2px solid var(--brand-ink); padding-left: 9px; }
+  .kw b { color: var(--ink-2); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; font-size: 8.5px; display: block; margin-bottom: 2px; }
+  .dark .kw, .dark2 .kw { color: var(--on-dark-2); border-color: var(--brand); }
+  .dark .kw b, .dark2 .kw b { color: #FFB59B; }
+
   .wkicker { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); }
   .dark .wkicker, .dark2 .wkicker { color: var(--brand); }
   .wt { font-size: 13px; color: var(--ink-2); }
@@ -164,7 +180,7 @@
   .lines { display: grid; gap: 6px; }
 
   .box { border: 1px solid var(--wire-2); border-radius: 8px; min-height: 96px; background-image: repeating-linear-gradient(135deg, var(--hatch) 0 7px, transparent 7px 14px); display: grid; place-items: center; text-align: center; padding: 10px; font-family: var(--f-mono); font-size: 9.5px; color: var(--ink-3); line-height: 1.5; }
-  .box.t { min-height: 150px; } .box.tt { min-height: 210px; } .box.s { min-height: 64px; }
+  .box.t { min-height: 150px; } .box.tt { min-height: 200px; } .box.s { min-height: 62px; }
   .dark .box, .dark2 .box { border-color: rgba(255,255,255,.24); color: var(--on-dark-2); }
 
   .btnrow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
@@ -227,7 +243,7 @@
   .phone .pnav .logo { width: 34px; height: 11px; background: var(--wire-2); border-radius: 3px; }
   .phone .pnav .burger { margin-left: auto; width: 20px; height: 14px; border-radius: 3px; background: var(--wire); }
   .phone .wsec { padding: 14px; }
-  .phone .wh { font-size: 16px; } .phone .wh.xl { font-size: 19px; }
+  .phone .wh { font-size: 15px; } .phone .wh.xl { font-size: 18px; }
   .phone .box { min-height: 74px; } .phone .box.t { min-height: 100px; }
   .phone .wbtn { width: 100%; }
   .phone-cap { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-3); margin-top: 8px; text-align: center; }
@@ -289,6 +305,7 @@
   <div class="shell topbar-in">
     <div class="mark">VLX <i>&middot;</i> Service Wireframes</div>
     <nav class="topnav">
+      <a href="#keywords">Keyword map</a>
       <a href="#arch">Architecture</a>
       <a href="#home">VLX Home</a>
       <a href="#quality">VLX Quality</a>
@@ -301,92 +318,255 @@
 <header class="doc">
   <div class="shell">
     <a class="backlink" href="../">&larr; VLX SEO plan</a>
-    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 18 August 2026 &middot; v2</div>
+    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 18 August 2026 &middot; v3</div>
     <h1>Three new services, three new structures</h1>
     <p class="lede">
-      VLX Home, VLX Quality and VLX Inventory.ai are <b>new services</b>: each has its own scope, its own
-      licence and its own promise. They are not summary pages for functionality that lives elsewhere on the site.
-      None of them reuses the 13-section SuperTemplate that carries the current 18 solution pages, and each one
-      carries a mechanism of its own &mdash; while all three speak VLX's visual language: brand orange over slate
-      neutrals, 12px cards, dark bands for emphasis, product-UI illustration instead of photography.
+      VLX Home, VLX Quality and VLX Inventory.ai are <b>new services</b>: each has its own scope, its own licence
+      and its own promise. None of them reuses the 13-section SuperTemplate that carries the current 18 solution
+      pages, and each one carries a mechanism of its own &mdash; while all three speak VLX's visual language.
+      This version adds the part that turns a wireframe into a brief: <b>real titles, a labelled H1/H2 hierarchy,
+      the primary keyword each heading carries, secondary keywords annotated per section, and a decision on the
+      URL architecture.</b>
     </p>
     <div class="meta-row">
-      <span class="chip">Drawn wireframes: desktop + mobile</span>
-      <span class="chip">Vertical proportions compressed</span>
-      <span class="chip">3 new mechanisms, live on this page</span>
-      <span class="chip">Launch SEO architecture included</span>
+      <span class="chip">Keyword evidence: GSC Sep 2025 &ndash; Apr 2026</span>
+      <span class="chip">H1 / H2 labelled in every wireframe</span>
+      <span class="chip">Secondary keywords annotated, copy not written</span>
+      <span class="chip">Architecture verdict included</span>
     </div>
   </div>
 </header>
 
-<!-- ══════════ ARCHITECTURE ══════════ -->
-<section class="block" id="arch">
+<!-- ══════════ KEYWORD MAP ══════════ -->
+<section class="block" id="keywords">
   <div class="shell">
-    <div class="h-sec"><span class="n">01</span><h2>Where each service lives</h2></div>
+    <div class="h-sec"><span class="n">01</span><h2>Keyword map and what it is based on</h2></div>
     <p class="sub">
-      These are services &mdash; not industry solutions and not internal capabilities. That places them under the
-      product pillar at level 2: not in <span class="mono">/digital-inspections-software/</span>, which is the
-      sector solution cluster, and not at level 3 beside KYPiT and COUNTiT, which are capabilities inside the platform.
+      Every keyword decision below is anchored in the property's own Search Console export
+      (<span class="mono">docs/seo/skill-research/waves/WAVE-01.5-VLX-AI-GSC-ANALYSIS.md</span>, window
+      2025-09-16 &rarr; 2026-04-08: 3,126 clicks / 624,451 impressions / 453 pages). No third-party volume tool
+      was available for this pass, so <b>positions and impressions below are real; search volumes for brand-new
+      terms are unverified</b> and must be checked in Ahrefs before the H1s are frozen.
     </p>
 
-    <div class="tree">
-      <b>vlx.ai/</b><br>
-      &#9500;&#9472; <b>/product/</b> <span class="dim">&mdash; product pillar (already exists, level 1)</span><br>
-      &#9474;&nbsp; &#9500;&#9472; <span class="new">/product/vlx-home/</span> <span class="dim">&larr; new service &middot; level 2</span><br>
-      &#9474;&nbsp; &#9500;&#9472; <span class="new">/product/vlx-quality/</span> <span class="dim">&larr; new service &middot; level 2</span><br>
-      &#9474;&nbsp; &#9500;&#9472; <span class="new">/product/vlx-inventory-ai/</span> <span class="dim">&larr; new service &middot; level 2</span><br>
-      &#9474;&nbsp; &#9492;&#9472; /features/ <span class="dim">&mdash; base platform capabilities</span><br>
-      &#9500;&#9472; <b>/digital-inspections-software/</b> <span class="dim">&mdash; sector solutions (20 children)</span><br>
-      &#9474;&nbsp; &#9500;&#9472; /quality/ &middot; /home-inspectors/ &middot; /asset-verification/ <span class="dim">&rarr; capture generic intent, link to the service</span><br>
-      &#9474;&nbsp; &#9492;&#9472; app/kypit/ &middot; app/countit/ <span class="dim">&mdash; capabilities the services use</span><br>
-      &#9500;&#9472; /pricing/ <span class="dim">&mdash; new row or tab per service</span><br>
-      &#9492;&#9472; /whats-new/ <span class="dim">&mdash; launch announcement (initial entry link)</span>
-    </div>
-
+    <h3 class="mini">The four facts that drive every decision on this page</h3>
     <div class="tw">
       <table>
-        <thead><tr><th>Service</th><th>URL</th><th>Level</th><th>Target keyword (hypothesis)</th><th>Intent</th><th>Schema</th></tr></thead>
+        <thead><tr><th>Evidence</th><th>Data</th><th>Consequence for the new services</th></tr></thead>
         <tbody>
-          <tr><td><b>VLX Home</b></td><td><code>/product/vlx-home/</code></td><td>2</td><td>home inspection business software &middot; software for inspectors</td><td>Commercial / transactional</td><td>SoftwareApplication + Offer</td></tr>
-          <tr><td><b>VLX Quality</b></td><td><code>/product/vlx-quality/</code></td><td>2</td><td>quality management platform &middot; eQMS with evidence</td><td>Commercial / evaluation</td><td>SoftwareApplication + FAQPage</td></tr>
-          <tr><td><b>VLX Inventory.ai</b></td><td><code>/product/vlx-inventory-ai/</code></td><td>2</td><td>AI inventory counting &middot; cycle count &middot; inventory reconciliation</td><td>Commercial / transactional</td><td>SoftwareApplication + FAQPage</td></tr>
+          <tr>
+            <td><b>The category term is weak and already owned by the solutions hub</b></td>
+            <td class="num">"digital inspection software": pos <span class="weak">12.47</span>, 3,015 impr, 3 clicks &rarr; ranks at <code>/digital-inspections-software/</code></td>
+            <td>New pages must not compete for it. They target service-level terms and link up to the hub.</td>
+          </tr>
+          <tr>
+            <td><b>COUNTiT is the strongest product page on the site &mdash; and it sits at level 3</b></td>
+            <td class="num">644 clicks / 52,382 impr / pos <span class="good">5.16</span>; branded "instacount" pos 3.85, "countit" pos 6.82</td>
+            <td>Depth is not the problem at VLX. Inventory.ai must build on COUNTiT, never re-target its queries.</td>
+          </tr>
+          <tr>
+            <td><b><code>/product/</code> is a weak pillar, not a strong one</b></td>
+            <td class="num">10 clicks / 3,111 impr / pos <span class="weak">27.56</span> &mdash; down from 88 clicks on the legacy property</td>
+            <td>Hanging three new services off it inherits no authority. See the architecture verdict in &sect;02.</td>
+          </tr>
+          <tr>
+            <td><b>Competing URL shapes are the site's dominant SEO problem</b></td>
+            <td class="num">Singular vs plural hub (<code>/digital-inspection-software/</code> pos 33.19 + plural pos 27.64) split ~10,400 impressions</td>
+            <td>Do not launch a new URL shape next to an existing same-word sibling. This rules out one architecture option outright.</td>
+          </tr>
         </tbody>
       </table>
     </div>
 
+    <h3 class="mini">Keyword ownership: who keeps what</h3>
+    <p class="sub" style="margin-top:8px">
+      The biggest risk in launching three service pages is taking terms away from pages that already rank for them.
+      This table is the contract.
+    </p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Cluster</th><th>Existing page keeps</th><th>Evidence</th><th>New service takes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Home / residential</td>
+            <td><code>/digital-inspections-software/home-inspectors/</code><br>&ldquo;home inspection software&rdquo; (current title: <i>Home Inspection Software &mdash; Fastest Reports, Custom Formats</i>)</td>
+            <td class="num">Property/Home cluster: ~30 clicks / 8,500 impr / pos ~12</td>
+            <td><b>VLX Home:</b> &ldquo;home inspection business software&rdquo;, &ldquo;home inspection report software&rdquo;, &ldquo;home inspection scheduling&rdquo;, &ldquo;home inspection app&rdquo;</td>
+          </tr>
+          <tr>
+            <td>Quality / compliance</td>
+            <td><code>/digital-inspections-software/quality/</code><br>&ldquo;quality inspection software&rdquo; (current title: <i>Quality &amp; Compliance Inspection Software</i>)</td>
+            <td class="num">Compliance cluster: ~15 clicks / 12,000 impr / pos ~28; &ldquo;brc audit checklist&rdquo; pos 8.55</td>
+            <td><b>VLX Quality:</b> &ldquo;quality management software&rdquo;, &ldquo;CAPA software&rdquo;, &ldquo;non-conformance software&rdquo;, &ldquo;eQMS&rdquo;</td>
+          </tr>
+          <tr>
+            <td>Counting / inventory</td>
+            <td><code>/digital-inspections-software/app/countit/</code><br>&ldquo;AI object counting&rdquo;, &ldquo;counting app&rdquo;, &ldquo;object counting software free&rdquo;</td>
+            <td class="num">Site's #2 page: 644 clicks / pos 5.16; &ldquo;ai counting app&rdquo; 418 impr pos 8.61</td>
+            <td><b>Inventory.ai:</b> &ldquo;inventory counting software&rdquo;, &ldquo;cycle count app&rdquo;, &ldquo;inventory reconciliation&rdquo;, &ldquo;inventory audit software&rdquo;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="callout">
-      <div class="ct">What changes because these are new services, not summary pages</div>
+      <div class="ct">Why the split is drawn there</div>
       <div class="cb">
-        A new service launches with <b>no authority and no history</b>: it inherits no rankings, so the page has to
-        convert from day one and capture later. Three design consequences: <b>service scope</b> (what is in and what
-        is out) is a required section, not an extra; <b>how it is licensed</b> belongs on the page, not only on
-        <span class="mono">/pricing/</span>; and the launch needs entry links from the nav, the footer, the
-        <span class="mono">/product/</span> pillar and an announcement in <span class="mono">/whats-new/</span> &mdash;
-        without those the pages launch orphaned and take months to index properly.
+        The counting cluster proves the point. COUNTiT ranks for a <b>free-tool</b> intent (&ldquo;free counting app&rdquo;,
+        &ldquo;object counting software free&rdquo;) and converts poorly by design. Inventory.ai should take the
+        <b>commercial</b> end of the same demand &mdash; cycle counts, inventory audits, ERP reconciliation &mdash;
+        which has no page today. Same topic, different intent, no cannibalisation.
       </div>
     </div>
 
-    <h3 class="mini">Relationship with what already exists</h3>
+    <h3 class="mini">Titles and H1s, final proposal</h3>
     <div class="tw">
       <table>
-        <thead><tr><th>Existing page</th><th>Role after launch</th><th>Link</th></tr></thead>
+        <thead><tr><th>Service</th><th>Title tag</th><th>Chars</th><th>H1</th><th>Primary keyword in H1</th></tr></thead>
         <tbody>
-          <tr><td><code>/digital-inspections-software/home-inspectors/</code></td><td>Keeps capturing "home inspection software" (generic, top of funnel). Becomes a <b>feeder</b>: its main CTA points to VLX Home.</td><td>&darr; to the service, with a product anchor</td></tr>
-          <tr><td><code>/digital-inspections-software/quality/</code></td><td>Same: captures the category, hands evaluation over to VLX Quality.</td><td>&darr; to the service</td></tr>
-          <tr><td><code>/app/countit/</code> (COUNTiT)</td><td>A <b>capability</b> Inventory.ai uses, not an internal competitor. Gains an "included in VLX Inventory.ai" banner.</td><td>&uarr; to the service</td></tr>
-          <tr><td><code>/app/kypit/</code> (KYPiT)</td><td>Cross-cutting capability: appears in all three services as evidence verification.</td><td>&harr; from all three</td></tr>
-          <tr><td><code>/pricing/</code></td><td>Each service needs its row or tab. Without it, a visitor arriving from the service page cannot find the price.</td><td>&harr;</td></tr>
+          <tr>
+            <td><b>VLX Home</b></td>
+            <td>Home Inspection Business Software | VLX Home</td>
+            <td class="num">43</td>
+            <td>VLX Home: home inspection business software, from booking to payment</td>
+            <td>home inspection business software</td>
+          </tr>
+          <tr>
+            <td><b>VLX Quality</b></td>
+            <td>Quality Management &amp; CAPA Software | VLX Quality</td>
+            <td class="num">47</td>
+            <td>VLX Quality: quality management software with audit-ready evidence</td>
+            <td>quality management software</td>
+          </tr>
+          <tr>
+            <td><b>VLX Inventory.ai</b></td>
+            <td>AI Inventory Counting Software | VLX Inventory.ai</td>
+            <td class="num">48</td>
+            <td>VLX Inventory.ai: AI inventory counting from a single photo</td>
+            <td>AI inventory counting</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sub" style="font-size:13.5px">
+      Pattern: keyword first, brand last, no boilerplate. Every H1 carries the product name <i>and</i> the category,
+      because a brand-new service needs both &mdash; the name to build the entity, the category to be findable.
+      Each H2 in the wireframes below carries one keyword and is labelled with its heading level.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ ARCHITECTURE DECISION ══════════ -->
+<section class="block" id="arch">
+  <div class="shell">
+    <div class="h-sec"><span class="n">02</span><h2>Architecture: is <code style="font-size:.8em">/product/</code> worth keeping?</h2></div>
+    <p class="sub">
+      This section answers the question directly, and it <b>reverses the recommendation in v2 of this document</b>.
+      Version 2 proposed <code>/product/vlx-home/</code> on the argument that level 2 inherits pillar authority and
+      that level 3 buries a page. The Search Console data contradicts both halves of that argument.
+    </p>
+
+    <h3 class="mini">What the data says about the two candidate containers</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Container</th><th>Clicks</th><th>Impressions</th><th>Avg position</th><th>Reading</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/product/</code></td><td class="num">10</td><td class="num">3,111</td><td class="num weak">27.56</td>
+            <td>Was 88 clicks on the legacy property. The GSC analysis notes the solutions hub &ldquo;may be siphoning&rdquo; it. No children, and it overlaps <code>/features/</code>.</td>
+          </tr>
+          <tr>
+            <td><code>/digital-inspections-software/</code></td><td class="num">14</td><td class="num">4,978</td><td class="num">27.64</td>
+            <td>Weak too &mdash; but it is the URL that ranks for the category term (&ldquo;digital inspection software&rdquo;, 3,015 impr) and it already has 20 children plus the <code>app/</code> namespace.</td>
+          </tr>
+          <tr>
+            <td><code>/digital-inspections-software/app/countit/</code></td><td class="num good">644</td><td class="num">52,382</td><td class="num good">5.16</td>
+            <td><b>Level 3, and the best product page on the site.</b> This is the proof that depth is not what holds VLX pages back.</td>
+          </tr>
+          <tr>
+            <td><code>/digital-inspections-software/app/kypit/</code></td><td class="num">~8 (branded)</td><td class="num">~200</td><td class="num good">2.19</td>
+            <td>Also level 3, also holding position. The pattern repeats.</td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <h3 class="mini">SEO requirements that shape these wireframes</h3>
+    <h3 class="mini">The three options, judged</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Option</th><th>URL shape</th><th>For</th><th>Against</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>A</b></td>
+            <td><code>/digital-inspections-software/app/vlx-home/</code></td>
+            <td>Rides the only proven product-page pattern on the site (COUNTiT pos 5.16, KYPiT pos 2.19). Sits inside the hub that owns the category term, so it inherits real topical relevance. No same-word sibling collision.</td>
+            <td>Level 3 and a long URL. The segment is called <span class="mono">app</span>, which reads as &ldquo;mobile app module&rdquo; rather than &ldquo;service&rdquo;.</td>
+            <td class="good">Recommended</td>
+          </tr>
+          <tr>
+            <td><b>B</b></td>
+            <td><code>/product/vlx-home/</code></td>
+            <td>Shorter, level 2, and three strong children could rescue a pillar that is currently doing nothing.</td>
+            <td>That is a bet, not an inheritance: the pillar is at pos 27.56 with 10 clicks. It also splits the product story across two containers (<code>/product/</code> and the hub), which is how the current duplication mess started.</td>
+            <td>Acceptable only if <code>/product/</code> is rebuilt as a real pillar in the same release</td>
+          </tr>
+          <tr>
+            <td><b>C</b></td>
+            <td><code>/digital-inspections-software/vlx-quality/</code></td>
+            <td>Level 2 inside the strong hub, short and clean.</td>
+            <td><b>Ruled out.</b> It would place <code>vlx-quality</code> directly beside the existing <code>quality/</code> child. The property's dominant SEO problem is exactly this &mdash; competing URL shapes for one topic (singular vs plural hub, <code>/checklists/</code> vs <code>/blog/</code>). Do not add a fourth instance of the same failure.</td>
+            <td class="weak">Rejected</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout verdict">
+      <div class="ct">Verdict</div>
+      <div class="cb">
+        <b>Put the three services under the hub, in the namespace that already works</b> &mdash;
+        <code>/digital-inspections-software/app/vlx-home/</code>,
+        <code>&hellip;/app/vlx-quality/</code>,
+        <code>&hellip;/app/vlx-inventory-ai/</code>.
+        Keep <code>/product/</code> as a navigational overview that links <i>down</i> to the three services and to
+        <code>/features/</code>, and stop trying to make it rank. If product prefers the shorter
+        <code>/product/&hellip;</code> shape, that is defensible &mdash; but only bundled with a rewrite of the
+        <code>/product/</code> pillar itself, otherwise the services launch onto a page with no equity to pass on.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">Prerequisite, whichever option is chosen</div>
+      <div class="cb">
+        Fix the singular/plural hub duplication first: <code>/digital-inspection-software/</code> (pos 33.19) and
+        <code>/digital-inspections-software/</code> (pos 27.64) are splitting ~10,400 impressions between them.
+        Launching three children under a container that exists at two URL shapes doubles the damage instead of
+        adding to it. One 301, one canonical, then launch.
+      </div>
+    </div>
+
+    <div class="tree">
+      <b>vlx.ai/</b><br>
+      &#9500;&#9472; <b>/digital-inspections-software/</b> <span class="dim">&mdash; hub, owns &ldquo;digital inspection software&rdquo; (pos 12.47)</span><br>
+      &#9474;&nbsp; &#9500;&#9472; /quality/ &middot; /home-inspectors/ &middot; /asset-verification/ &hellip; <span class="dim">20 sector children, keep generic keywords, link down</span><br>
+      &#9474;&nbsp; &#9492;&#9472; <b>app/</b> <span class="dim">&mdash; product namespace (proven: countit pos 5.16, kypit pos 2.19)</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/countit/ <span class="dim">keeps &ldquo;object counting&rdquo; &middot; gains &ldquo;part of VLX Inventory.ai&rdquo;</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/kypit/ <span class="dim">cross-cutting capability</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/vlx-home/</span> <span class="dim">&larr; new service</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/vlx-quality/</span> <span class="dim">&larr; new service</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9492;&#9472; <span class="new">app/vlx-inventory-ai/</span> <span class="dim">&larr; new service &middot; no dot in the path</span><br>
+      &#9500;&#9472; /product/ <span class="dim">&mdash; overview only; links down to the three services (stop optimising it)</span><br>
+      &#9500;&#9472; /pricing/ <span class="dim">&mdash; one row or tab per service</span><br>
+      &#9492;&#9472; /whats-new/ <span class="dim">&mdash; launch announcement, first entry link</span>
+    </div>
+
+    <h3 class="mini">Launch requirements that do not change with the URL choice</h3>
     <ul class="tight">
-      <li><b>One H1 carrying the service name plus the category.</b> The name alone ("VLX Home") means nothing to someone who does not know the brand; the category alone does not build the new entity.</li>
-      <li><b>No key content inside JS.</b> All three mechanisms render server-side with the full text in the DOM; JS only filters or reveals. In the Quality framework matrix this is what makes the vocabulary of all four standards indexable.</li>
-      <li><b>The LCP is never the mechanism.</b> In all three it is the hero text block or its static image with <span class="mono">priority</span>; the interactive module sits below the fold behind <span class="mono">dynamic()</span>.</li>
-      <li><b>Scope and price as text</b>, not inside an image: that is the part people search for literally ("what's included", "how much does it cost").</li>
-      <li><b>Trailing slash, no dots in the path:</b> <span class="mono">vlx-inventory-ai</span>. The dot in "Inventory.ai" lives in the visible name, not in the URL.</li>
+      <li><b>Entry links before launch:</b> nav dropdown, footer Product column, the <code>/product/</code> overview, the sector pages that feed each service, and a <code>/whats-new/</code> post. A new service has no history; without internal links it indexes slowly and ranks for nothing.</li>
+      <li><b>Scope and price as crawlable text</b> on the page &mdash; those are the literal queries (&ldquo;what's included&rdquo;, &ldquo;pricing&rdquo;).</li>
+      <li><b>No key content behind JS.</b> All three mechanisms render server-side with the text in the DOM; JS only filters or reveals.</li>
+      <li><b>The LCP is never the mechanism</b> &mdash; hero text or a static <span class="mono">priority</span> image; the module loads below the fold.</li>
+      <li><b>Trailing slash, no dots in paths.</b> The dot in &ldquo;Inventory.ai&rdquo; stays in the visible name.</li>
+      <li><b>Schema:</b> <span class="mono">SoftwareApplication</span> per service, <span class="mono">FAQPage</span> where the Q&amp;A is visible, <span class="mono">BreadcrumbList</span> already global.</li>
     </ul>
   </div>
 </section>
@@ -394,20 +574,20 @@
 <!-- ══════════════════ VLX HOME ══════════════════ -->
 <section class="block" id="home">
   <div class="shell">
-    <div class="h-sec"><span class="n">02</span><h2>VLX Home</h2></div>
+    <div class="h-sec"><span class="n">03</span><h2>VLX Home</h2></div>
     <p class="sub">
       <b>Service:</b> runs a residential inspection business end to end &mdash; scheduling and clients, field
       inspection with no signal, branded report, signed delivery and payment.
       <b>Structure:</b> editorial, driven by the path of one real job.
       <b>Mechanisms:</b> draggable job track + wipe comparator.
-      <b>Core message:</b> "From booking to paid, in one app."
+      <b>Primary keyword:</b> home inspection business software.
     </p>
 
     <div class="wrap">
       <div class="canvas">
         <div class="canvas-bar">
           <span class="dots"><i></i><i></i><i></i></span>
-          <span class="url">vlx.ai/product/vlx-home/</span>
+          <span class="url">vlx.ai/digital-inspections-software/app/vlx-home/</span>
           <span class="vp">1280px</span>
         </div>
 
@@ -418,17 +598,18 @@
           <div class="inner g s55">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Home</span>
-              <div class="wh xl">From booking to paid,<br>in one app</div>
+              <div class="wh xl"><span class="hl">H1</span>VLX Home: home inspection business software, from booking to payment</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
+              <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
+                inspection scheduling software &middot; offline inspection app &middot; branded inspection report &middot; get paid faster</div>
               <div class="btnrow"><span class="wbtn p">Start Free Trial</span><span class="wbtn s">Book a Demo</span></div>
-              <div class="ln w30" style="height:5px"></div>
             </div>
             <div class="box tt">Finished report<br>full size, slightly rotated<br>&mdash; the deliverable, not the app</div>
           </div>
         </div>
 
         <div class="wsec muted">
-          <span class="sid">S2</span><span class="snote">one-line strip</span>
+          <span class="sid">S2</span><span class="snote">one-line strip &middot; no heading</span>
           <div class="inner g c5" style="align-items:center">
             <div class="box s">logo</div><div class="box s">logo</div><div class="box s">logo</div><div class="box s">logo</div>
             <div class="stackv"><div class="wh sm">1,200 inspections</div><div class="wt">during the pilot</div></div>
@@ -439,24 +620,30 @@
           <span class="sid">S3</span><span class="snote">service scope &middot; indexable text</span>
           <div class="inner stackv">
             <div class="center stackv" style="justify-items:center">
-              <div class="wh">What VLX Home includes</div>
+              <div class="wh"><span class="hl">H2</span>Everything a home inspection business runs on</div>
               <div class="ln w45"></div>
             </div>
             <div class="g c3">
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Scheduling &amp; clients</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Offline inspection</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Branded report</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Delivery &amp; signature</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Invoicing &amp; follow-up</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Verified evidence</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Scheduling &amp; clients</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Offline inspection app</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Branded report engine</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Delivery &amp; e-signature</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Invoicing &amp; follow-up</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Verified evidence (KYPiT)</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div></div>
             </div>
+            <div class="kw"><b>card body copy &mdash; secondary keywords to work in</b>
+              home inspection scheduling &middot; inspection templates &middot; photo annotation &middot; inspection report template &middot;
+              digital signature &middot; inspection invoicing software &middot; photo authentication software <span style="color:var(--ok)">(real query, pos ~7)</span></div>
           </div>
         </div>
 
         <div class="wsec muted">
           <span class="sid">S4</span><span class="snote">mechanism 1 &middot; draggable</span>
           <div class="inner stackv">
-            <div class="stackv"><div class="wh">One job, start to finish</div><div class="ln w60"></div></div>
+            <div class="stackv">
+              <div class="wh"><span class="hl">H2</span>From booking to invoice: one home inspection job in VLX</div>
+              <div class="ln w60"></div>
+            </div>
             <div class="flow">
               <div class="node"><span class="nn">01</span><span class="nt">Book</span><div class="box s">calendar</div></div>
               <div class="node"><span class="nn">02</span><span class="nt">Inspect</span><div class="box s">checklist</div></div>
@@ -464,6 +651,9 @@
               <div class="node"><span class="nn">04</span><span class="nt">Sign</span><div class="box s">receipt</div></div>
               <div class="node"><span class="nn">05</span><span class="nt">Get paid</span><div class="box s">invoice</div></div>
             </div>
+            <div class="kw"><b>step copy &mdash; secondary keywords to work in</b>
+              inspection route planning &middot; client confirmation email &middot; works offline / no signal &middot; voice to text notes &middot;
+              GPS-stamped photos &middot; same-day report delivery &middot; payment reminders</div>
             <div class="wt mono" style="font-size:10px">&harr; draggable &middot; stacks vertically on mobile</div>
           </div>
         </div>
@@ -472,8 +662,11 @@
           <span class="sid">S5</span><span class="snote">mechanism 2 &middot; wipe</span>
           <div class="inner g s45">
             <div class="stackv">
-              <div class="wh">Same finding,<br>two reports</div>
+              <div class="wh"><span class="hl">H2</span>Home inspection reports clients actually read</div>
               <div class="lines"><div class="ln"></div><div class="ln w75"></div><div class="ln w45"></div></div>
+              <div class="kw"><b>body copy &mdash; secondary keywords to work in</b>
+                home inspection report software &middot; inspection report format &middot; state-required report forms &middot;
+                summary of findings &middot; repair cost estimate</div>
               <span class="wbtn s" style="width:max-content">See the full example</span>
             </div>
             <div class="box t" style="position:relative">
@@ -486,13 +679,15 @@
         <div class="wsec dark">
           <span class="sid">S6</span><span class="snote">dark band #0F172A</span>
           <div class="inner stackv">
-            <div class="wh center">What stops happening</div>
+            <div class="wh center"><span class="hl">H2</span>What home inspectors stop losing to office work</div>
             <div class="g c4">
               <div class="kpi"><span class="v">&minus;34 h</span><span class="l">of office work a month</span></div>
               <div class="kpi"><span class="v">0</span><span class="l">unpaid jobs</span></div>
               <div class="kpi"><span class="v">1 day</span><span class="l">to client delivery</span></div>
               <div class="kpi"><span class="v">100 %</span><span class="l">verified evidence</span></div>
             </div>
+            <div class="kw"><b>supporting line &mdash; secondary keywords to work in</b>
+              inspection turnaround time &middot; admin time per inspection &middot; inspections per week per inspector</div>
           </div>
         </div>
 
@@ -500,8 +695,11 @@
           <span class="sid">S7</span><span class="snote">licensing &middot; on the page</span>
           <div class="inner g s55">
             <div class="stackv">
-              <div class="wh">How it is purchased</div>
+              <div class="wh"><span class="hl">H2</span>Home inspection software pricing</div>
               <div class="lines"><div class="ln"></div><div class="ln w90"></div><div class="ln w60"></div></div>
+              <div class="kw"><b>body copy &mdash; secondary keywords to work in</b>
+                home inspection software cost &middot; per inspector pricing &middot; free trial &middot; no credit card &middot;
+                template migration</div>
               <div class="wchips"><span class="wchip">per inspector</span><span class="wchip">no minimum</span><span class="wchip">migration included</span></div>
             </div>
             <div class="plan">
@@ -516,20 +714,23 @@
         <div class="wsec muted">
           <span class="sid">S8</span><span class="snote">FAQPage schema</span>
           <div class="inner stackv">
-            <div class="wh">Before you decide</div>
+            <div class="wh"><span class="hl">H2</span>Home inspection software questions</div>
             <div class="g c2">
-              <div class="wcard"><div class="wh sm">Does it work with no signal?</div><div class="ln w75"></div></div>
-              <div class="wcard"><div class="wh sm">Can I keep my report format?</div><div class="ln w60"></div></div>
-              <div class="wcard"><div class="wh sm">How long does migration take?</div><div class="ln w75"></div></div>
-              <div class="wcard"><div class="wh sm">Does it work for a solo inspector?</div><div class="ln w45"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Does it work with no signal?</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Can I keep my report format?</div><div class="ln w60"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>How long does migration take?</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Does it work for a solo inspector?</div><div class="ln w45"></div></div>
             </div>
+            <div class="kw"><b>answer copy &mdash; secondary keywords to work in</b>
+              offline mode &middot; mobile home inspection software <span style="color:var(--ok)">(real query)</span> &middot;
+              pre-purchase inspection &middot; insurance inspection checklist &middot; solo inspector plan</div>
           </div>
         </div>
 
         <div class="wsec dark2">
           <span class="sid">S9</span><span class="snote">canonical close</span>
           <div class="inner center stackv" style="justify-items:center">
-            <div class="wh">Close your next job inside VLX</div>
+            <div class="wh"><span class="hl">H2</span>Start your next home inspection in VLX</div>
             <div class="ln w45"></div>
             <div class="btnrow" style="justify-content:center"><span class="wbtn i">Start Free Trial</span><span class="wbtn s">Book a Demo</span></div>
           </div>
@@ -537,14 +738,14 @@
       </div>
 
       <div class="notes">
-        <div class="notes-h">Wireframe decisions</div>
+        <div class="notes-h">Wireframe + SEO decisions</div>
         <div class="note-i"><span class="id">S1</span><span class="tx"><b>The deliverable is the hero.</b> The SuperTemplate opens with a promise plus an app mockup. Here the report leads: it is what the inspector sells to their own client.</span></div>
-        <div class="note-i"><span class="id">S2</span><span class="tx"><b>A thin strip, not a section.</b> A new service has little social proof yet; it takes one line and promises no more than exists.</span></div>
-        <div class="note-i"><span class="id">S3</span><span class="tx"><b>Scope near the top.</b> For a new service, "what's included" is the first question. Six blocks, each with an internal link to its capability.</span></div>
-        <div class="note-i"><span class="id">S4</span><span class="tx"><b>Mechanism 1.</b> Five steps on a draggable track, reusing the drag gesture already present in the homepage logo marquee.</span></div>
-        <div class="note-i"><span class="id">S5</span><span class="tx"><b>Mechanism 2.</b> The SuperTemplate's "Old Way vs VLX Way" is two text columns; here it is one image the visitor splits with a finger.</span></div>
-        <div class="note-i"><span class="id">S6</span><span class="tx"><b>Business numbers</b>, not software numbers &mdash; and no animated counters: that device already belongs to the SuperTemplate.</span></div>
-        <div class="note-i"><span class="id">S7</span><span class="tx"><b>Price on the page.</b> A new service has no ranking history: if the price only lives on /pricing/, the conversion leaks.</span></div>
+        <div class="note-i"><span class="id">S1</span><span class="tx"><b>H1 carries name + category.</b> &ldquo;Home inspection business software&rdquo; deliberately avoids the head term &ldquo;home inspection software&rdquo;, which stays with the sector page.</span></div>
+        <div class="note-i"><span class="id">S2</span><span class="tx"><b>No heading here.</b> A proof strip does not need an H2 &mdash; adding one would spend a heading slot on nothing.</span></div>
+        <div class="note-i"><span class="id">S3</span><span class="tx"><b>Six H3s, one per capability.</b> This is the section that has to carry the &ldquo;what's included&rdquo; queries, so every card title is a real feature term, not a slogan.</span></div>
+        <div class="note-i"><span class="id">S4</span><span class="tx"><b>Mechanism 1</b> reuses the drag gesture already in the homepage logo marquee. The H2 spells out the job so the section can rank for the workflow query.</span></div>
+        <div class="note-i"><span class="id">S5</span><span class="tx"><b>Mechanism 2.</b> The SuperTemplate's &ldquo;Old Way vs VLX Way&rdquo; is two text columns; here it is one image the visitor splits with a finger.</span></div>
+        <div class="note-i"><span class="id">S7</span><span class="tx"><b>Pricing H2 is a keyword, not a label.</b> &ldquo;Pricing&rdquo; alone ranks for nothing; &ldquo;home inspection software pricing&rdquo; is a real query pattern.</span></div>
         <div class="note-i"><span class="id">S9</span><span class="tx"><b>Use <span class="mono">#C63A0A</span></b>, not <span class="mono">#FF5722</span>: 5.24:1 against 3.16:1 on white.</span></div>
       </div>
     </div>
@@ -557,7 +758,7 @@
           <div class="wsec"><span class="sid">S1</span>
             <div class="inner stackv">
               <span class="wkicker">VLX Home</span>
-              <div class="wh xl">From booking to paid</div>
+              <div class="wh xl"><span class="hl">H1</span>Home inspection business software</div>
               <div class="lines"><div class="ln"></div><div class="ln w75"></div></div>
               <span class="wbtn p">Start Free Trial</span>
               <span class="wbtn s">Book a Demo</span>
@@ -566,20 +767,20 @@
           </div>
           <div class="wsec muted"><span class="sid">S3</span>
             <div class="inner stackv">
-              <div class="wh sm">What's included</div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Scheduling &amp; clients</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Offline inspection</div><div class="ln w60"></div></div>
+              <div class="wh sm"><span class="hl">H2</span>Everything the business runs on</div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Scheduling &amp; clients</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Offline inspection app</div><div class="ln w60"></div></div>
             </div>
           </div>
           <div class="wsec"><span class="sid">S4</span>
             <div class="inner stackv">
-              <div class="wh sm">One job, start to finish</div>
+              <div class="wh sm"><span class="hl">H2</span>One job, booking to invoice</div>
               <div class="wcard"><span class="mono" style="font-size:9px;color:var(--brand-ink)">01</span><div class="wh sm">Book</div><div class="box s">calendar</div></div>
               <div class="wcard"><span class="mono" style="font-size:9px;color:var(--brand-ink)">02</span><div class="wh sm">Inspect</div><div class="box s">checklist</div></div>
             </div>
           </div>
         </div>
-        <div class="phone-cap">375px &mdash; the track stacks, CTAs go full width</div>
+        <div class="phone-cap">375px &mdash; H1 shortens, the track stacks, CTAs go full width</div>
       </div>
 
       <div style="flex:1;min-width:280px">
@@ -631,11 +832,13 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/product/vlx-home/</code></td></tr>
-          <tr><td>Title</td><td>VLX Home &mdash; Inspection Business Software | VLX</td></tr>
-          <tr><td>H1</td><td>VLX Home: from booking to paid, in one app</td></tr>
-          <tr><td>Meta</td><td>Scheduling, offline inspection, branded reports, signature and payment. The VLX service for residential inspection businesses.</td></tr>
-          <tr><td>Service scope</td><td>Scheduling &amp; clients &middot; offline capture &middot; property templates &middot; report engine &middot; delivery &amp; signature &middot; invoicing &middot; KYPiT verification</td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-home/</code><br><span class="mono" style="color:var(--ink-3)">alt if product prefers option B: /product/vlx-home/</span></td></tr>
+          <tr><td>Title (43)</td><td>Home Inspection Business Software | VLX Home</td></tr>
+          <tr><td>H1</td><td>VLX Home: home inspection business software, from booking to payment</td></tr>
+          <tr><td>Meta</td><td>Scheduling, offline inspections, branded reports, signature and invoicing in one service. VLX Home runs the whole residential inspection job.</td></tr>
+          <tr><td>Primary keyword</td><td>home inspection business software</td></tr>
+          <tr><td>Secondary keywords</td><td>home inspection report software &middot; home inspection app &middot; inspection scheduling software &middot; inspection invoicing &middot; offline inspection app &middot; photo authentication software &middot; mobile home inspection software</td></tr>
+          <tr><td>Do not target</td><td><b>home inspection software</b> (kept by <code>/digital-inspections-software/home-inspectors/</code>)</td></tr>
         </tbody>
       </table>
     </div>
@@ -645,18 +848,18 @@
 <!-- ══════════════════ VLX QUALITY ══════════════════ -->
 <section class="block" id="quality">
   <div class="shell">
-    <div class="h-sec"><span class="n">03</span><h2>VLX Quality</h2></div>
+    <div class="h-sec"><span class="n">04</span><h2>VLX Quality</h2></div>
     <p class="sub">
       <b>Service:</b> quality and compliance &mdash; non-conformances, CAPA, internal and supplier audits,
       threshold scoring and an auditable record.
       <b>Structure:</b> data-dense, and it opens dark (inverting the site pattern, where dark is an intercalated band).
       <b>Mechanism:</b> a framework selector that reconfigures the coverage matrix.
-      <b>Core message:</b> "Compliance you can prove, not file away."
+      <b>Primary keyword:</b> quality management software.
     </p>
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/product/vlx-quality/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/vlx-quality/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec dark">
@@ -664,8 +867,10 @@
           <div class="inner g c2">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Quality</span>
-              <div class="wh xl">Compliance you<br>can prove</div>
+              <div class="wh xl"><span class="hl">H1</span>VLX Quality: quality management software with audit-ready evidence</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
+              <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
+                eQMS &middot; non-conformance management &middot; corrective and preventive action &middot; audit trail software</div>
               <div class="btnrow"><span class="wbtn i">Book a Demo</span><span class="wbtn s">See my standard &darr;</span></div>
             </div>
             <div class="box t">quality dashboard:<br>open NCRs &middot; overdue CAPAs &middot; score by plant</div>
@@ -675,7 +880,10 @@
         <div class="wsec">
           <span class="sid">S2</span><span class="snote">mechanism &middot; 4 matrices in the HTML</span>
           <div class="inner stackv">
-            <div class="stackv"><div class="wh">Your standard, clause by clause</div><div class="ln w60"></div></div>
+            <div class="stackv">
+              <div class="wh"><span class="hl">H2</span>ISO 9001, IATF 16949, HACCP and AS9100, clause by clause</div>
+              <div class="ln w60"></div>
+            </div>
             <div class="wchips"><span class="wchip on">ISO 9001</span><span class="wchip">IATF 16949</span><span class="wchip">HACCP</span><span class="wchip">AS9100</span></div>
             <div class="matrix">
               <div class="mrow"><span class="mk">8.5.1 Production control</span><span class="mv">Templates per operation with mandatory checkpoints</span><span class="me">signed record</span></div>
@@ -683,13 +891,17 @@
               <div class="mrow"><span class="mk">10.2 Corrective action</span><span class="mv">CAPA with root cause and effectiveness check</span><span class="me">verified closure</span></div>
               <div class="mrow"><span class="mk">9.2 Internal audit</span><span class="mv">Programme, checklist per clause, traceable findings</span><span class="me">audit report</span></div>
             </div>
+            <div class="kw"><b>matrix rows &mdash; secondary keywords to work in (this is the long-tail engine of the page)</b>
+              ISO 9001 audit checklist software &middot; IATF 16949 compliance software &middot; HACCP monitoring software &middot;
+              AS9100 quality system &middot; BRC audit checklist <span style="color:var(--ok)">(real query, pos 8.55)</span> &middot;
+              clause-by-clause evidence &middot; internal audit programme</div>
           </div>
         </div>
 
         <div class="wsec muted">
           <span class="sid">S3</span><span class="snote">the real service cycle</span>
           <div class="inner stackv">
-            <div class="wh">From finding to closed evidence</div>
+            <div class="wh"><span class="hl">H2</span>From non-conformance to CAPA closure</div>
             <div class="flow">
               <div class="node"><span class="nn">01</span><span class="nt">Detection</span><div class="ln w75"></div></div>
               <div class="node"><span class="nn">02</span><span class="nt">Containment</span><div class="ln w75"></div></div>
@@ -698,7 +910,9 @@
               <div class="node"><span class="nn">05</span><span class="nt">Auditable closure</span><div class="ln w60"></div></div>
             </div>
             <div class="arrows"><span>&rarr;</span><span>&rarr;</span><span>&rarr;</span><span>&rarr;</span><span></span></div>
-            <div class="wt mono" style="font-size:10px">target time per state &middot; verified evidence at every step</div>
+            <div class="kw"><b>step copy &mdash; secondary keywords to work in</b>
+              NCR software &middot; 5 whys / root cause analysis &middot; Ishikawa &middot; containment and segregation &middot;
+              effectiveness verification &middot; 30/60/90 day check &middot; quality record retention</div>
           </div>
         </div>
 
@@ -706,8 +920,11 @@
           <span class="sid">S4</span><span class="snote">high density</span>
           <div class="inner g s45">
             <div class="stackv">
-              <div class="wh">What the quality director sees on Monday</div>
+              <div class="wh"><span class="hl">H2</span>Quality KPIs by plant, line and supplier</div>
               <div class="lines"><div class="ln"></div><div class="ln w90"></div><div class="ln w60"></div></div>
+              <div class="kw"><b>body copy &mdash; secondary keywords to work in</b>
+                quality management dashboard &middot; supplier quality audit &middot; scrap and rework rate &middot;
+                first pass yield &middot; threshold alerts &middot; export to BI</div>
               <div class="wchips"><span class="wchip">by plant</span><span class="wchip">by line</span><span class="wchip">threshold alerts</span></div>
             </div>
             <div class="stackv">
@@ -725,24 +942,30 @@
         <div class="wsec muted">
           <span class="sid">S5</span><span class="snote">service scope</span>
           <div class="inner stackv">
-            <div class="wh">What VLX Quality includes</div>
+            <div class="wh"><span class="hl">H2</span>What VLX Quality includes</div>
             <div class="g c3">
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Non-conformances</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">CAPA</div><div class="ln w60"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Audits</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Scoring &amp; thresholds</div><div class="ln w60"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Supplier quality</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Auditable record</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Non-conformance (NCR)</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>CAPA workflow</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Internal &amp; supplier audits</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Scoring &amp; thresholds</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Compliance frameworks</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Auditable record</div><div class="ln w60"></div></div>
             </div>
+            <div class="kw"><b>card body copy &mdash; secondary keywords to work in</b>
+              quality control checklist app &middot; quality inspection software manufacturing &middot; deviation management &middot;
+              document control &middot; tamper-proof audit trail &middot; e-signature on quality records</div>
           </div>
         </div>
 
         <div class="wsec">
           <span class="sid">S6</span><span class="snote">proof as audited figures</span>
-          <div class="inner g c3">
-            <div class="wcard"><div class="wh sm">ISO audit with no documentation findings</div><div class="ln w75"></div></div>
-            <div class="wcard"><div class="wh sm">CAPA: 45 days down to 12</div><div class="ln w60"></div></div>
-            <div class="wcard"><div class="wh sm">100 % verified evidence</div><div class="ln w75"></div></div>
+          <div class="inner stackv">
+            <div class="wh"><span class="hl">H2</span>Audit results from VLX Quality customers</div>
+            <div class="g c3">
+              <div class="wcard"><div class="wh sm">ISO audit with no documentation findings</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm">CAPA: 45 days down to 12</div><div class="ln w60"></div></div>
+              <div class="wcard"><div class="wh sm">100 % verified evidence</div><div class="ln w75"></div></div>
+            </div>
           </div>
         </div>
 
@@ -750,25 +973,28 @@
           <span class="sid">S7</span><span class="snote">light close &middot; breaks the pattern</span>
           <div class="inner g s55">
             <div class="stackv">
-              <div class="wh">Bring your next audit to the demo</div>
+              <div class="wh"><span class="hl">H2</span>Bring your next quality audit to the demo</div>
               <div class="lines"><div class="ln"></div><div class="ln w60"></div></div>
               <div class="btnrow"><span class="wbtn p">Book a Demo</span><span class="wbtn s">See pricing</span></div>
             </div>
             <div class="stackv">
-              <div class="wcard"><div class="wh sm">Does it replace our QMS?</div><div class="ln w75"></div></div>
-              <div class="wcard"><div class="wh sm">Is it valid for an external auditor?</div><div class="ln w60"></div></div>
-              <div class="wcard"><div class="wh sm">Does it integrate with the ERP?</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Does it replace our QMS?</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Is it valid for an external auditor?</div><div class="ln w60"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Does it integrate with the ERP?</div><div class="ln w75"></div></div>
+              <div class="kw"><b>answer copy &mdash; secondary keywords to work in</b>
+                QMS vs eQMS <span style="color:var(--ok)">(existing blog post &mdash; link it)</span> &middot;
+                document control system &middot; ERP quality integration &middot; quality management software pricing</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="notes">
-        <div class="notes-h">Wireframe decisions</div>
+        <div class="notes-h">Wireframe + SEO decisions</div>
         <div class="note-i"><span class="id">S1</span><span class="tx"><b>It opens dark.</b> On vlx.ai <span class="mono">#0F172A</span> is an intercalated emphasis band; here it is the starting point and light is the exception. Same palette, new structure.</span></div>
-        <div class="note-i"><span class="id">S1</span><span class="tx"><b>Primary CTA is the demo</b>, not the trial: this purchase goes through sales and the quality lead.</span></div>
-        <div class="note-i"><span class="id">S2</span><span class="tx"><b>Mechanism.</b> All four matrices ship complete and JS only applies <span class="mono">hidden</span>, so the vocabulary of four standards gets indexed &mdash; long tail nothing on the site covers today.</span></div>
-        <div class="note-i"><span class="id">S3</span><span class="tx"><b>The real cycle</b>, using the names the quality lead already uses, instead of a generic four-step "How it works".</span></div>
+        <div class="note-i"><span class="id">S1</span><span class="tx"><b>H1 avoids &ldquo;quality inspection software&rdquo;</b> on purpose &mdash; that term stays with the existing <code>/quality/</code> sector page. This page owns &ldquo;quality management software&rdquo;.</span></div>
+        <div class="note-i"><span class="id">S2</span><span class="tx"><b>The matrix is the long-tail engine.</b> All four standards ship in the HTML and JS only toggles <span class="mono">hidden</span>, so clause-level vocabulary gets indexed. The compliance cluster already has 12,000 impressions at pos ~28 &mdash; this is where it can improve.</span></div>
+        <div class="note-i"><span class="id">S3</span><span class="tx"><b>The real cycle</b>, using the terms a quality lead already searches (NCR, CAPA, root cause), instead of a generic four-step &ldquo;How it works&rdquo;.</span></div>
         <div class="note-i"><span class="id">S4</span><span class="tx"><b>The page behaves like the tool:</b> KPIs with state and a filterable table, not marketing figures.</span></div>
         <div class="note-i"><span class="id">S7</span><span class="tx"><b>Closes light</b> because the hero is already dark; otherwise the ending competes with the entrance.</span></div>
         <div class="note-i"><span class="id">&mdash;</span><span class="tx"><b>No SectionFade</b> on this page: dropping opacity on enter and exit gets in the way of dense content.</span></div>
@@ -783,7 +1009,7 @@
           <div class="wsec dark"><span class="sid">S1</span>
             <div class="inner stackv">
               <span class="wkicker">VLX Quality</span>
-              <div class="wh xl">Compliance you can prove</div>
+              <div class="wh xl"><span class="hl">H1</span>Quality management software with audit-ready evidence</div>
               <div class="lines"><div class="ln w90"></div></div>
               <span class="wbtn i">Book a Demo</span>
               <div class="box">dashboard</div>
@@ -791,7 +1017,7 @@
           </div>
           <div class="wsec"><span class="sid">S2</span>
             <div class="inner stackv">
-              <div class="wh sm">Your standard, clause by clause</div>
+              <div class="wh sm"><span class="hl">H2</span>Your standard, clause by clause</div>
               <div class="wchips"><span class="wchip on">ISO 9001</span><span class="wchip">IATF</span><span class="wchip">HACCP</span></div>
               <div class="wcard"><div class="wh sm">8.7 Nonconforming outputs</div><div class="ln w75"></div><div class="mono" style="font-size:9px;color:var(--ok)">NCR + photos</div></div>
               <div class="wcard"><div class="wh sm">10.2 Corrective action</div><div class="ln w60"></div><div class="mono" style="font-size:9px;color:var(--ok)">verified closure</div></div>
@@ -836,11 +1062,13 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/product/vlx-quality/</code></td></tr>
-          <tr><td>Title</td><td>VLX Quality &mdash; Quality Management Platform | VLX</td></tr>
-          <tr><td>H1</td><td>VLX Quality: compliance you can prove with evidence</td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-quality/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/vlx-quality/</span></td></tr>
+          <tr><td>Title (47)</td><td>Quality Management &amp; CAPA Software | VLX Quality</td></tr>
+          <tr><td>H1</td><td>VLX Quality: quality management software with audit-ready evidence</td></tr>
           <tr><td>Meta</td><td>Non-conformances, CAPA, audits and scoring in one service. Every clause of your standard with the evidence that backs it, ready for the auditor.</td></tr>
-          <tr><td>Service scope</td><td>NCR &middot; CAPA &middot; internal and supplier audits &middot; scoring and thresholds &middot; compliance frameworks &middot; auditable record &middot; KYPiT</td></tr>
+          <tr><td>Primary keyword</td><td>quality management software</td></tr>
+          <tr><td>Secondary keywords</td><td>CAPA software &middot; non-conformance (NCR) software &middot; eQMS &middot; ISO 9001 audit checklist software &middot; IATF 16949 compliance &middot; HACCP monitoring &middot; AS9100 &middot; supplier quality audit &middot; audit trail software &middot; BRC audit checklist</td></tr>
+          <tr><td>Do not target</td><td><b>quality inspection software</b> (kept by <code>/digital-inspections-software/quality/</code>)</td></tr>
         </tbody>
       </table>
     </div>
@@ -850,18 +1078,18 @@
 <!-- ══════════════════ INVENTORY.AI ══════════════════ -->
 <section class="block" id="inv">
   <div class="shell">
-    <div class="h-sec"><span class="n">04</span><h2>VLX Inventory.ai</h2></div>
+    <div class="h-sec"><span class="n">05</span><h2>VLX Inventory.ai</h2></div>
     <p class="sub">
       <b>Service:</b> AI-assisted inventory &mdash; counting from a photo, cycle counts, reconciliation against the
       ERP and verifiable evidence for every variance. COUNTiT is its vision engine.
       <b>Structure:</b> the mechanism is the argument; everything else hangs off it.
       <b>Mechanism:</b> a count you can run on the page itself.
-      <b>Core message:</b> "One photo. Inventory reconciled."
+      <b>Primary keyword:</b> AI inventory counting.
     </p>
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/product/vlx-inventory-ai/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/vlx-inventory-ai/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec">
@@ -869,8 +1097,10 @@
           <div class="inner g s55">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Inventory.ai</span>
-              <div class="wh xl">One photo.<br>Inventory reconciled.</div>
+              <div class="wh xl"><span class="hl">H1</span>VLX Inventory.ai: AI inventory counting from a single photo</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
+              <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
+                inventory counting software &middot; cycle count app &middot; stock count &middot; inventory reconciliation &middot; ERP integration</div>
               <div class="btnrow"><span class="wbtn p">Start Free Trial</span><span class="wbtn s">Try the count &darr;</span></div>
             </div>
             <div class="detbox">
@@ -886,21 +1116,29 @@
         <div class="wsec muted">
           <span class="sid">S2</span><span class="snote">mechanism &middot; dynamic() below the fold</span>
           <div class="inner stackv">
-            <div class="center stackv" style="justify-items:center"><div class="wh">Run it yourself</div><div class="ln w45"></div></div>
-            <div class="box t">unit grid + "Count stock" button<br>+ readout: detected / confidence / time / ERP balance</div>
-            <div class="wt mono center" style="font-size:10px">the variance against the ERP is highlighted in orange</div>
+            <div class="center stackv" style="justify-items:center">
+              <div class="wh"><span class="hl">H2</span>Run an AI inventory count on this photo</div>
+              <div class="ln w45"></div>
+            </div>
+            <div class="box t">unit grid + &ldquo;Count stock&rdquo; button<br>+ readout: detected / confidence / time / ERP balance</div>
+            <div class="kw"><b>caption + surrounding copy &mdash; secondary keywords to work in</b>
+              count stock from a photo &middot; computer vision counting &middot; count accuracy &middot; confidence score &middot;
+              powered by COUNTiT <span style="color:var(--ok)">(link to the existing page, pos 5.16)</span></div>
           </div>
         </div>
 
         <div class="wsec">
           <span class="sid">S3</span><span class="snote">what happens after the number</span>
           <div class="inner stackv">
-            <div class="wh">Field, AI and ERP on one line</div>
+            <div class="wh"><span class="hl">H2</span>Cycle counts, AI counting and ERP reconciliation</div>
             <div class="g c3">
-              <div class="wcard"><span class="wkicker">Lane 1 &middot; Field</span><div class="wh sm">Count round</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div><div class="box s">mobile app</div></div>
-              <div class="wcard"><span class="wkicker">Lane 2 &middot; Inventory.ai</span><div class="wh sm">Count &amp; confidence</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div><div class="box s">COUNTiT</div></div>
-              <div class="wcard"><span class="wkicker">Lane 3 &middot; ERP</span><div class="wh sm">Reconciliation</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div><div class="box s">variance by SKU</div></div>
+              <div class="wcard"><span class="wkicker">Lane 1 &middot; Field</span><div class="wh sm"><span class="hl h3t">H3</span>Count round</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div><div class="box s">mobile app</div></div>
+              <div class="wcard"><span class="wkicker">Lane 2 &middot; Inventory.ai</span><div class="wh sm"><span class="hl h3t">H3</span>Count &amp; confidence</div><div class="lines"><div class="ln"></div><div class="ln w60"></div></div><div class="box s">COUNTiT</div></div>
+              <div class="wcard"><span class="wkicker">Lane 3 &middot; ERP</span><div class="wh sm"><span class="hl h3t">H3</span>Reconciliation</div><div class="lines"><div class="ln"></div><div class="ln w75"></div></div><div class="box s">variance by SKU</div></div>
             </div>
+            <div class="kw"><b>lane copy &mdash; secondary keywords to work in</b>
+              cycle counting by location &middot; physical inventory count &middot; inventory variance by SKU &middot;
+              stock discrepancy report &middot; ERP inventory sync &middot; inventory adjustment with evidence</div>
           </div>
         </div>
 
@@ -908,8 +1146,10 @@
           <span class="sid">S4</span><span class="snote">dark band</span>
           <div class="inner g s55">
             <div class="stackv">
-              <div class="wh">The shrinkage you cannot see is the one you pay for</div>
+              <div class="wh"><span class="hl">H2</span>Inventory shrinkage you can prove</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w60"></div></div>
+              <div class="kw"><b>body copy &mdash; secondary keywords to work in</b>
+                inventory shrinkage &middot; stock loss &middot; count accuracy rate &middot; audit evidence per variance</div>
             </div>
             <div class="g c3">
               <div class="kpi"><span class="v">6&times;</span><span class="l">faster</span></div>
@@ -922,15 +1162,18 @@
         <div class="wsec">
           <span class="sid">S5</span><span class="snote">service scope</span>
           <div class="inner stackv">
-            <div class="wh">What VLX Inventory.ai includes</div>
+            <div class="wh"><span class="hl">H2</span>What VLX Inventory.ai includes</div>
             <div class="g c3">
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Counting from photos</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Cycle counts</div><div class="ln w60"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">ERP reconciliation</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Variance alerts</div><div class="ln w60"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">Asset verification</div><div class="ln w75"></div></div>
-              <div class="wcard"><span class="wicon"></span><div class="wh sm">KYPiT traceability</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Counting from photos</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Cycle counts</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>ERP reconciliation</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Variance alerts</div><div class="ln w60"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>Asset verification</div><div class="ln w75"></div></div>
+              <div class="wcard"><span class="wicon"></span><div class="wh sm"><span class="hl h3t">H3</span>KYPiT traceability</div><div class="ln w60"></div></div>
             </div>
+            <div class="kw"><b>card body copy &mdash; secondary keywords to work in</b>
+              inventory audit software &middot; warehouse count app &middot; barcode-free counting &middot; offline counting &middot;
+              photo authentication &middot; chain of custody</div>
           </div>
         </div>
 
@@ -938,8 +1181,11 @@
           <span class="sid">S6</span><span class="snote">honest section &middot; nothing like it on the site today</span>
           <div class="inner g s45">
             <div class="stackv">
-              <div class="wh">Where it works well<br>and where it does not</div>
+              <div class="wh"><span class="hl">H2</span>Where AI inventory counting is accurate &mdash; and where it is not</div>
               <div class="lines"><div class="ln"></div><div class="ln w75"></div></div>
+              <div class="kw"><b>table + body copy &mdash; secondary keywords to work in</b>
+                counting accuracy &middot; occlusion &middot; bulk material counting &middot; human-in-the-loop review &middot;
+                two-angle capture</div>
             </div>
             <div class="tblwire">
               <div class="tr head"><span class="td">Condition</span><span class="td">Accuracy</span><span class="td">Recommendation</span></div>
@@ -952,17 +1198,23 @@
 
         <div class="wsec">
           <span class="sid">S7</span><span class="snote">3 scenarios &middot; internal links</span>
-          <div class="inner g c3">
-            <div class="wcard"><div class="wh sm">Warehouse cycle counting</div><div class="ln w75"></div></div>
-            <div class="wcard"><div class="wh sm">Inventory as collateral</div><div class="ln w60"></div><div class="wt mono" style="font-size:9px">&rarr; financial-institutions</div></div>
-            <div class="wcard"><div class="wh sm">Field asset audits</div><div class="ln w75"></div><div class="wt mono" style="font-size:9px">&rarr; asset-verification</div></div>
+          <div class="inner stackv">
+            <div class="wh"><span class="hl">H2</span>Inventory counting for warehouses, lenders and field assets</div>
+            <div class="g c3">
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Warehouse cycle counting</div><div class="ln w75"></div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Inventory as collateral</div><div class="ln w60"></div><div class="wt mono" style="font-size:9px">&rarr; financial-institutions</div></div>
+              <div class="wcard"><div class="wh sm"><span class="hl h3t">H3</span>Field asset audits</div><div class="ln w75"></div><div class="wt mono" style="font-size:9px">&rarr; asset-verification</div></div>
+            </div>
+            <div class="kw"><b>scenario copy &mdash; secondary keywords to work in</b>
+              collateral inspection <span style="color:var(--ok)">(real query, pos 10.72)</span> &middot;
+              asset-based lending inspection &middot; borrowing base audit &middot; field asset inventory &middot; equipment count</div>
           </div>
         </div>
 
         <div class="wsec dark2">
           <span class="sid">S8</span><span class="snote">CTA with the visitor's own data</span>
           <div class="inner center stackv" style="justify-items:center">
-            <div class="wh">Count your first warehouse this week</div>
+            <div class="wh"><span class="hl">H2</span>Count your first warehouse this week</div>
             <div class="ln w45"></div>
             <div class="btnrow" style="justify-content:center"><span class="wbtn i">Start Free Trial</span><span class="wbtn s">Book a Demo</span></div>
           </div>
@@ -970,13 +1222,14 @@
       </div>
 
       <div class="notes">
-        <div class="notes-h">Wireframe decisions</div>
+        <div class="notes-h">Wireframe + SEO decisions</div>
         <div class="note-i"><span class="id">S1</span><span class="tx"><b>The result, already drawn.</b> The hero shows the photo with detection boxes in place: the service is legible without reading. The image is static and <span class="mono">priority</span>, so the LCP never depends on JS.</span></div>
+        <div class="note-i"><span class="id">S1</span><span class="tx"><b>&ldquo;AI inventory counting&rdquo;, not &ldquo;object counting&rdquo;.</b> COUNTiT is the site's #2 page at pos 5.16 for the counting cluster &mdash; this page must not compete with it. It takes the commercial inventory intent instead.</span></div>
         <div class="note-i"><span class="id">S2</span><span class="tx"><b>Mechanism.</b> The only one of the three services that proves itself in three seconds, so the demo goes high on the page and replaces the argument.</span></div>
-        <div class="note-i"><span class="id">S3</span><span class="tx"><b>Three lanes.</b> The difference between "we count with a phone" and "we close inventory". This is where "reconciliation" and "cycle count" get positioned &mdash; neither has a page today.</span></div>
+        <div class="note-i"><span class="id">S3</span><span class="tx"><b>Three lanes.</b> The difference between &ldquo;we count with a phone&rdquo; and &ldquo;we close inventory&rdquo;. This H2 is where &ldquo;cycle count&rdquo; and &ldquo;inventory reconciliation&rdquo; get positioned &mdash; neither has a page today.</span></div>
         <div class="note-i"><span class="id">S4</span><span class="tx"><b>No ROI calculator:</b> the SuperTemplate already owns that device, and here it would compete with the demo.</span></div>
         <div class="note-i"><span class="id">S6</span><span class="tx"><b>Saying where it fails</b> is what makes the rest credible in an AI product &mdash; and it prevents disappointment during the trial.</span></div>
-        <div class="note-i"><span class="id">S8</span><span class="tx"><b>A CTA with their own data</b> ("upload 10 of your photos"): the natural close for a page whose argument is a demo.</span></div>
+        <div class="note-i"><span class="id">S7</span><span class="tx"><b>&ldquo;Collateral inspection&rdquo; is a real ranking query</b> (pos 10.72, 360 impr) on a blog post. This section is the commercial page that query deserves.</span></div>
       </div>
     </div>
 
@@ -988,7 +1241,7 @@
           <div class="wsec"><span class="sid">S1</span>
             <div class="inner stackv">
               <span class="wkicker">VLX Inventory.ai</span>
-              <div class="wh xl">One photo. Inventory reconciled.</div>
+              <div class="wh xl"><span class="hl">H1</span>AI inventory counting from a single photo</div>
               <div class="detbox" style="min-height:110px"><i style="left:14%;top:20%;width:24%;height:30%"></i><i style="left:46%;top:26%;width:22%;height:26%"></i><i style="left:26%;top:58%;width:26%;height:28%"></i></div>
               <span class="wbtn p">Start Free Trial</span>
               <span class="wbtn s">Try the count</span>
@@ -996,7 +1249,7 @@
           </div>
           <div class="wsec muted"><span class="sid">S2</span>
             <div class="inner stackv">
-              <div class="wh sm">Run it yourself</div>
+              <div class="wh sm"><span class="hl">H2</span>Run an AI count on this photo</div>
               <div class="box t">grid + count button</div>
               <div class="wt mono" style="font-size:9px">readout drops from 4 columns to 2</div>
             </div>
@@ -1027,11 +1280,13 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/product/vlx-inventory-ai/</code> <span class="mono" style="color:var(--ink-3)">&mdash; no dot in the path</span></td></tr>
-          <tr><td>Title</td><td>VLX Inventory.ai &mdash; AI Inventory Counting | VLX</td></tr>
-          <tr><td>H1</td><td>VLX Inventory.ai: one photo and inventory reconciled</td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-inventory-ai/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/vlx-inventory-ai/ &mdash; no dot in the path either way</span></td></tr>
+          <tr><td>Title (48)</td><td>AI Inventory Counting Software | VLX Inventory.ai</td></tr>
+          <tr><td>H1</td><td>VLX Inventory.ai: AI inventory counting from a single photo</td></tr>
           <tr><td>Meta</td><td>Count stock from a photo, close cycle counts in hours and reconcile against your ERP with verifiable evidence for every variance.</td></tr>
-          <tr><td>Service scope</td><td>Vision counting (COUNTiT) &middot; cycle counts &middot; ERP reconciliation &middot; alerts &middot; asset verification &middot; KYPiT traceability</td></tr>
+          <tr><td>Primary keyword</td><td>AI inventory counting</td></tr>
+          <tr><td>Secondary keywords</td><td>inventory counting software &middot; cycle count app &middot; stock count app &middot; physical inventory count &middot; inventory reconciliation &middot; inventory audit software &middot; inventory shrinkage &middot; collateral inspection &middot; asset verification</td></tr>
+          <tr><td>Do not target</td><td><b>object counting / counting app / free counting app</b> (kept by <code>/app/countit/</code> &mdash; 644 clicks, pos 5.16)</td></tr>
         </tbody>
       </table>
     </div>
@@ -1041,7 +1296,7 @@
 <!-- ══════════ HANDOFF ══════════ -->
 <section class="block" id="handoff">
   <div class="shell">
-    <div class="h-sec"><span class="n">05</span><h2>Handoff and open decisions</h2></div>
+    <div class="h-sec"><span class="n">06</span><h2>Handoff and open decisions</h2></div>
 
     <h3 class="mini">New components</h3>
     <div class="tw">
@@ -1050,13 +1305,22 @@
         <tbody>
           <tr><td><code>JobTrack</code></td><td>Home S4</td><td>Server + optional JS</td><td>CSS scroll-snap; the buttons are progressive enhancement. Without JS it scrolls natively.</td></tr>
           <tr><td><code>WipeCompare</code></td><td>Home S5</td><td>Light client</td><td><span class="mono">input[type=range]</span> + <span class="mono">clip-path</span>, no libraries. Both sides in the DOM.</td></tr>
-          <tr><td><code>FrameworkMatrix</code></td><td>Quality S2</td><td>Server, client-side filter</td><td>All four matrices in the HTML; initial state from a query param resolved server-side.</td></tr>
+          <tr><td><code>FrameworkMatrix</code></td><td>Quality S2</td><td>Server, client-side filter</td><td>All four matrices in the HTML; initial state from a query param resolved server-side. This is the page's long-tail engine &mdash; never lazy-load it.</td></tr>
           <tr><td><code>CountDemo</code></td><td>Inventory S2</td><td>Client, <span class="mono">dynamic()</span></td><td>Pre-computed results; below the fold; with <span class="mono">prefers-reduced-motion</span> it shows the result immediately.</td></tr>
-          <tr><td><code>ScopeGrid</code></td><td>all three &middot; S3/S5</td><td>Server</td><td>3&times;2 scope grid with an internal link per item. Shared.</td></tr>
+          <tr><td><code>ScopeGrid</code></td><td>all three</td><td>Server</td><td>3&times;2 scope grid; each card title is an H3 and an internal link. Shared across the three services.</td></tr>
           <tr><td><code>ServicePlanCard</code></td><td>Home S7 &middot; the other two</td><td>Server</td><td>Service price on the page, kept in sync with <span class="mono">/pricing/</span>.</td></tr>
         </tbody>
       </table>
     </div>
+
+    <h3 class="mini">Heading rules applied in all three wireframes</h3>
+    <ul class="tight">
+      <li><b>One H1 per page</b>, carrying product name + category keyword.</li>
+      <li><b>Every H2 carries one keyword</b> and maps to one functional cluster. No decorative headings: the proof strip in Home S2 deliberately has none.</li>
+      <li><b>H3s are the capability names</b> inside scope grids and FAQ questions &mdash; the terms people actually search, not slogans.</li>
+      <li><b>No heading-level skips</b> (H1 &rarr; H2 &rarr; H3). <span class="mono">SectionHeading</span> already supports a <span class="mono">level</span> prop for exactly this.</li>
+      <li><b>Secondary keywords are annotated, not written.</b> The orange notes mark where each term belongs; the copy itself is the next deliverable.</li>
+    </ul>
 
     <h3 class="mini">Inherited rules to respect</h3>
     <ul class="tight">
@@ -1073,26 +1337,29 @@
         <thead><tr><th>Service</th><th>Hypothesis</th><th>Primary metric</th><th>Counter-metric</th></tr></thead>
         <tbody>
           <tr><td>VLX Home</td><td>Telling one complete job converts better than listing features, because the inspector is buying a closed cycle.</td><td>Trials / visit</td><td>Drop in the share of visitors reaching the final CTA</td></tr>
-          <tr><td>VLX Quality</td><td>The framework selector qualifies: whoever picks a standard requests a demo with higher intent.</td><td>Demos with a standard named</td><td>Bounce among visitors new to the category</td></tr>
-          <tr><td>Inventory.ai</td><td>Running the count on the page replaces the argument and shortens time to trial.</td><td>Demo run &rarr; trial</td><td>Trials that upload no photo within 7 days</td></tr>
+          <tr><td>VLX Quality</td><td>The framework selector qualifies: whoever picks a standard requests a demo with higher intent. It should also lift the compliance cluster from pos ~28.</td><td>Demos with a standard named &middot; clause-query impressions</td><td>Bounce among visitors new to the category</td></tr>
+          <tr><td>Inventory.ai</td><td>Running the count on the page replaces the argument and shortens time to trial, without touching COUNTiT's rankings.</td><td>Demo run &rarr; trial</td><td>COUNTiT position for &ldquo;counting app&rdquo; (must not move)</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3 class="mini">What we need from product</h3>
+    <h3 class="mini">Open decisions</h3>
     <ul class="tight">
-      <li><b>The scope of each service.</b> Six blocks are drawn in each scope grid; confirm which are in and which are out &mdash; especially the administrative side of VLX Home (invoicing and payments).</li>
-      <li><b>The licensing model.</b> The price card is drawn with the amount blank. Per inspector, per site or per inspection volume changes the whole S7 block.</li>
-      <li><b>Do all three launch together?</b> If the rollout is staged, the first one needs more internal-link weight and its own launch post; the other two follow with less effort.</li>
+      <li><b>Architecture:</b> confirm option A (<code>/digital-inspections-software/app/&hellip;</code>) or option B (<code>/product/&hellip;</code> plus a pillar rewrite). Everything else in this document is agnostic to that choice.</li>
+      <li><b>Keyword validation:</b> the ownership split is based on real GSC positions, but volumes for the new terms (&ldquo;home inspection business software&rdquo;, &ldquo;inventory counting software&rdquo;) are unverified. Check them in Ahrefs before the H1s are frozen.</li>
+      <li><b>Service scope:</b> six capability cards are drawn per service; confirm which are in &mdash; especially invoicing and payments in VLX Home.</li>
+      <li><b>Licensing model:</b> the price card is drawn with the amount blank. Per inspector, per site or per inspection volume changes the whole S7 block.</li>
+      <li><b>Staged or simultaneous launch?</b> If staged, the first service needs more internal-link weight and its own launch post.</li>
     </ul>
   </div>
 </section>
 
 <footer class="doc">
   <div class="shell">
-    VLX service wireframes &middot; v2 &middot; 18 August 2026. Layout drawn with the site's real tokens; vertical
-    proportions compressed so a full page reads at a glance. The three mechanisms are working prototypes.
-    Figures and copy are plausible placeholders &mdash; confirm before production.
+    VLX service wireframes &middot; v3 &middot; 18 August 2026. Layout drawn with the site's real tokens; vertical
+    proportions compressed so a full page reads at a glance. Keyword evidence from the property's own Search
+    Console export (Sep 2025 &ndash; Apr 2026). The three mechanisms are working prototypes. Figures and body copy
+    are placeholders &mdash; headings and titles are the proposal.
     <br><a class="backlink" href="../" style="display:inline-block;margin-top:10px">&larr; Back to the VLX SEO plan</a>
   </div>
 </footer>
