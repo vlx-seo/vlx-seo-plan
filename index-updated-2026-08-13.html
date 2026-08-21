@@ -256,6 +256,9 @@ body.show-details .btn-d-on{display:inline}
 .tb-opt:hover{background:rgba(255,255,255,.07)}
 .tb-opt input{accent-color:#F97316;cursor:pointer;width:14px;height:14px}
 .tb-count{color:#22C55E;font-weight:600;font-size:11.5px;flex-shrink:0}
+.tb-sync{font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;flex-shrink:0;padding:3px 7px;border-radius:999px;border:1px solid transparent;cursor:default}
+.tb-sync.ok{color:#4ADE80;border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.10)}
+.tb-sync.warn{color:#FBBF24;border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.12)}
 .tb-reset{background:transparent;border:1px solid rgba(255,255,255,.18);color:#cbd5e1;border-radius:6px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:inherit;flex-shrink:0}
 .tb-reset:hover{background:rgba(255,255,255,.10)}
 body{padding-top:62px}
@@ -334,7 +337,7 @@ body{padding-top:62px}
       <path class="tbw" d="M1020.32,558.92c-7.23,0-13.12-5.89-13.12-13.12v-106.71h-33.46v107.54c0,22.3,18.14,40.44,40.44,40.44h2.73l24.01-28.15h-20.6Z"/>
       <polygon class="tbw" points="1104.02 557.33 1129.09 587.07 1171.48 587.07 1124.95 532.51 1170.71 478.23 1129.39 478.23 1104.02 507.98 1077.88 477.33 1036.57 477.33 1083.09 532.51 1036.56 587.07 1078.95 587.07 1094.59 568.52 1104.02 557.33"/>
       <path class="tbo" d="M706.42,527.32l-1.01,1.78-23.65,40.96c-5.05,8.75-14.47,14.19-24.58,14.19h-45.63l14.73-25.48,1.01-1.78,23.65-40.96c5.05-8.75,14.47-14.19,24.58-14.19h45.63l-14.73,25.48ZM763.99,501.83h-42.85l-21.48-37.23h-26.38c-22.07,0-42.64,11.88-53.67,31l-29.49,51.12-25.89-44.88h-43.08l47.55,82.42h42.84l21.49,37.23h26.38c22.07,0,42.63-11.88,53.66-31l29.15-50.51.36.61,25.17,43.66h43.8l-47.55-82.42Z"/>
-    </svg><span class="t-en">SEO Plan</span><span class="t-es">Plan SEO</span></div><select class="tb-nav" id="tb-nav" onchange="navTo(this.value)"></select><div class="tb-dd"><button class="tb-ddbtn" id="ddbtn-prio" onclick="tbDD('prio')"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="tb-badge" id="badge-prio"></span><span class="tb-car">▾</span></button><div class="tb-ddpanel" id="panel-prio"><label class="tb-opt"><input type="checkbox" value="p1" onchange="tbCheck('prio',this)"><span>P1</span></label><label class="tb-opt"><input type="checkbox" value="p2" onchange="tbCheck('prio',this)"><span>P2</span></label><label class="tb-opt"><input type="checkbox" value="p3" onchange="tbCheck('prio',this)"><span>P3</span></label><label class="tb-opt"><input type="checkbox" value="p4" onchange="tbCheck('prio',this)"><span>P4</span></label></div></div><div class="tb-dd"><button class="tb-ddbtn" id="ddbtn-type" onclick="tbDD('type')"><span class="t-en">Type</span><span class="t-es">Tipo</span><span class="tb-badge" id="badge-type"></span><span class="tb-car">▾</span></button><div class="tb-ddpanel" id="panel-type"><label class="tb-opt"><input type="checkbox" value="technical" onchange="tbCheck('type',this)"><span><span class="t-en">Technical</span><span class="t-es">Técnico</span></span></label><label class="tb-opt"><input type="checkbox" value="content" onchange="tbCheck('type',this)"><span><span class="t-en">Content</span><span class="t-es">Contenido</span></span></label><label class="tb-opt"><input type="checkbox" value="schema" onchange="tbCheck('type',this)"><span>Schema</span></label><label class="tb-opt"><input type="checkbox" value="performance" onchange="tbCheck('type',this)"><span><span class="t-en">Performance</span><span class="t-es">Rendim.</span></span></label><label class="tb-opt"><input type="checkbox" value="linkbuilding" onchange="tbCheck('type',this)"><span>Links</span></label><label class="tb-opt"><input type="checkbox" value="geo" onchange="tbCheck('type',this)"><span><span class="t-en">GEO·AI</span><span class="t-es">GEO·IA</span></span></label><label class="tb-opt"><input type="checkbox" value="aso" onchange="tbCheck('type',this)"><span>ASO</span></label><label class="tb-opt"><input type="checkbox" value="local" onchange="tbCheck('type',this)"><span>Local·GMB</span></label><label class="tb-opt"><input type="checkbox" value="cro" onchange="tbCheck('type',this)"><span>CRO</span></label></div></div><span class="tb-count" id="tb-count"></span><button class="tb-reset" onclick="resetF()">Reset</button></div>
+    </svg><span class="t-en">SEO Plan</span><span class="t-es">Plan SEO</span></div><select class="tb-nav" id="tb-nav" onchange="navTo(this.value)"></select><div class="tb-dd"><button class="tb-ddbtn" id="ddbtn-prio" onclick="tbDD('prio')"><span class="t-en">Priority</span><span class="t-es">Prioridad</span><span class="tb-badge" id="badge-prio"></span><span class="tb-car">▾</span></button><div class="tb-ddpanel" id="panel-prio"><label class="tb-opt"><input type="checkbox" value="p1" onchange="tbCheck('prio',this)"><span>P1</span></label><label class="tb-opt"><input type="checkbox" value="p2" onchange="tbCheck('prio',this)"><span>P2</span></label><label class="tb-opt"><input type="checkbox" value="p3" onchange="tbCheck('prio',this)"><span>P3</span></label><label class="tb-opt"><input type="checkbox" value="p4" onchange="tbCheck('prio',this)"><span>P4</span></label></div></div><div class="tb-dd"><button class="tb-ddbtn" id="ddbtn-type" onclick="tbDD('type')"><span class="t-en">Type</span><span class="t-es">Tipo</span><span class="tb-badge" id="badge-type"></span><span class="tb-car">▾</span></button><div class="tb-ddpanel" id="panel-type"><label class="tb-opt"><input type="checkbox" value="technical" onchange="tbCheck('type',this)"><span><span class="t-en">Technical</span><span class="t-es">Técnico</span></span></label><label class="tb-opt"><input type="checkbox" value="content" onchange="tbCheck('type',this)"><span><span class="t-en">Content</span><span class="t-es">Contenido</span></span></label><label class="tb-opt"><input type="checkbox" value="schema" onchange="tbCheck('type',this)"><span>Schema</span></label><label class="tb-opt"><input type="checkbox" value="performance" onchange="tbCheck('type',this)"><span><span class="t-en">Performance</span><span class="t-es">Rendim.</span></span></label><label class="tb-opt"><input type="checkbox" value="linkbuilding" onchange="tbCheck('type',this)"><span>Links</span></label><label class="tb-opt"><input type="checkbox" value="geo" onchange="tbCheck('type',this)"><span><span class="t-en">GEO·AI</span><span class="t-es">GEO·IA</span></span></label><label class="tb-opt"><input type="checkbox" value="aso" onchange="tbCheck('type',this)"><span>ASO</span></label><label class="tb-opt"><input type="checkbox" value="local" onchange="tbCheck('type',this)"><span>Local·GMB</span></label><label class="tb-opt"><input type="checkbox" value="cro" onchange="tbCheck('type',this)"><span>CRO</span></label></div></div><span class="tb-count" id="tb-count"></span><span class="tb-sync" id="tb-sync"></span><button class="tb-reset" onclick="resetF()">Reset</button></div>
 
 <!-- ── Floating Controls ── -->
 <div class="page-controls">
@@ -831,6 +834,7 @@ function updateTooltips(isEs) {
   });
 }
 function toggleLang() {
+  setTimeout(setSyncBadge, 0);
   const isEs = document.body.classList.toggle('es');
   document.getElementById('lang-btn').classList.toggle('active', isEs);
   localStorage.setItem('vlx-lang', isEs ? 'es' : 'en');
@@ -957,17 +961,64 @@ const SUPA_URL = 'https://vepnbdqpkfbjqwybaxim.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcG5iZHFwa2ZianF3eWJheGltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMjIyODksImV4cCI6MjA5NTg5ODI4OX0.YBo0D7SOvfJeT5jGLuAqngBTMA8g4flkJICoiPELjDY';
 let supa = null;
 
+let supaOk = false;
+
 async function initSupabase() {
   try {
     supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-    await syncStateFromSupabase();
-    console.log('Supabase connected');
-  } catch(e) { console.log('Supabase offline — using localStorage'); }
+    await syncStateFromSupabase();   // baja lo compartido: la base manda
+    await pushLocalStateUp();        // sube lo que solo estaba en este navegador
+    supaOk = true;
+  } catch(e) {
+    supaOk = false;
+    console.log('Supabase no responde — el estado queda solo en este navegador', e && e.message);
+  }
+  setSyncBadge();
+}
+
+// Si una tarea tiene estado guardado aqui y no existe en la base, se sube.
+// Asi una marca deja de quedarse encerrada en un navegador.
+async function pushLocalStateUp() {
+  if (!supa) return;
+  const local = load();
+  const ids = Object.keys(local).filter(id => local[id] && (local[id].status || local[id].done || local[id].owner));
+  if (!ids.length) return;
+  const { data, error } = await supa.from('task_state').select('task_id');
+  if (error) throw error;
+  const known = new Set((data || []).map(r => r.task_id));
+  const now = new Date().toISOString();
+  const rows = ids.filter(id => !known.has(id)).map(id => {
+    const st = local[id].status || (local[id].done ? 'done' : 'backlog');
+    return { task_id: id, is_done: st === 'done', status: st, owner: local[id].owner || null,
+             done_at: st === 'done' ? now : null, updated_at: now };
+  });
+  if (!rows.length) return;
+  const r1 = await supa.from('task_state').upsert(rows, { onConflict: 'task_id' });
+  if (r1.error) {   // por si la columna status no existiera en otra instalacion
+    const bare = rows.map(({ status, ...rest }) => rest);
+    const r2 = await supa.from('task_state').upsert(bare, { onConflict: 'task_id' });
+    if (r2.error) throw r2.error;
+  }
+  console.log('Subidas ' + rows.length + ' marcas que solo estaban en este navegador');
+}
+
+function setSyncBadge() {
+  const el = document.getElementById('tb-sync');
+  if (!el) return;
+  const es = document.body.classList.contains('es');
+  el.textContent = supaOk ? (es ? '\u25CF compartido' : '\u25CF shared')
+                          : (es ? '\u25CF solo local' : '\u25CF local only');
+  el.className = 'tb-sync ' + (supaOk ? 'ok' : 'warn');
+  el.title = supaOk
+    ? (es ? 'Lo que marques se guarda para todo el equipo' : 'What you mark is saved for the whole team')
+    : (es ? 'Sin conexion con la base compartida: lo que marques queda SOLO en este navegador'
+          : 'No connection to the shared database: what you mark stays in THIS browser only');
 }
 
 async function syncStateFromSupabase() {
   if (!supa) return;
-  const { data } = await supa.from('task_state').select('*');
+  const { data, error } = await supa.from('task_state').select('*');
+  if (error) throw error;          // que el indicador diga la verdad
   if (!data) return;
   data.forEach(state => {
     const row = document.getElementById('task-' + state.task_id);
