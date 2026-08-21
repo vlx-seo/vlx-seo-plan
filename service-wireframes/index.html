@@ -318,7 +318,7 @@
 <header class="doc">
   <div class="shell">
     <a class="backlink" href="../">&larr; VLX SEO plan</a>
-    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 18 August 2026 &middot; v3</div>
+    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 21 August 2026 &middot; v4</div>
     <h1>Three new services, three new structures</h1>
     <p class="lede">
       VLX Home, VLX Quality and VLX Inventory.ai are <b>new services</b>: each has its own scope, its own licence
@@ -326,7 +326,7 @@
       pages, and each one carries a mechanism of its own &mdash; while all three speak VLX's visual language.
       This version adds the part that turns a wireframe into a brief: <b>real titles, a labelled H1/H2 hierarchy,
       the primary keyword each heading carries, secondary keywords annotated per section, and a decision on the
-      URL architecture.</b>
+      URL architecture.</b> <b>v4 corrects two things in that brief:</b> the three H1s now open with the primary keyword instead of the product name, and the last URL segment carries the keyword instead of the brand (&sect;02).
     </p>
     <div class="meta-row">
       <span class="chip">Keyword evidence: GSC Sep 2025 &ndash; Apr 2026</span>
@@ -427,28 +427,28 @@
             <td><b>VLX Home</b></td>
             <td>Home Inspection Business Software | VLX Home</td>
             <td class="num">43</td>
-            <td>VLX Home: home inspection business software, from booking to payment</td>
+            <td>Home inspection business software, from booking to payment &mdash; VLX Home</td>
             <td>home inspection business software</td>
           </tr>
           <tr>
             <td><b>VLX Quality</b></td>
             <td>Quality Management &amp; CAPA Software | VLX Quality</td>
             <td class="num">47</td>
-            <td>VLX Quality: quality management software with audit-ready evidence</td>
+            <td>Quality management software with audit-ready evidence &mdash; VLX Quality</td>
             <td>quality management software</td>
           </tr>
           <tr>
             <td><b>VLX Inventory.ai</b></td>
             <td>AI Inventory Counting Software | VLX Inventory.ai</td>
             <td class="num">48</td>
-            <td>VLX Inventory.ai: AI inventory counting from a single photo</td>
+            <td>AI inventory counting from a single photo &mdash; VLX Inventory.ai</td>
             <td>AI inventory counting</td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="sub" style="font-size:13.5px">
-      Pattern: keyword first, brand last, no boilerplate. Every H1 carries the product name <i>and</i> the category,
+      Pattern: <b>the primary keyword opens the string, as far left as it will go</b>; the brand closes it. Every H1 carries the product name <i>and</i> the category,
       because a brand-new service needs both &mdash; the name to build the entity, the category to be findable.
       Each H2 in the wireframes below carries one keyword and is labelled with its heading level.
     </p>
@@ -497,23 +497,23 @@
         <tbody>
           <tr>
             <td><b>A</b></td>
-            <td><code>/digital-inspections-software/app/vlx-home/</code></td>
+            <td><code>/digital-inspections-software/app/home-inspection-business-software/</code></td>
             <td>Rides the only proven product-page pattern on the site (COUNTiT pos 5.16, KYPiT pos 2.19). Sits inside the hub that owns the category term, so it inherits real topical relevance. No same-word sibling collision.</td>
             <td>Level 3 and a long URL. The segment is called <span class="mono">app</span>, which reads as &ldquo;mobile app module&rdquo; rather than &ldquo;service&rdquo;.</td>
             <td class="good">Recommended</td>
           </tr>
           <tr>
             <td><b>B</b></td>
-            <td><code>/product/vlx-home/</code></td>
+            <td><code>/product/home-inspection-business-software/</code></td>
             <td>Shorter, level 2, and three strong children could rescue a pillar that is currently doing nothing.</td>
             <td>That is a bet, not an inheritance: the pillar is at pos 27.56 with 10 clicks. It also splits the product story across two containers (<code>/product/</code> and the hub), which is how the current duplication mess started.</td>
             <td>Acceptable only if <code>/product/</code> is rebuilt as a real pillar in the same release</td>
           </tr>
           <tr>
             <td><b>C</b></td>
-            <td><code>/digital-inspections-software/vlx-quality/</code></td>
+            <td><code>/digital-inspections-software/quality-management-software/</code></td>
             <td>Level 2 inside the strong hub, short and clean.</td>
-            <td><b>Ruled out.</b> It would place <code>vlx-quality</code> directly beside the existing <code>quality/</code> child. The property's dominant SEO problem is exactly this &mdash; competing URL shapes for one topic (singular vs plural hub, <code>/checklists/</code> vs <code>/blog/</code>). Do not add a fourth instance of the same failure.</td>
+            <td><b>Ruled out.</b> A keyword-led slug removes the same-word collision that killed this option in v3 (<span class="mono">quality management</span> &ne; <span class="mono">quality inspection</span>), but it still puts a service page as a direct sibling of the 20 sector children and abandons the only product pattern the property has ever ranked with. The dominant SEO problem here is competing URL shapes for one topic (singular vs plural hub, <code>/checklists/</code> vs <code>/blog/</code>) &mdash; a near-sibling on the same topic is how that starts.</td>
             <td class="weak">Rejected</td>
           </tr>
         </tbody>
@@ -524,13 +524,33 @@
       <div class="ct">Verdict</div>
       <div class="cb">
         <b>Put the three services under the hub, in the namespace that already works</b> &mdash;
-        <code>/digital-inspections-software/app/vlx-home/</code>,
-        <code>&hellip;/app/vlx-quality/</code>,
-        <code>&hellip;/app/vlx-inventory-ai/</code>.
+        <code>/digital-inspections-software/app/home-inspection-business-software/</code>,
+        <code>&hellip;/app/quality-management-software/</code>,
+        <code>&hellip;/app/ai-inventory-counting-software/</code>.
         Keep <code>/product/</code> as a navigational overview that links <i>down</i> to the three services and to
         <code>/features/</code>, and stop trying to make it rank. If product prefers the shorter
         <code>/product/&hellip;</code> shape, that is defensible &mdash; but only bundled with a rewrite of the
         <code>/product/</code> pillar itself, otherwise the services launch onto a page with no equity to pass on.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ct">Why the last segment is the keyword and not the product name</div>
+      <div class="cb">
+        v3 decided the <i>container</i> with data and then took the leaf slug from the product name, copying
+        <code>app/countit/</code> and <code>app/kypit/</code>. That pattern earns its position because at COUNTiT
+        <b>the brand is the query</b>: &ldquo;countit&rdquo; at pos 6.82 and &ldquo;instacount&rdquo; at pos 3.85, on
+        the page with 644 clicks. <b>VLX Home, VLX Quality and VLX Inventory.ai have no search demand at all</b>
+        &mdash; they are names that start existing on launch day. A brand slug on a brand nobody searches carries
+        nothing, so the leaf now opens with the primary keyword and the product name lives in the title, the H1 and
+        the breadcrumb label.
+        <br><br>
+        This does not reopen option C: these slugs sit one level below the sector pages, inside <code>app/</code>, and
+        the words differ (<span class="mono">quality management</span> &ne; <span class="mono">quality
+        inspection</span>, <span class="mono">home inspection business</span> &ne; <span class="mono">home
+        inspection</span>), so no same-word sibling is created. The cost is internal, not organic: the nav will say
+        &ldquo;VLX Home&rdquo; while the URL says the category &mdash; that is what the breadcrumb label is for. And
+        it is free to change now, because none of the three pages exists yet. After launch it is a 301.
       </div>
     </div>
 
@@ -551,9 +571,9 @@
       &#9474;&nbsp; &#9492;&#9472; <b>app/</b> <span class="dim">&mdash; product namespace (proven: countit pos 5.16, kypit pos 2.19)</span><br>
       &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/countit/ <span class="dim">keeps &ldquo;object counting&rdquo; &middot; gains &ldquo;part of VLX Inventory.ai&rdquo;</span><br>
       &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/kypit/ <span class="dim">cross-cutting capability</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/vlx-home/</span> <span class="dim">&larr; new service</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/vlx-quality/</span> <span class="dim">&larr; new service</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9492;&#9472; <span class="new">app/vlx-inventory-ai/</span> <span class="dim">&larr; new service &middot; no dot in the path</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/home-inspection-business-software/</span> <span class="dim">&larr; new service</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/quality-management-software/</span> <span class="dim">&larr; new service</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9492;&#9472; <span class="new">app/ai-inventory-counting-software/</span> <span class="dim">&larr; new service</span><br>
       &#9500;&#9472; /product/ <span class="dim">&mdash; overview only; links down to the three services (stop optimising it)</span><br>
       &#9500;&#9472; /pricing/ <span class="dim">&mdash; one row or tab per service</span><br>
       &#9492;&#9472; /whats-new/ <span class="dim">&mdash; launch announcement, first entry link</span>
@@ -587,7 +607,7 @@
       <div class="canvas">
         <div class="canvas-bar">
           <span class="dots"><i></i><i></i><i></i></span>
-          <span class="url">vlx.ai/digital-inspections-software/app/vlx-home/</span>
+          <span class="url">vlx.ai/digital-inspections-software/app/home-inspection-business-software/</span>
           <span class="vp">1280px</span>
         </div>
 
@@ -598,7 +618,7 @@
           <div class="inner g s55">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Home</span>
-              <div class="wh xl"><span class="hl">H1</span>VLX Home: home inspection business software, from booking to payment</div>
+              <div class="wh xl"><span class="hl">H1</span>Home inspection business software, from booking to payment &mdash; VLX Home</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
                 inspection scheduling software &middot; offline inspection app &middot; branded inspection report &middot; get paid faster</div>
@@ -832,9 +852,9 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-home/</code><br><span class="mono" style="color:var(--ink-3)">alt if product prefers option B: /product/vlx-home/</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/home-inspection-business-software/</code><br><span class="mono" style="color:var(--ink-3)">alt if product prefers option B: /product/home-inspection-business-software/</span></td></tr>
           <tr><td>Title (43)</td><td>Home Inspection Business Software | VLX Home</td></tr>
-          <tr><td>H1</td><td>VLX Home: home inspection business software, from booking to payment</td></tr>
+          <tr><td>H1</td><td>Home inspection business software, from booking to payment &mdash; VLX Home</td></tr>
           <tr><td>Meta</td><td>Scheduling, offline inspections, branded reports, signature and invoicing in one service. VLX Home runs the whole residential inspection job.</td></tr>
           <tr><td>Primary keyword</td><td>home inspection business software</td></tr>
           <tr><td>Secondary keywords</td><td>home inspection report software &middot; home inspection app &middot; inspection scheduling software &middot; inspection invoicing &middot; offline inspection app &middot; photo authentication software &middot; mobile home inspection software</td></tr>
@@ -859,7 +879,7 @@
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/vlx-quality/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/quality-management-software/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec dark">
@@ -867,7 +887,7 @@
           <div class="inner g c2">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Quality</span>
-              <div class="wh xl"><span class="hl">H1</span>VLX Quality: quality management software with audit-ready evidence</div>
+              <div class="wh xl"><span class="hl">H1</span>Quality management software with audit-ready evidence &mdash; VLX Quality</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
                 eQMS &middot; non-conformance management &middot; corrective and preventive action &middot; audit trail software</div>
@@ -1062,9 +1082,9 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-quality/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/vlx-quality/</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/quality-management-software/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/quality-management-software/</span></td></tr>
           <tr><td>Title (47)</td><td>Quality Management &amp; CAPA Software | VLX Quality</td></tr>
-          <tr><td>H1</td><td>VLX Quality: quality management software with audit-ready evidence</td></tr>
+          <tr><td>H1</td><td>Quality management software with audit-ready evidence &mdash; VLX Quality</td></tr>
           <tr><td>Meta</td><td>Non-conformances, CAPA, audits and scoring in one service. Every clause of your standard with the evidence that backs it, ready for the auditor.</td></tr>
           <tr><td>Primary keyword</td><td>quality management software</td></tr>
           <tr><td>Secondary keywords</td><td>CAPA software &middot; non-conformance (NCR) software &middot; eQMS &middot; ISO 9001 audit checklist software &middot; IATF 16949 compliance &middot; HACCP monitoring &middot; AS9100 &middot; supplier quality audit &middot; audit trail software &middot; BRC audit checklist</td></tr>
@@ -1089,7 +1109,7 @@
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/vlx-inventory-ai/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/ai-inventory-counting-software/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec">
@@ -1097,7 +1117,7 @@
           <div class="inner g s55">
             <div class="stackv">
               <span class="wkicker">New service &middot; VLX Inventory.ai</span>
-              <div class="wh xl"><span class="hl">H1</span>VLX Inventory.ai: AI inventory counting from a single photo</div>
+              <div class="wh xl"><span class="hl">H1</span>AI inventory counting from a single photo &mdash; VLX Inventory.ai</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
                 inventory counting software &middot; cycle count app &middot; stock count &middot; inventory reconciliation &middot; ERP integration</div>
@@ -1280,9 +1300,9 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/vlx-inventory-ai/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/vlx-inventory-ai/ &mdash; no dot in the path either way</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/app/ai-inventory-counting-software/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/ai-inventory-counting-software/</span></td></tr>
           <tr><td>Title (48)</td><td>AI Inventory Counting Software | VLX Inventory.ai</td></tr>
-          <tr><td>H1</td><td>VLX Inventory.ai: AI inventory counting from a single photo</td></tr>
+          <tr><td>H1</td><td>AI inventory counting from a single photo &mdash; VLX Inventory.ai</td></tr>
           <tr><td>Meta</td><td>Count stock from a photo, close cycle counts in hours and reconcile against your ERP with verifiable evidence for every variance.</td></tr>
           <tr><td>Primary keyword</td><td>AI inventory counting</td></tr>
           <tr><td>Secondary keywords</td><td>inventory counting software &middot; cycle count app &middot; stock count app &middot; physical inventory count &middot; inventory reconciliation &middot; inventory audit software &middot; inventory shrinkage &middot; collateral inspection &middot; asset verification</td></tr>
@@ -1356,7 +1376,7 @@
 
 <footer class="doc">
   <div class="shell">
-    VLX service wireframes &middot; v3 &middot; 18 August 2026. Layout drawn with the site's real tokens; vertical
+    VLX service wireframes &middot; v4 &middot; 21 August 2026. Layout drawn with the site's real tokens; vertical
     proportions compressed so a full page reads at a glance. Keyword evidence from the property's own Search
     Console export (Sep 2025 &ndash; Apr 2026). The three mechanisms are working prototypes. Figures and body copy
     are placeholders &mdash; headings and titles are the proposal.
