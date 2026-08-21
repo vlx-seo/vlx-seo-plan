@@ -1098,7 +1098,8 @@ window.saveCustomTask = async function() {
 };
 
 // ── Drag & Drop reorder ──
-const DKEY = 'vlx-order-2026';
+// v2: la clave anterior guardo ids renumerados (S1..S59) que no existen; se ignora.
+const DKEY = 'vlx-order-2026-v2';
 function saveOrder(slideId, ids) { const o=JSON.parse(localStorage.getItem(DKEY)||'{}'); o[slideId]=ids; localStorage.setItem(DKEY,JSON.stringify(o)); }
 function loadOrder() { try { return JSON.parse(localStorage.getItem(DKEY)||'{}'); } catch { return {}; } }
 
@@ -1117,8 +1118,16 @@ function initDrag() {
     const slide = tbody.closest('.slide');
     if (!slide || !slide.id) return;
     const saved = loadOrder()[slide.id];
-    if (saved) {
-      saved.forEach(id => { const r=document.getElementById(id); if(r) tbody.appendChild(r); });
+    if (saved && saved.length) {
+      const rows = [...tbody.querySelectorAll('tr.task-row')];
+      const present = saved.filter(id => rows.some(r => r.id === id));
+      // Solo se reordena si el orden guardado cubre las filas que hay. Si no,
+      // las que faltan quedarian arriba y la tabla saldria barajada.
+      if (present.length === rows.length) {
+        present.forEach(id => { const r = document.getElementById(id); if (r) tbody.appendChild(r); });
+      } else {
+        console.log('Orden guardado descartado en ' + slide.id + ': cubre ' + present.length + ' de ' + rows.length + ' filas');
+      }
     }
   });
 }
@@ -1201,8 +1210,10 @@ function makeDraggable(row, tbody) {
   row.addEventListener('dragend', () => {
     row.classList.remove('dragging'); dragEnabled=false;
     document.querySelectorAll('.task-row').forEach(r => r.classList.remove('drag-over'));
-    // Renumber ALL phases sequentially after any drag
-    document.querySelectorAll('.slide[id] tbody').forEach(tb => renumberPhase(tb));
+    // NO se renumera. Renumerar reescribia el id de CADA fila de la fase a
+    // prefijo+posicion (S1..Sn), y el estado se guarda POR ID: al renombrar, la
+    // marca dejaba de corresponder a su tarea y el guardado compartido fallaba
+    // porque ese id nuevo no existe en el catalogo.
     // Save order for all slides
     document.querySelectorAll('.slide[id]').forEach(slide => {
       const tb = slide.querySelector('tbody');
