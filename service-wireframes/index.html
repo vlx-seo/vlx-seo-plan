@@ -318,7 +318,7 @@
 <header class="doc">
   <div class="shell">
     <a class="backlink" href="../">&larr; VLX SEO plan</a>
-    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 21 August 2026 &middot; v4</div>
+    <div class="eyebrow" style="margin-top:14px">Design proposal &middot; 21 August 2026 &middot; v5</div>
     <h1>Three new services, three new structures</h1>
     <p class="lede">
       VLX Home, VLX Quality and VLX Inventory.ai are <b>new services</b>: each has its own scope, its own licence
@@ -326,7 +326,7 @@
       pages, and each one carries a mechanism of its own &mdash; while all three speak VLX's visual language.
       This version adds the part that turns a wireframe into a brief: <b>real titles, a labelled H1/H2 hierarchy,
       the primary keyword each heading carries, secondary keywords annotated per section, and a decision on the
-      URL architecture.</b> <b>v4 corrects two things in that brief:</b> the three H1s now open with the primary keyword instead of the product name, and the last URL segment carries the keyword instead of the brand (&sect;02).
+      URL architecture.</b> <b>v5 corrects three things:</b> the three H1s now open with the primary keyword instead of the product name; the last URL segment carries the head keyword instead of the brand; and the architecture consolidates the two sector pages instead of splitting terms with them &mdash; measured on the export <b>grouped by final URL</b>, which is what showed the &ldquo;existing owners&rdquo; had zero clicks (&sect;01, &sect;02).
     </p>
     <div class="meta-row">
       <span class="chip">Keyword evidence: GSC Sep 2025 &ndash; Apr 2026</span>
@@ -380,8 +380,11 @@
 
     <h3 class="mini">Keyword ownership: who keeps what</h3>
     <p class="sub" style="margin-top:8px">
-      The biggest risk in launching three service pages is taking terms away from pages that already rank for them.
-      This table is the contract.
+      The risk in launching three service pages is taking terms away from pages that already rank for them.
+      Measured against the consolidated export (every alias grouped into its final URL with
+      <span class="mono">consolidate_urls.py</span>, not raw GSC rows), <b>two of the three &ldquo;existing owners&rdquo;
+      own nothing</b>: they are pages with zero clicks. So this table is no longer a split &mdash; it is a
+      consolidation. This is the contract.
     </p>
     <div class="tw">
       <table>
@@ -389,15 +392,15 @@
         <tbody>
           <tr>
             <td>Home / residential</td>
-            <td><code>/digital-inspections-software/home-inspectors/</code><br>&ldquo;home inspection software&rdquo; (current title: <i>Home Inspection Software &mdash; Fastest Reports, Custom Formats</i>)</td>
-            <td class="num">Property/Home cluster: ~30 clicks / 8,500 impr / pos ~12</td>
-            <td><b>VLX Home:</b> &ldquo;home inspection business software&rdquo;, &ldquo;home inspection report software&rdquo;, &ldquo;home inspection scheduling&rdquo;, &ldquo;home inspection app&rdquo;</td>
+            <td><b>Nothing to keep.</b> <code>/digital-inspections-software/home-inspectors/</code> (title: <i>Home Inspection Software &mdash; Fastest Reports, Custom Formats</i>) <b>301s into the new service</b></td>
+            <td class="num weak">0 impressions consolidated, under every alias. The page is <span class="mono">only-new</span> &mdash; it did not exist on WordPress, so it has no history to lose either. The ~30 clicks / 8,500 impr / pos ~12 &ldquo;Property/Home&rdquo; cluster the v3 table cited belongs to <b>two blog posts</b> (<code>/blog/pre-purchase-inspection-checklist/</code>, <code>/blog/house-insurance-inspection-checklist/</code>), and its queries are <span class="mono">mobile home inspection</span> (manufactured homes) and checklists &mdash; informational, not software</td>
+            <td><b>VLX Home takes the head term:</b> &ldquo;home inspection software&rdquo;, plus &ldquo;home inspection business software&rdquo;, &ldquo;home inspection report software&rdquo;, &ldquo;home inspection scheduling&rdquo;, &ldquo;home inspection app&rdquo;</td>
           </tr>
           <tr>
             <td>Quality / compliance</td>
-            <td><code>/digital-inspections-software/quality/</code><br>&ldquo;quality inspection software&rdquo; (current title: <i>Quality &amp; Compliance Inspection Software</i>)</td>
-            <td class="num">Compliance cluster: ~15 clicks / 12,000 impr / pos ~28; &ldquo;brc audit checklist&rdquo; pos 8.55</td>
-            <td><b>VLX Quality:</b> &ldquo;quality management software&rdquo;, &ldquo;CAPA software&rdquo;, &ldquo;non-conformance software&rdquo;, &ldquo;eQMS&rdquo;</td>
+            <td><b>Nothing to keep.</b> <code>/digital-inspections-software/quality/</code> (title: <i>Quality &amp; Compliance Inspection Software</i>) <b>301s into the new service</b></td>
+            <td class="num weak">700 impr consolidated &mdash; the raw USA row shows 89; the consolidation adds <span class="mono">/digital-inspection-software/quality/</span>, the <b>singular</b> hub &mdash; with <b>0 clicks at pos 64.7</b>. The term itself, &ldquo;quality inspection software&rdquo;: 718 impr, 0 clicks, <b>pos 69.1</b>. The compliance cluster that does earn (&ldquo;brc audit checklist&rdquo; pos 8.55) sits on blog checklists, which stay where they are</td>
+            <td><b>VLX Quality takes both:</b> &ldquo;quality management software&rdquo;, &ldquo;CAPA software&rdquo;, &ldquo;non-conformance software&rdquo;, &ldquo;eQMS&rdquo; &mdash; and the &ldquo;quality inspection software&rdquo; the sector page never converted</td>
           </tr>
           <tr>
             <td>Counting / inventory</td>
@@ -458,29 +461,34 @@
 <!-- ══════════ ARCHITECTURE DECISION ══════════ -->
 <section class="block" id="arch">
   <div class="shell">
-    <div class="h-sec"><span class="n">02</span><h2>Architecture: is <code style="font-size:.8em">/product/</code> worth keeping?</h2></div>
+    <div class="h-sec"><span class="n">02</span><h2>Architecture: where the three services live</h2></div>
     <p class="sub">
-      This section answers the question directly, and it <b>reverses the recommendation in v2 of this document</b>.
-      Version 2 proposed <code>/product/vlx-home/</code> on the argument that level 2 inherits pillar authority and
-      that level 3 buries a page. The Search Console data contradicts both halves of that argument.
+      <b>The container is not an open question &mdash; the site's own history already answered it.</b>
+      <code>/product/</code> was the hub in the previous CMS; when the site was rebuilt, the hub role moved to
+      <code>/digital-inspections-software/</code>, which is why the consolidated export attributes the old
+      <code>/product/</code>'s <b>41,276 impressions / 14 clicks</b> to the hub's final URL. The latest rebuild then
+      <b>separated the two by client decision</b>: <code>/product/</code> keeps the product narrative,
+      <code>/digital-inspections-software/</code> carries the SEO strategy. So the authority followed the
+      <i>role</i>, not the URL string &mdash; and the services belong under the container that holds the role.
+      This reverses v2 (<code>/product/vlx-home/</code>) and v3 (<code>app/vlx-home/</code>) alike.
     </p>
 
-    <h3 class="mini">What the data says about the two candidate containers</h3>
+    <h3 class="mini">What the consolidated data says</h3>
     <div class="tw">
       <table>
         <thead><tr><th>Container</th><th>Clicks</th><th>Impressions</th><th>Avg position</th><th>Reading</th></tr></thead>
         <tbody>
           <tr>
             <td><code>/product/</code></td><td class="num">10</td><td class="num">3,111</td><td class="num weak">27.56</td>
-            <td>Was 88 clicks on the legacy property. The GSC analysis notes the solutions hub &ldquo;may be siphoning&rdquo; it. No children, and it overlaps <code>/features/</code>.</td>
+            <td><b>A URL that kept its address and lost its job.</b> It was the hub; the role and the legacy volume moved to <code>/digital-inspections-software/</code>. What is left is the residue, and by the client's own decision this page now carries narrative, not SEO. Services under it would fight that decision.</td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/</code></td><td class="num">14</td><td class="num">4,978</td><td class="num">27.64</td>
-            <td>Weak too &mdash; but it is the URL that ranks for the category term (&ldquo;digital inspection software&rdquo;, 3,015 impr) and it already has 20 children plus the <code>app/</code> namespace.</td>
+            <td><b>The container that holds the hub role.</b> Consolidated it carries the legacy 41,276 impr / 14 clicks of the old <code>/product/</code>, it is the URL that ranks for the category term (&ldquo;digital inspection software&rdquo;, 3,015 impr, pos 12.47) and it already has 20 children plus the <code>app/</code> namespace.</td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/app/countit/</code></td><td class="num good">644</td><td class="num">52,382</td><td class="num good">5.16</td>
-            <td><b>Level 3, and the best product page on the site.</b> This is the proof that depth is not what holds VLX pages back.</td>
+            <td><b>Level 3, and the best product page on the site</b> &mdash; proof that depth is not what holds VLX pages back. But read why it wins: its queries are <span class="mono">countit</span> (pos 6.82) and <span class="mono">instacount</span> (pos 3.85). <b>The brand is the query.</b></td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/app/kypit/</code></td><td class="num">~8 (branded)</td><td class="num">~200</td><td class="num good">2.19</td>
@@ -497,23 +505,23 @@
         <tbody>
           <tr>
             <td><b>A</b></td>
-            <td><code>/digital-inspections-software/app/home-inspection-business-software/</code></td>
-            <td>Rides the only proven product-page pattern on the site (COUNTiT pos 5.16, KYPiT pos 2.19). Sits inside the hub that owns the category term, so it inherits real topical relevance. No same-word sibling collision.</td>
-            <td>Level 3 and a long URL. The segment is called <span class="mono">app</span>, which reads as &ldquo;mobile app module&rdquo; rather than &ldquo;service&rdquo;.</td>
+            <td><code>/digital-inspections-software/home-inspection-software/</code></td>
+            <td><b>Level 2 inside the container that holds the hub role</b>, with the head term in the last segment. It replaces the sector page instead of competing with it: one page, one intent, and a 301 that costs <b>0 clicks</b> because the sector page has none. Shortest of the three and the keyword sits one segment from the root.</td>
+            <td>It consumes a sector child, so the rule has to be written down or the hub ends up mixing two page types with no visible logic.</td>
             <td class="good">Recommended</td>
           </tr>
           <tr>
             <td><b>B</b></td>
-            <td><code>/product/home-inspection-business-software/</code></td>
-            <td>Shorter, level 2, and three strong children could rescue a pillar that is currently doing nothing.</td>
-            <td>That is a bet, not an inheritance: the pillar is at pos 27.56 with 10 clicks. It also splits the product story across two containers (<code>/product/</code> and the hub), which is how the current duplication mess started.</td>
-            <td>Acceptable only if <code>/product/</code> is rebuilt as a real pillar in the same release</td>
+            <td><code>/product/home-inspection-software/</code></td>
+            <td>Shorter path, and three children could give <code>/product/</code> something to do.</td>
+            <td><b>It contradicts a decision already taken.</b> The client split the two containers on purpose: <code>/product/</code> carries the narrative, the hub carries SEO. Hanging the service pages off the narrative URL re-merges what was deliberately separated &mdash; and it inherits nothing, because the authority left with the role, not with the address.</td>
+            <td class="weak">Rejected</td>
           </tr>
           <tr>
             <td><b>C</b></td>
-            <td><code>/digital-inspections-software/quality-management-software/</code></td>
-            <td>Level 2 inside the strong hub, short and clean.</td>
-            <td><b>Ruled out.</b> A keyword-led slug removes the same-word collision that killed this option in v3 (<span class="mono">quality management</span> &ne; <span class="mono">quality inspection</span>), but it still puts a service page as a direct sibling of the 20 sector children and abandons the only product pattern the property has ever ranked with. The dominant SEO problem here is competing URL shapes for one topic (singular vs plural hub, <code>/checklists/</code> vs <code>/blog/</code>) &mdash; a near-sibling on the same topic is how that starts.</td>
+            <td><code>/digital-inspections-software/app/quality-management-software/</code></td>
+            <td>Rides the only product pattern the property has ever ranked with (COUNTiT pos 5.16, KYPiT pos 2.19).</td>
+            <td><b>Ruled out.</b> That pattern is not a pattern, it is <b>branded demand</b>: COUNTiT and KYPiT rank because their names are searched. These three names have no demand at all. <span class="mono">app</span> also reads as &ldquo;mobile app module&rdquo;, and it buries the page at level 3 for nothing in return.</td>
             <td class="weak">Rejected</td>
           </tr>
         </tbody>
@@ -523,14 +531,19 @@
     <div class="callout verdict">
       <div class="ct">Verdict</div>
       <div class="cb">
-        <b>Put the three services under the hub, in the namespace that already works</b> &mdash;
-        <code>/digital-inspections-software/app/home-inspection-business-software/</code>,
-        <code>&hellip;/app/quality-management-software/</code>,
-        <code>&hellip;/app/ai-inventory-counting-software/</code>.
-        Keep <code>/product/</code> as a navigational overview that links <i>down</i> to the three services and to
-        <code>/features/</code>, and stop trying to make it rank. If product prefers the shorter
-        <code>/product/&hellip;</code> shape, that is defensible &mdash; but only bundled with a rewrite of the
-        <code>/product/</code> pillar itself, otherwise the services launch onto a page with no equity to pass on.
+        <b>Level 2 inside the hub, with the head term as the last segment</b> &mdash;
+        <code>/digital-inspections-software/home-inspection-software/</code>,
+        <code>&hellip;/quality-management-software/</code>,
+        <code>&hellip;/ai-inventory-counting-software/</code>, and a <b>301 from the two sector pages they replace</b>
+        (<code>/home-inspectors/</code> and <code>/quality/</code> &mdash; 0 clicks between them, so the redirect
+        costs nothing).
+        <br><br>
+        <b>The rule this creates, written down so it survives without us:</b> <code>app/</code> is for products whose
+        <i>brand</i> is searched (countit, kypit); <b>level 2 is for services named after their category</b>. A sector
+        child is only consolidated when a service covers that same audience &mdash; the sectors with no service
+        (<code>oil-and-gas/</code> at 1,948 impr, <code>vehicle/</code>, <code>real-estate/</code>&hellip;) stay exactly
+        where they are, and they are the ones with impressions. <code>/product/</code> keeps its narrative and links
+        <i>down</i> to the three services; it is not asked to rank.
       </div>
     </div>
 
@@ -545,12 +558,15 @@
         nothing, so the leaf now opens with the primary keyword and the product name lives in the title, the H1 and
         the breadcrumb label.
         <br><br>
-        This does not reopen option C: these slugs sit one level below the sector pages, inside <code>app/</code>, and
-        the words differ (<span class="mono">quality management</span> &ne; <span class="mono">quality
-        inspection</span>, <span class="mono">home inspection business</span> &ne; <span class="mono">home
-        inspection</span>), so no same-word sibling is created. The cost is internal, not organic: the nav will say
-        &ldquo;VLX Home&rdquo; while the URL says the category &mdash; that is what the breadcrumb label is for. And
-        it is free to change now, because none of the three pages exists yet. After launch it is a 301.
+        And there is no sibling to collide with, because the sector page is not kept &mdash; it is consolidated into
+        this one (&sect;01). The cost is internal, not organic: the nav will say &ldquo;VLX Home&rdquo; while the URL
+        says the category &mdash; that is what the breadcrumb label is for. It is free to change now, because none of
+        the three pages exists yet. After launch it is a 301.
+        <br><br>
+        <b>Still to validate:</b> the wording of the two head slugs (&ldquo;home inspection software&rdquo; vs
+        &ldquo;home inspection business software&rdquo;, &ldquo;quality management&rdquo; vs &ldquo;quality
+        inspection&rdquo;) is a <i>market volume</i> question, and GSC cannot answer it: zero impressions means the
+        property has no presence, not that there is no demand. Check the pair in Ahrefs before the slugs are frozen.
       </div>
     </div>
 
@@ -567,14 +583,14 @@
     <div class="tree">
       <b>vlx.ai/</b><br>
       &#9500;&#9472; <b>/digital-inspections-software/</b> <span class="dim">&mdash; hub, owns &ldquo;digital inspection software&rdquo; (pos 12.47)</span><br>
-      &#9474;&nbsp; &#9500;&#9472; /quality/ &middot; /home-inspectors/ &middot; /asset-verification/ &hellip; <span class="dim">20 sector children, keep generic keywords, link down</span><br>
-      &#9474;&nbsp; &#9492;&#9472; <b>app/</b> <span class="dim">&mdash; product namespace (proven: countit pos 5.16, kypit pos 2.19)</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/countit/ <span class="dim">keeps &ldquo;object counting&rdquo; &middot; gains &ldquo;part of VLX Inventory.ai&rdquo;</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/kypit/ <span class="dim">cross-cutting capability</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/home-inspection-business-software/</span> <span class="dim">&larr; new service</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; <span class="new">app/quality-management-software/</span> <span class="dim">&larr; new service</span><br>
-      &#9474;&nbsp; &nbsp; &nbsp;&#9492;&#9472; <span class="new">app/ai-inventory-counting-software/</span> <span class="dim">&larr; new service</span><br>
-      &#9500;&#9472; /product/ <span class="dim">&mdash; overview only; links down to the three services (stop optimising it)</span><br>
+      &#9474;&nbsp; &#9500;&#9472; <span class="new">home-inspection-software/</span> <span class="dim">&larr; VLX Home &middot; 301 from /home-inspectors/</span><br>
+      &#9474;&nbsp; &#9500;&#9472; <span class="new">quality-management-software/</span> <span class="dim">&larr; VLX Quality &middot; 301 from /quality/</span><br>
+      &#9474;&nbsp; &#9500;&#9472; <span class="new">ai-inventory-counting-software/</span> <span class="dim">&larr; Inventory.ai &middot; no sector sibling to consolidate</span><br>
+      &#9474;&nbsp; &#9500;&#9472; /oil-and-gas/ &middot; /vehicle/ &middot; /real-estate/ &hellip; <span class="dim">the sectors with no service stay &mdash; and they are the ones with impressions (oil-and-gas 1,948)</span><br>
+      &#9474;&nbsp; &#9492;&#9472; <b>app/</b> <span class="dim">&mdash; only brands that are searched</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9500;&#9472; app/countit/ <span class="dim">keeps &ldquo;object counting&rdquo; (pos 5.16) &middot; gains &ldquo;part of VLX Inventory.ai&rdquo;</span><br>
+      &#9474;&nbsp; &nbsp; &nbsp;&#9492;&#9472; app/kypit/ <span class="dim">cross-cutting capability</span><br>
+      &#9500;&#9472; /product/ <span class="dim">&mdash; the narrative, by client decision; links down to the three services, not asked to rank</span><br>
       &#9500;&#9472; /pricing/ <span class="dim">&mdash; one row or tab per service</span><br>
       &#9492;&#9472; /whats-new/ <span class="dim">&mdash; launch announcement, first entry link</span>
     </div>
@@ -607,7 +623,7 @@
       <div class="canvas">
         <div class="canvas-bar">
           <span class="dots"><i></i><i></i><i></i></span>
-          <span class="url">vlx.ai/digital-inspections-software/app/home-inspection-business-software/</span>
+          <span class="url">vlx.ai/digital-inspections-software/home-inspection-software/</span>
           <span class="vp">1280px</span>
         </div>
 
@@ -852,13 +868,13 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/home-inspection-business-software/</code><br><span class="mono" style="color:var(--ink-3)">alt if product prefers option B: /product/home-inspection-business-software/</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/home-inspection-software/</code><br><span class="mono" style="color:var(--ink-3)">301 from /digital-inspections-software/home-inspectors/ (0 clicks)</span></td></tr>
           <tr><td>Title (43)</td><td>Home Inspection Business Software | VLX Home</td></tr>
           <tr><td>H1</td><td>Home inspection business software, from booking to payment &mdash; VLX Home</td></tr>
           <tr><td>Meta</td><td>Scheduling, offline inspections, branded reports, signature and invoicing in one service. VLX Home runs the whole residential inspection job.</td></tr>
           <tr><td>Primary keyword</td><td>home inspection business software</td></tr>
           <tr><td>Secondary keywords</td><td>home inspection report software &middot; home inspection app &middot; inspection scheduling software &middot; inspection invoicing &middot; offline inspection app &middot; photo authentication software &middot; mobile home inspection software</td></tr>
-          <tr><td>Do not target</td><td><b>home inspection software</b> (kept by <code>/digital-inspections-software/home-inspectors/</code>)</td></tr>
+          <tr><td>Do not target</td><td>&mdash; <span class="mono">home inspection software</span> is now <b>this page's</b> head term; <code>/home-inspectors/</code> 301s here. Keep off <span class="mono">mobile / manufactured home inspection</span> and the checklist queries: those are the blog's, and informational</td></tr>
         </tbody>
       </table>
     </div>
@@ -879,7 +895,7 @@
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/quality-management-software/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/quality-management-software/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec dark">
@@ -1082,13 +1098,13 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/quality-management-software/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/quality-management-software/</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/quality-management-software/</code><br><span class="mono" style="color:var(--ink-3)">301 from /digital-inspections-software/quality/ (0 clicks, pos 64.7)</span></td></tr>
           <tr><td>Title (47)</td><td>Quality Management &amp; CAPA Software | VLX Quality</td></tr>
           <tr><td>H1</td><td>Quality management software with audit-ready evidence &mdash; VLX Quality</td></tr>
           <tr><td>Meta</td><td>Non-conformances, CAPA, audits and scoring in one service. Every clause of your standard with the evidence that backs it, ready for the auditor.</td></tr>
           <tr><td>Primary keyword</td><td>quality management software</td></tr>
           <tr><td>Secondary keywords</td><td>CAPA software &middot; non-conformance (NCR) software &middot; eQMS &middot; ISO 9001 audit checklist software &middot; IATF 16949 compliance &middot; HACCP monitoring &middot; AS9100 &middot; supplier quality audit &middot; audit trail software &middot; BRC audit checklist</td></tr>
-          <tr><td>Do not target</td><td><b>quality inspection software</b> (kept by <code>/digital-inspections-software/quality/</code>)</td></tr>
+          <tr><td>Do not target</td><td>&mdash; <span class="mono">quality inspection software</span> comes here too; <code>/quality/</code> 301s in. Keep off <span class="mono">brc audit checklist</span> and the clause checklists that already earn on the blog</td></tr>
         </tbody>
       </table>
     </div>
@@ -1109,7 +1125,7 @@
 
     <div class="wrap">
       <div class="canvas">
-        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/app/ai-inventory-counting-software/</span><span class="vp">1280px</span></div>
+        <div class="canvas-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">vlx.ai/digital-inspections-software/ai-inventory-counting-software/</span><span class="vp">1280px</span></div>
         <div class="wnav"><span class="logo"></span><span class="items"><i></i><i></i><i></i><i></i><i></i></span><span class="cta"></span></div>
 
         <div class="wsec">
@@ -1300,7 +1316,7 @@
       <table>
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
-          <tr><td>URL</td><td><code>/digital-inspections-software/app/ai-inventory-counting-software/</code><br><span class="mono" style="color:var(--ink-3)">alt: /product/ai-inventory-counting-software/</span></td></tr>
+          <tr><td>URL</td><td><code>/digital-inspections-software/ai-inventory-counting-software/</code><br><span class="mono" style="color:var(--ink-3)">no sector page to consolidate</span></td></tr>
           <tr><td>Title (48)</td><td>AI Inventory Counting Software | VLX Inventory.ai</td></tr>
           <tr><td>H1</td><td>AI inventory counting from a single photo &mdash; VLX Inventory.ai</td></tr>
           <tr><td>Meta</td><td>Count stock from a photo, close cycle counts in hours and reconcile against your ERP with verifiable evidence for every variance.</td></tr>
@@ -1376,7 +1392,7 @@
 
 <footer class="doc">
   <div class="shell">
-    VLX service wireframes &middot; v4 &middot; 21 August 2026. Layout drawn with the site's real tokens; vertical
+    VLX service wireframes &middot; v5 &middot; 21 August 2026. Layout drawn with the site's real tokens; vertical
     proportions compressed so a full page reads at a glance. Keyword evidence from the property's own Search
     Console export (Sep 2025 &ndash; Apr 2026). The three mechanisms are working prototypes. Figures and body copy
     are placeholders &mdash; headings and titles are the proposal.
