@@ -966,8 +966,9 @@ async function initSupabase() {
   try {
     supa = supabase.createClient(SUPA_URL, SUPA_KEY);
     await syncStateFromSupabase();   // baja lo compartido: la base manda
-    await pushLocalStateUp();        // sube lo que solo estaba en este navegador
-    supaOk = true;
+    supaOk = true;                   // leer ya prueba que hay conexion
+    try { await pushLocalStateUp(); }
+    catch (e) { console.log('No se pudo subir el estado local:', e && e.message); }
   } catch(e) {
     supaOk = false;
     console.log('Supabase no responde — el estado queda solo en este navegador', e && e.message);
@@ -985,8 +986,12 @@ async function pushLocalStateUp() {
   const { data, error } = await supa.from('task_state').select('task_id');
   if (error) throw error;
   const known = new Set((data || []).map(r => r.task_id));
+  // Solo se puede subir estado de tareas que existen en el catalogo: task_state.task_id
+  // es clave foranea a tasks.id, y una sola id vieja hace fallar el lote entero.
+  const cat = await supa.from('tasks').select('id');
+  const valid = new Set(((cat && cat.data) || []).map(r => r.id));
   const now = new Date().toISOString();
-  const rows = ids.filter(id => !known.has(id)).map(id => {
+  const rows = ids.filter(id => !known.has(id)).filter(id => !valid.size || valid.has(id)).map(id => {
     const st = local[id].status || (local[id].done ? 'done' : 'backlog');
     return { task_id: id, is_done: st === 'done', status: st, owner: local[id].owner || null,
              done_at: st === 'done' ? now : null, updated_at: now };
@@ -1049,7 +1054,17 @@ async function pushStatus(id, st) {
     updated_at: new Date().toISOString()
   };
   const { error } = await supa.from('task_state').upsert(Object.assign({}, base, { status: st }), { onConflict: 'task_id' });
-  if (error) await supa.from('task_state').upsert(base, { onConflict: 'task_id' });
+  if (error) {
+    const retry = await supa.from('task_state').upsert(base, { onConflict: 'task_id' });
+    if (retry.error) {
+      // El clic no se guardo para el equipo: que el indicador lo diga en vez de callarlo.
+      supaOk = false;
+      setSyncBadge();
+      console.log('No se pudo guardar el estado de ' + id + ':', retry.error.message);
+      return;
+    }
+  }
+  if (!supaOk) { supaOk = true; setSyncBadge(); }
 }
 
 // Override setOwner to sync with Supabase
