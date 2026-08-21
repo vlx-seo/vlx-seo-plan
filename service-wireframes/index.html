@@ -83,6 +83,15 @@
   header.doc h1 { font-size: clamp(31px, 4.6vw, 46px); font-weight: 700; margin-top: 14px; letter-spacing: -.02em; }
   .lede { font-size: 17.5px; color: var(--ink-2); max-width: 66ch; margin-top: 16px; }
   .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .v5 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+  @media (max-width: 800px) { .v5 { grid-template-columns: 1fr; } }
+  .v5 .card { border: 1px solid var(--line); border-radius: var(--r); padding: 14px 15px 15px; background: var(--ground-2); }
+  .v5 .k { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); }
+  .v5 .t { font-size: 14.5px; font-weight: 600; margin-top: 7px; line-height: 1.35; }
+  .v5 .d { font-size: 12.5px; color: var(--ink-2); margin-top: 7px; line-height: 1.5; }
+  .v5 .ba { font-family: var(--f-mono); font-size: 11px; margin-top: 10px; line-height: 1.7; }
+  .v5 .ba .was { color: var(--ink-3); text-decoration: line-through; }
+  .v5 .ba .now { color: var(--brand-ink); }
   .chip { font-family: var(--f-mono); font-size: 11px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); background: var(--ground-2); }
   .backlink { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-3); text-decoration: none; }
   .backlink:hover { color: var(--brand-ink); }
@@ -100,7 +109,7 @@
   th { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); background: var(--ground-2); font-weight: 500; white-space: nowrap; }
   tr:last-child td { border-bottom: 0; }
   td code { font-family: var(--f-mono); font-size: 12.5px; background: var(--ground-3); padding: 2px 5px; border-radius: 4px; white-space: nowrap; }
-  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .num { font-variant-numeric: tabular-nums; }
   .good { color: var(--ok); font-weight: 600; }
   .weak { color: var(--bad); font-weight: 600; }
   ul.tight { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 14.5px; }
@@ -342,6 +351,27 @@
       <span class="chip">Secondary keywords annotated, copy not written</span>
       <span class="chip">Architecture verdict included</span>
     </div>
+
+    <div class="v5">
+      <div class="card">
+        <div class="k">01 &middot; Headings</div>
+        <div class="t">The keyword opens every heading. The brand closes it.</div>
+        <div class="d">Three H1s and nine H2s opened with the product name or with a filler word. Each H2 now leads with its own secondary cluster, not with the primary again.</div>
+        <div class="ba"><span class="was">VLX Home: home inspection software&hellip;</span><br><span class="now">Home inspection software&hellip; &mdash; VLX Home</span></div>
+      </div>
+      <div class="card">
+        <div class="k">02 &middot; Architecture</div>
+        <div class="t">Level 2 in the hub, and the sector pages are consolidated.</div>
+        <div class="d">Measured on the export grouped by final URL: the two &ldquo;existing owners&rdquo; have <b>0 clicks</b>, so there was nothing to split terms with. The 301 costs nothing.</div>
+        <div class="ba"><span class="was">/&hellip;/app/vlx-home/</span><br><span class="now">/&hellip;/home-inspection-software/</span></div>
+      </div>
+      <div class="card">
+        <div class="k">03 &middot; Identity</div>
+        <div class="t">A sub-product lockup, not a logo per service.</div>
+        <div class="d">The name lost visual weight when it moved right in the H1. The lockup gives it back without spending the leftmost slot &mdash; and it is the asset each service needs for its OG image and schema.</div>
+        <div class="ba"><span class="was">New service &middot; VLX Home</span><br><span class="now">[ VLX &#9656; Home ] &middot; part of VLX</span></div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -400,15 +430,15 @@
         <tbody>
           <tr>
             <td>Home / residential</td>
-            <td><b>Nothing to keep.</b> <code>/digital-inspections-software/home-inspectors/</code> (title: <i>Home Inspection Software &mdash; Fastest Reports, Custom Formats</i>) <b>301s into the new service</b></td>
-            <td class="num weak">0 impressions consolidated, under every alias. The page is <span class="mono">only-new</span> &mdash; it did not exist on WordPress, so it has no history to lose either. The ~30 clicks / 8,500 impr / pos ~12 &ldquo;Property/Home&rdquo; cluster the v3 table cited belongs to <b>two blog posts</b> (<code>/blog/pre-purchase-inspection-checklist/</code>, <code>/blog/house-insurance-inspection-checklist/</code>), and its queries are <span class="mono">mobile home inspection</span> (manufactured homes) and checklists &mdash; informational, not software</td>
-            <td><b>VLX Home takes the head term:</b> &ldquo;home inspection software&rdquo;, plus &ldquo;home inspection business software&rdquo;, &ldquo;home inspection report software&rdquo;, &ldquo;home inspection scheduling&rdquo;, &ldquo;home inspection app&rdquo;</td>
+            <td><b>Nothing to keep</b> &mdash; <code>/home-inspectors/</code> <b>301s into the service</b></td>
+            <td class="num weak">0 impr &middot; 0 clicks<br><span class="mono" style="font-size:11px">only-new page</span></td>
+            <td><b>The head term:</b> &ldquo;home inspection software&rdquo; &middot; then business software, report software, scheduling, app</td>
           </tr>
           <tr>
             <td>Quality / compliance</td>
-            <td><b>Nothing to keep.</b> <code>/digital-inspections-software/quality/</code> (title: <i>Quality &amp; Compliance Inspection Software</i>) <b>301s into the new service</b></td>
-            <td class="num weak">700 impr consolidated &mdash; the raw USA row shows 89; the consolidation adds <span class="mono">/digital-inspection-software/quality/</span>, the <b>singular</b> hub &mdash; with <b>0 clicks at pos 64.7</b>. The term itself, &ldquo;quality inspection software&rdquo;: 718 impr, 0 clicks, <b>pos 69.1</b>. The compliance cluster that does earn (&ldquo;brc audit checklist&rdquo; pos 8.55) sits on blog checklists, which stay where they are</td>
-            <td><b>VLX Quality takes both:</b> &ldquo;quality management software&rdquo;, &ldquo;CAPA software&rdquo;, &ldquo;non-conformance software&rdquo;, &ldquo;eQMS&rdquo; &mdash; and the &ldquo;quality inspection software&rdquo; the sector page never converted</td>
+            <td><b>Nothing to keep</b> &mdash; <code>/quality/</code> <b>301s into the service</b></td>
+            <td class="num weak">700 impr &middot; 0 clicks &middot; pos 64.7<br><span class="mono" style="font-size:11px">term: 718 impr, pos 69.1</span></td>
+            <td><b>Both sides:</b> &ldquo;quality management software&rdquo;, CAPA, NCR, eQMS &mdash; and the &ldquo;quality inspection software&rdquo; the sector page never converted</td>
           </tr>
           <tr>
             <td>Counting / inventory</td>
@@ -420,10 +450,21 @@
       </table>
     </div>
     <div class="callout">
-      <div class="ct">Why the split is drawn there</div>
+      <div class="ct">Why two of the three are a consolidation, not a split</div>
       <div class="cb">
-        The counting cluster proves the point. COUNTiT ranks for a <b>free-tool</b> intent (&ldquo;free counting app&rdquo;,
-        &ldquo;object counting software free&rdquo;) and converts poorly by design. Inventory.ai should take the
+        <b>Neither sector page owns anything.</b> <code>/home-inspectors/</code> registers 0 impressions under every
+        alias and is <span class="mono">only-new</span> &mdash; it never existed on WordPress, so there is no history
+        to lose. The &ldquo;~30 clicks / 8,500 impr&rdquo; Property/Home cluster that v3 cited as its evidence belongs
+        to <b>two blog posts</b> (<code>pre-purchase-inspection-checklist</code>,
+        <code>house-insurance-inspection-checklist</code>), and its queries are
+        <span class="mono">mobile home inspection</span> &mdash; manufactured homes &mdash; and checklists:
+        informational, not software. <code>/quality/</code> has 700 impressions consolidated (the raw USA row shows
+        89; the rest arrives from the <b>singular</b> hub alias) with 0 clicks at position 64.7. The compliance
+        queries that do earn, like &ldquo;brc audit checklist&rdquo; at 8.55, sit on blog checklists and stay where
+        they are.
+        <br><br>
+        <b>Counting is the exception, and it is a real split.</b> COUNTiT ranks for a <b>free-tool</b> intent COUNTiT ranks for a <b>free-tool</b> intent (&ldquo;free counting app&rdquo;,
+        (&ldquo;free counting app&rdquo;, &ldquo;object counting software free&rdquo;) and converts poorly by design. Inventory.ai takes the
         <b>commercial</b> end of the same demand &mdash; cycle counts, inventory audits, ERP reconciliation &mdash;
         which has no page today. Same topic, different intent, no cannibalisation.
       </div>
@@ -488,15 +529,15 @@
         <tbody>
           <tr>
             <td><code>/product/</code></td><td class="num">10</td><td class="num">3,111</td><td class="num weak">27.56</td>
-            <td><b>A URL that kept its address and lost its job.</b> It was the hub; the role and the legacy volume moved to <code>/digital-inspections-software/</code>. What is left is the residue, and by the client's own decision this page now carries narrative, not SEO. Services under it would fight that decision.</td>
+            <td><b>Kept its address, lost its job.</b> It was the hub; the role and the legacy volume moved on. By client decision it now carries narrative, not SEO.</td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/</code></td><td class="num">14</td><td class="num">4,978</td><td class="num">27.64</td>
-            <td><b>The container that holds the hub role.</b> Consolidated it carries the legacy 41,276 impr / 14 clicks of the old <code>/product/</code>, it is the URL that ranks for the category term (&ldquo;digital inspection software&rdquo;, 3,015 impr, pos 12.47) and it already has 20 children plus the <code>app/</code> namespace.</td>
+            <td><b>Holds the hub role.</b> Consolidated it carries the old <code>/product/</code>'s 41,276 impr / 14 clicks, and it is the URL that ranks for the category term (3,015 impr, pos 12.47).</td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/app/countit/</code></td><td class="num good">644</td><td class="num">52,382</td><td class="num good">5.16</td>
-            <td><b>Level 3, and the best product page on the site</b> &mdash; proof that depth is not what holds VLX pages back. But read why it wins: its queries are <span class="mono">countit</span> (pos 6.82) and <span class="mono">instacount</span> (pos 3.85). <b>The brand is the query.</b></td>
+            <td><b>Level 3, and the best page on the site</b> &mdash; depth is not the problem. But its queries are <span class="mono">countit</span> and <span class="mono">instacount</span>: <b>the brand is the query.</b></td>
           </tr>
           <tr>
             <td><code>/digital-inspections-software/app/kypit/</code></td><td class="num">~8 (branded)</td><td class="num">~200</td><td class="num good">2.19</td>
@@ -514,7 +555,7 @@
           <tr>
             <td><b>A</b></td>
             <td><code>/digital-inspections-software/home-inspection-software/</code></td>
-            <td><b>Level 2 inside the container that holds the hub role</b>, with the head term in the last segment. It replaces the sector page instead of competing with it: one page, one intent, and a 301 that costs <b>0 clicks</b> because the sector page has none. Shortest of the three and the keyword sits one segment from the root.</td>
+            <td><b>Level 2 in the container that holds the role</b>, head term in the last segment. Replaces the sector page instead of competing with it &mdash; one page, one intent, and a 301 that costs <b>0 clicks</b>.</td>
             <td>It consumes a sector child, so the rule has to be written down or the hub ends up mixing two page types with no visible logic.</td>
             <td class="good">Recommended</td>
           </tr>
@@ -522,14 +563,14 @@
             <td><b>B</b></td>
             <td><code>/product/home-inspection-software/</code></td>
             <td>Shorter path, and three children could give <code>/product/</code> something to do.</td>
-            <td><b>It contradicts a decision already taken.</b> The client split the two containers on purpose: <code>/product/</code> carries the narrative, the hub carries SEO. Hanging the service pages off the narrative URL re-merges what was deliberately separated &mdash; and it inherits nothing, because the authority left with the role, not with the address.</td>
+            <td><b>Contradicts a decision already taken.</b> The client split the containers on purpose &mdash; narrative vs SEO. And it inherits nothing: the authority left with the role, not the address.</td>
             <td class="weak">Rejected</td>
           </tr>
           <tr>
             <td><b>C</b></td>
             <td><code>/digital-inspections-software/app/quality-management-software/</code></td>
             <td>Rides the only product pattern the property has ever ranked with (COUNTiT pos 5.16, KYPiT pos 2.19).</td>
-            <td><b>Ruled out.</b> That pattern is not a pattern, it is <b>branded demand</b>: COUNTiT and KYPiT rank because their names are searched. These three names have no demand at all. <span class="mono">app</span> also reads as &ldquo;mobile app module&rdquo;, and it buries the page at level 3 for nothing in return.</td>
+            <td><b>Ruled out.</b> That is not a pattern, it is <b>branded demand</b> &mdash; and these three names have none. <span class="mono">app</span> also reads as &ldquo;mobile app module&rdquo;.</td>
             <td class="weak">Rejected</td>
           </tr>
         </tbody>
@@ -612,6 +653,7 @@
       <li><b>Trailing slash, no dots in paths.</b> The dot in &ldquo;Inventory.ai&rdquo; stays in the visible name.</li>
       <li><b>Schema:</b> <span class="mono">SoftwareApplication</span> per service, <span class="mono">FAQPage</span> where the Q&amp;A is visible, <span class="mono">BreadcrumbList</span> already global. Each service declares <span class="mono">isPartOf</span> / <span class="mono">brand</span> &rarr; VLX, so the three read as one family and not as three companies.</li>
       <li><b>One OG image per service</b>, built from its lockup. The property emits <span class="mono">og:image</span> on the homepage only, so a service without one shares nothing recognisable.</li>
+      <li><b>Lockup rules:</b> <span class="mono">role="img"</span> + <span class="mono">&lt;title&gt;VLX Home&lt;/title&gt;</span>, never an empty alt. The name must also exist as <b>text</b> &mdash; H1, breadcrumb label, <span class="mono">SoftwareApplication.name</span> &mdash; because text inside an image is invisible to Google. The same asset is exported at an absolute URL for the OG image and for schema <span class="mono">logo</span>/<span class="mono">image</span>. And &ldquo;part of VLX&rdquo; stays in text next to it: a lockup that reads as a standalone product hides that the service needs VLX.</li>
     </ul>
   </div>
 </section>
@@ -1355,7 +1397,7 @@
           <tr><td><code>WipeCompare</code></td><td>Home S5</td><td>Light client</td><td><span class="mono">input[type=range]</span> + <span class="mono">clip-path</span>, no libraries. Both sides in the DOM.</td></tr>
           <tr><td><code>FrameworkMatrix</code></td><td>Quality S2</td><td>Server, client-side filter</td><td>All four matrices in the HTML; initial state from a query param resolved server-side. This is the page's long-tail engine &mdash; never lazy-load it.</td></tr>
           <tr><td><code>CountDemo</code></td><td>Inventory S2</td><td>Client, <span class="mono">dynamic()</span></td><td>Pre-computed results; below the fold; with <span class="mono">prefers-reduced-motion</span> it shows the result immediately.</td></tr>
-          <tr><td><code>ServiceLockup</code></td><td>S1 of all three</td><td>Server</td><td><b>Inline SVG, not <span class="mono">&lt;img&gt;</span>.</b> One system: the VLX mark plus the module name in the same type and colour &mdash; a derived lockup, never a separate logo per service. Inline keeps it out of the LCP race (Home's LCP is the report image, Quality's is text) and costs zero requests. <span class="mono">role="img"</span> + <span class="mono">&lt;title&gt;VLX Home&lt;/title&gt;</span>, never an empty alt. The name must also exist as text (H1, breadcrumb, <span class="mono">SoftwareApplication.name</span>) &mdash; text inside an image is invisible to Google. Same asset exported at an absolute URL for the OG image and for schema <span class="mono">logo</span>/<span class="mono">image</span>.</td></tr>
+          <tr><td><code>ServiceLockup</code></td><td>S1 of all three</td><td>Server</td><td><b>Inline SVG, not <span class="mono">&lt;img&gt;</span></b> &mdash; it stays out of the LCP race and costs zero requests. One derived system (VLX mark + module name), never a logo per service. See the lockup rules below.</td></tr>
           <tr><td><code>ScopeGrid</code></td><td>all three</td><td>Server</td><td>3&times;2 scope grid; each card title is an H3 and an internal link. Shared across the three services.</td></tr>
           <tr><td><code>ServicePlanCard</code></td><td>Home S7 &middot; the other two</td><td>Server</td><td>Service price on the page, kept in sync with <span class="mono">/pricing/</span>.</td></tr>
         </tbody>
