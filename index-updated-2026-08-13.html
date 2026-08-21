@@ -1113,6 +1113,11 @@ function initDrag() {
       handle.className = 'drag-handle'; handle.textContent = '⋮⋮'; handle.title = 'Drag to reorder';
       td.insertBefore(handle, td.firstChild);
       makeDraggable(row, tbody);
+      // De que fase es esta fila. Es lo unico fiable para saber si se movio:
+      // el prefijo del id NO sirve — en Estabilizacion conviven S, T, C y A,
+      // y compararlos con la fase renombraria filas que nadie toco.
+      const sl = tbody.closest('.slide');
+      if (sl && sl.id && !row.dataset.phase) row.dataset.phase = sl.id;
     });
     // Restore saved order
     const slide = tbody.closest('.slide');
@@ -1138,7 +1143,7 @@ let dragEnabled = false;
 // Phase prefix map for auto-rename
 const PHASE_PREFIX = {
   'slide-phase0':'L','slide-phase1':'S','slide-phase2':'O',
-  'slide-phase3':'G','slide-phase4':'P4'
+  'slide-phase3':'G','slide-phase4':'P'   // P, no P4: las tareas de esa fase son P1..P6
 };
 
 function getPhasePrefix(slide) {
@@ -1162,7 +1167,70 @@ function applyTaskId(row, newId) {
   row.querySelectorAll('.owner-pill').forEach(p => {
     p.setAttribute('onclick', `setOwner('${newId}','${p.dataset.owner}')`);
   });
+  // el selector de 3 estados tambien lleva el id dentro
+  const grp = row.querySelector('.st-pills');
+  if (grp) {
+    grp.dataset.task = newId;
+    grp.querySelectorAll('.st-pill').forEach(p => {
+      p.setAttribute('onclick', `setStatus('${newId}','${p.dataset.st}')`);
+    });
+  }
   const s = load(); if (s[oldId]) { s[newId]=s[oldId]; delete s[oldId]; save(s); }
+}
+
+// El numero libre mas bajo para un prefijo, mirando TODO el tablero.
+function nextFreeId(prefix) {
+  const used = new Set();
+  document.querySelectorAll('tr.task-row').forEach(r => {
+    const m = r.id.replace('task-','').match(new RegExp('^' + prefix + '(\\d+)$'));
+    if (m) used.add(parseInt(m[1], 10));
+  });
+  let n = 1;
+  while (used.has(n)) n++;
+  return prefix + n;
+}
+
+// Una tarea que cambia de fase se reclasifica: nuevo prefijo, numero libre,
+// y su estado se muda con ella (aqui y en la base compartida).
+async function reclassifyMovedRows() {
+  const moved = [];
+  document.querySelectorAll('.slide[id] tbody').forEach(tb => {
+    const prefix = getPhasePrefix(tb.closest('.slide'));
+    if (!prefix) return;
+    const slideId = tb.closest('.slide').id;
+    [...tb.querySelectorAll('tr.task-row')].forEach(row => {
+      if (row.id.startsWith('task-c')) return;              // tareas propias del modal
+      if (!row.dataset.phase) { row.dataset.phase = slideId; return; }
+      if (row.dataset.phase === slideId) return;             // no se movio de fase
+      const oldId = row.id.replace('task-','');
+      const newId = nextFreeId(prefix);
+      applyTaskId(row, newId);
+      row.dataset.phase = slideId;
+      moved.push({ oldId, newId, phase: slideId, row });
+    });
+  });
+  if (!moved.length) return;
+  for (const m of moved) console.log('Reclasificada: ' + m.oldId + ' -> ' + m.newId + ' (' + m.phase + ')');
+  if (supa) { try { await persistRename(moved); } catch (e) { supaOk = false; setSyncBadge(); console.log('No se pudo mudar el estado:', e && e.message); } }
+}
+
+// En la base: el id nuevo tiene que existir en el catalogo antes de poder
+// guardarle estado (task_state.task_id es clave foranea a tasks.id).
+async function persistRename(moved) {
+  for (const m of moved) {
+    const cat = await supa.from('tasks').select('*').eq('id', m.oldId).maybeSingle();
+    const base = (cat && cat.data) ? cat.data : { id: m.oldId };
+    const fila = Object.assign({}, base, { id: m.newId, phase_id: m.phase });
+    const ins = await supa.from('tasks').upsert(fila, { onConflict: 'id' });
+    if (ins.error) throw ins.error;
+    const st = await supa.from('task_state').select('*').eq('task_id', m.oldId).maybeSingle();
+    if (st && st.data) {
+      const nuevo = Object.assign({}, st.data, { task_id: m.newId, updated_at: new Date().toISOString() });
+      const up = await supa.from('task_state').upsert(nuevo, { onConflict: 'task_id' });
+      if (up.error) throw up.error;
+      await supa.from('task_state').delete().eq('task_id', m.oldId);
+    }
+  }
 }
 
 function renumberPhase(tbody) {
@@ -1210,10 +1278,10 @@ function makeDraggable(row, tbody) {
   row.addEventListener('dragend', () => {
     row.classList.remove('dragging'); dragEnabled=false;
     document.querySelectorAll('.task-row').forEach(r => r.classList.remove('drag-over'));
-    // NO se renumera. Renumerar reescribia el id de CADA fila de la fase a
-    // prefijo+posicion (S1..Sn), y el estado se guarda POR ID: al renombrar, la
-    // marca dejaba de corresponder a su tarea y el guardado compartido fallaba
-    // porque ese id nuevo no existe en el catalogo.
+    // Solo se reclasifica la fila que CAMBIO de fase. Renumerar la fase entera
+    // reescribia el id de filas que nadie movio, y como el estado se guarda por
+    // id, la marca dejaba de corresponder a su tarea.
+    reclassifyMovedRows();
     // Save order for all slides
     document.querySelectorAll('.slide[id]').forEach(slide => {
       const tb = slide.querySelector('tbody');
