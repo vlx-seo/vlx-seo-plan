@@ -171,6 +171,14 @@
   .dark .kw b, .dark2 .kw b { color: #FFB59B; }
 
   .wkicker { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-ink); }
+  .lockup { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 6px; border: 1px dashed var(--brand-ink); border-radius: 5px; margin-bottom: 5px; }
+  .lockup .mark { font-family: var(--f-mono); font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--brand-ink); }
+  .lockup .mod { font-size: 11.5px; font-weight: 600; color: var(--ink-1); }
+  .lockup .slot { font-family: var(--f-mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .dark .lockup, .dark2 .lockup { border-color: var(--brand); }
+  .dark .lockup .mark, .dark2 .lockup .mark { color: var(--brand); }
+  .dark .lockup .mod, .dark2 .lockup .mod { color: var(--on-dark-1); }
+  .dark .lockup .slot, .dark2 .lockup .slot { color: var(--on-dark-2); }
   .dark .wkicker, .dark2 .wkicker { color: var(--brand); }
   .wt { font-size: 13px; color: var(--ink-2); }
   .dark .wt, .dark2 .wt { color: var(--on-dark-2); }
@@ -428,10 +436,10 @@
         <tbody>
           <tr>
             <td><b>VLX Home</b></td>
-            <td>Home Inspection Business Software | VLX Home</td>
-            <td class="num">43</td>
-            <td>Home inspection business software, from booking to payment &mdash; VLX Home</td>
-            <td>home inspection business software</td>
+            <td>Home Inspection Software, Booking to Invoicing | VLX Home</td>
+            <td class="num">57</td>
+            <td>Home inspection software, from booking to payment &mdash; VLX Home</td>
+            <td>home inspection software</td>
           </tr>
           <tr>
             <td><b>VLX Quality</b></td>
@@ -602,7 +610,8 @@
       <li><b>No key content behind JS.</b> All three mechanisms render server-side with the text in the DOM; JS only filters or reveals.</li>
       <li><b>The LCP is never the mechanism</b> &mdash; hero text or a static <span class="mono">priority</span> image; the module loads below the fold.</li>
       <li><b>Trailing slash, no dots in paths.</b> The dot in &ldquo;Inventory.ai&rdquo; stays in the visible name.</li>
-      <li><b>Schema:</b> <span class="mono">SoftwareApplication</span> per service, <span class="mono">FAQPage</span> where the Q&amp;A is visible, <span class="mono">BreadcrumbList</span> already global.</li>
+      <li><b>Schema:</b> <span class="mono">SoftwareApplication</span> per service, <span class="mono">FAQPage</span> where the Q&amp;A is visible, <span class="mono">BreadcrumbList</span> already global. Each service declares <span class="mono">isPartOf</span> / <span class="mono">brand</span> &rarr; VLX, so the three read as one family and not as three companies.</li>
+      <li><b>One OG image per service</b>, built from its lockup. The property emits <span class="mono">og:image</span> on the homepage only, so a service without one shares nothing recognisable.</li>
     </ul>
   </div>
 </section>
@@ -616,7 +625,7 @@
       inspection with no signal, branded report, signed delivery and payment.
       <b>Structure:</b> editorial, driven by the path of one real job.
       <b>Mechanisms:</b> draggable job track + wipe comparator.
-      <b>Primary keyword:</b> home inspection business software.
+      <b>Primary keyword:</b> home inspection software (the head term, now that <code>/home-inspectors/</code> is consolidated here).
     </p>
 
     <div class="wrap">
@@ -633,8 +642,9 @@
           <span class="sid">S1</span><span class="snote">LCP &middot; priority image</span>
           <div class="inner g s55">
             <div class="stackv">
-              <span class="wkicker">New service &middot; VLX Home</span>
-              <div class="wh xl"><span class="hl">H1</span>Home inspection business software, from booking to payment &mdash; VLX Home</div>
+              <span class="lockup"><span class="mark">VLX</span><span class="mod">Home</span><span class="slot">lockup</span></span><br>
+              <span class="wkicker">New service &middot; part of VLX</span>
+              <div class="wh xl"><span class="hl">H1</span>Home inspection software, from booking to payment &mdash; VLX Home</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
                 inspection scheduling software &middot; offline inspection app &middot; branded inspection report &middot; get paid faster</div>
@@ -776,7 +786,7 @@
       <div class="notes">
         <div class="notes-h">Wireframe + SEO decisions</div>
         <div class="note-i"><span class="id">S1</span><span class="tx"><b>The deliverable is the hero.</b> The SuperTemplate opens with a promise plus an app mockup. Here the report leads: it is what the inspector sells to their own client.</span></div>
-        <div class="note-i"><span class="id">S1</span><span class="tx"><b>H1 carries name + category.</b> &ldquo;Home inspection business software&rdquo; deliberately avoids the head term &ldquo;home inspection software&rdquo;, which stays with the sector page.</span></div>
+        <div class="note-i"><span class="id">S1</span><span class="tx"><b>H1 carries category + name, in that order.</b> It takes the head term &ldquo;home inspection software&rdquo; because the sector page that used to hold it is consolidated into this page (&sect;01). &ldquo;Home inspection business software&rdquo; drops to a secondary. Which of the two leads is the one thing still waiting on volume data.</span></div>
         <div class="note-i"><span class="id">S2</span><span class="tx"><b>No heading here.</b> A proof strip does not need an H2 &mdash; adding one would spend a heading slot on nothing.</span></div>
         <div class="note-i"><span class="id">S3</span><span class="tx"><b>Six H3s, one per capability.</b> This is the section that has to carry the &ldquo;what's included&rdquo; queries, so every card title is a real feature term, not a slogan.</span></div>
         <div class="note-i"><span class="id">S4</span><span class="tx"><b>Mechanism 1</b> reuses the drag gesture already in the homepage logo marquee. The H2 spells out the job so the section can rank for the workflow query.</span></div>
@@ -794,7 +804,7 @@
           <div class="wsec"><span class="sid">S1</span>
             <div class="inner stackv">
               <span class="wkicker">VLX Home</span>
-              <div class="wh xl"><span class="hl">H1</span>Home inspection business software</div>
+              <div class="wh xl"><span class="hl">H1</span>Home inspection software</div>
               <div class="lines"><div class="ln"></div><div class="ln w75"></div></div>
               <span class="wbtn p">Start Free Trial</span>
               <span class="wbtn s">Book a Demo</span>
@@ -869,11 +879,11 @@
         <thead><tr><th>Field</th><th>Proposed value</th></tr></thead>
         <tbody>
           <tr><td>URL</td><td><code>/digital-inspections-software/home-inspection-software/</code><br><span class="mono" style="color:var(--ink-3)">301 from /digital-inspections-software/home-inspectors/ (0 clicks)</span></td></tr>
-          <tr><td>Title (43)</td><td>Home Inspection Business Software | VLX Home</td></tr>
-          <tr><td>H1</td><td>Home inspection business software, from booking to payment &mdash; VLX Home</td></tr>
+          <tr><td>Title (57)</td><td>Home Inspection Software, Booking to Invoicing | VLX Home</td></tr>
+          <tr><td>H1</td><td>Home inspection software, from booking to payment &mdash; VLX Home</td></tr>
           <tr><td>Meta</td><td>Scheduling, offline inspections, branded reports, signature and invoicing in one service. VLX Home runs the whole residential inspection job.</td></tr>
-          <tr><td>Primary keyword</td><td>home inspection business software</td></tr>
-          <tr><td>Secondary keywords</td><td>home inspection report software &middot; home inspection app &middot; inspection scheduling software &middot; inspection invoicing &middot; offline inspection app &middot; photo authentication software &middot; mobile home inspection software</td></tr>
+          <tr><td>Primary keyword</td><td>home inspection software</td></tr>
+          <tr><td>Secondary keywords</td><td>home inspection business software &middot; home inspection report software &middot; home inspection app &middot; inspection scheduling software &middot; inspection invoicing &middot; offline inspection app &middot; photo authentication software &middot; mobile home inspection software</td></tr>
           <tr><td>Do not target</td><td>&mdash; <span class="mono">home inspection software</span> is now <b>this page's</b> head term; <code>/home-inspectors/</code> 301s here. Keep off <span class="mono">mobile / manufactured home inspection</span> and the checklist queries: those are the blog's, and informational</td></tr>
         </tbody>
       </table>
@@ -902,7 +912,8 @@
           <span class="sid">S1</span><span class="snote">dark hero &middot; LCP is text</span>
           <div class="inner g c2">
             <div class="stackv">
-              <span class="wkicker">New service &middot; VLX Quality</span>
+              <span class="lockup"><span class="mark">VLX</span><span class="mod">Quality</span><span class="slot">lockup</span></span><br>
+              <span class="wkicker">New service &middot; part of VLX</span>
               <div class="wh xl"><span class="hl">H1</span>Quality management software with audit-ready evidence &mdash; VLX Quality</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
@@ -1132,7 +1143,8 @@
           <span class="sid">S1</span><span class="snote">LCP = static image, boxes already drawn</span>
           <div class="inner g s55">
             <div class="stackv">
-              <span class="wkicker">New service &middot; VLX Inventory.ai</span>
+              <span class="lockup"><span class="mark">VLX</span><span class="mod">Inventory.ai</span><span class="slot">lockup</span></span><br>
+              <span class="wkicker">New service &middot; part of VLX</span>
               <div class="wh xl"><span class="hl">H1</span>AI inventory counting from a single photo &mdash; VLX Inventory.ai</div>
               <div class="lines"><div class="ln w90"></div><div class="ln w75"></div></div>
               <div class="kw"><b>subhead &mdash; secondary keywords to work in</b>
@@ -1343,6 +1355,7 @@
           <tr><td><code>WipeCompare</code></td><td>Home S5</td><td>Light client</td><td><span class="mono">input[type=range]</span> + <span class="mono">clip-path</span>, no libraries. Both sides in the DOM.</td></tr>
           <tr><td><code>FrameworkMatrix</code></td><td>Quality S2</td><td>Server, client-side filter</td><td>All four matrices in the HTML; initial state from a query param resolved server-side. This is the page's long-tail engine &mdash; never lazy-load it.</td></tr>
           <tr><td><code>CountDemo</code></td><td>Inventory S2</td><td>Client, <span class="mono">dynamic()</span></td><td>Pre-computed results; below the fold; with <span class="mono">prefers-reduced-motion</span> it shows the result immediately.</td></tr>
+          <tr><td><code>ServiceLockup</code></td><td>S1 of all three</td><td>Server</td><td><b>Inline SVG, not <span class="mono">&lt;img&gt;</span>.</b> One system: the VLX mark plus the module name in the same type and colour &mdash; a derived lockup, never a separate logo per service. Inline keeps it out of the LCP race (Home's LCP is the report image, Quality's is text) and costs zero requests. <span class="mono">role="img"</span> + <span class="mono">&lt;title&gt;VLX Home&lt;/title&gt;</span>, never an empty alt. The name must also exist as text (H1, breadcrumb, <span class="mono">SoftwareApplication.name</span>) &mdash; text inside an image is invisible to Google. Same asset exported at an absolute URL for the OG image and for schema <span class="mono">logo</span>/<span class="mono">image</span>.</td></tr>
           <tr><td><code>ScopeGrid</code></td><td>all three</td><td>Server</td><td>3&times;2 scope grid; each card title is an H3 and an internal link. Shared across the three services.</td></tr>
           <tr><td><code>ServicePlanCard</code></td><td>Home S7 &middot; the other two</td><td>Server</td><td>Service price on the page, kept in sync with <span class="mono">/pricing/</span>.</td></tr>
         </tbody>
