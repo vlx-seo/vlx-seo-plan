@@ -1102,10 +1102,41 @@ window.saveCustomTask = async function() {
 // ── Drag & Drop reorder ──
 // v2: la clave anterior guardo ids renumerados (S1..S59) que no existen; se ignora.
 const DKEY = 'vlx-order-2026-v2';
+
+// Los cambios de FASE se guardan aparte del orden. El orden solo reordena dentro
+// de un slide; mover una tarea a otro slide hay que rehacerlo al cargar, porque
+// el HTML la trae siempre en su fase original.
+//   { idOriginalDelHTML: { id: 'S33', phase: 'slide-phase1' } }
+const MKEY = 'vlx-moves-2026';
+function loadMoves() { try { return JSON.parse(localStorage.getItem(MKEY) || '{}'); } catch { return {}; } }
+function saveMoves(m) { localStorage.setItem(MKEY, JSON.stringify(m)); }
+
+function recordMove(htmlId, newId, phase) {
+  const m = loadMoves();
+  // Si esta tarea ya se habia movido, se actualiza su entrada en vez de crear otra.
+  const origen = Object.keys(m).find(k => m[k].id === htmlId) || htmlId;
+  m[origen] = { id: newId, phase };
+  saveMoves(m);
+}
+
+// Rehace los cambios de fase guardados. Corre ANTES de restaurar el orden.
+function applyMoves() {
+  const m = loadMoves();
+  Object.keys(m).forEach(htmlId => {
+    const { id: newId, phase } = m[htmlId];
+    const row = document.getElementById('task-' + htmlId) || document.getElementById('task-' + newId);
+    const tbody = document.querySelector('#' + phase + ' tbody');
+    if (!row || !tbody) return;
+    if (row.id !== 'task-' + newId) applyTaskId(row, newId);
+    if (row.parentElement !== tbody) tbody.appendChild(row);
+    row.dataset.phase = phase;
+  });
+}
 function saveOrder(slideId, ids) { const o=JSON.parse(localStorage.getItem(DKEY)||'{}'); o[slideId]=ids; localStorage.setItem(DKEY,JSON.stringify(o)); }
 function loadOrder() { try { return JSON.parse(localStorage.getItem(DKEY)||'{}'); } catch { return {}; } }
 
 function initDrag() {
+  applyMoves();   // primero las tareas cambiadas de fase, despues el orden dentro de cada una
   document.querySelectorAll('.task-table tbody').forEach(tbody => {
     // Add drag handles
     tbody.querySelectorAll('tr.task-row').forEach(row => {
@@ -1208,6 +1239,7 @@ async function reclassifyMovedRows() {
       const newId = nextFreeId(prefix);
       applyTaskId(row, newId);
       row.dataset.phase = slideId;
+      recordMove(oldId, newId, slideId);
       moved.push({ oldId, newId, phase: slideId, row });
     });
   });
