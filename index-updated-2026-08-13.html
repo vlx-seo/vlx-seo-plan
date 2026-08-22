@@ -1329,8 +1329,11 @@ const DEPS = {
 };
 
 // ── Categories ──
-const CAT_COLORS = {'Technical':'#60A5FA','Content':'#4ADE80','Schema':'#A78BFA','Links':'#FB923C','ASO':'#F472B6','Local SEO':'#2DD4BF','AI/GEO':'#22D3EE','CRO':'#FBBF24','Analytics':'#94A3B8','Competitive':'#F87171'};
-const CAT_ES = {'Technical':'Técnico','Content':'Contenido','Schema':'Schema','Links':'Link Building','ASO':'ASO','Local SEO':'SEO Local','AI/GEO':'IA / GEO','CRO':'CRO','Analytics':'Analítica','Competitive':'Competencia'};
+const CAT_COLORS = {'Technical':'#60A5FA','Content':'#4ADE80','Schema':'#A78BFA','Links':'#FB923C','ASO':'#F472B6','Local SEO':'#2DD4BF','AI/GEO':'#22D3EE','CRO':'#FBBF24','Analytics':'#94A3B8','Competitive':'#F87171','Performance':'#F0ABFC'};
+const CAT_ES = {'Technical':'Técnico','Content':'Contenido','Schema':'Schema','Links':'Link Building','ASO':'ASO','Local SEO':'SEO Local','AI/GEO':'IA / GEO','CRO':'CRO','Analytics':'Analítica','Competitive':'Competencia','Performance':'Rendimiento'};
+// El data-type que ya lleva cada fila -> etiqueta tematica. Con esto ninguna
+// tarea se queda sin clasificar, incluidas las que se agreguen despues.
+const TYPE_CAT = {technical:'Technical',content:'Content',schema:'Schema',performance:'Performance',linkbuilding:'Links',geo:'AI/GEO',aso:'ASO',local:'Local SEO',cro:'CRO'};
 const CATS = {
   'B1':['Technical'],'B2':['Technical'],'B3':['Technical'],'B4':['Technical'],
   'B5':['Technical'],'B6':['Technical'],'B7':['Technical'],'B8':['Technical'],
@@ -1351,21 +1354,27 @@ const CATS = {
   'P3':['ASO'],'P4':['Local SEO'],'P5':['Content','Technical'],'P6':['Analytics']
 };
 function initCats() {
-  const isEs = document.body.classList.contains('es');
-  Object.entries(CATS).forEach(([id, cats]) => {
-    const row = document.getElementById('task-' + id);
-    if (!row) return;
+  document.querySelectorAll('tr.task-row').forEach(row => {
+    const id = row.id.replace('task-', '');
     const initiative = row.querySelector('.td-initiative');
     if (!initiative || initiative.querySelector('.cat-badge')) return;
+    // El mapa escrito a mano manda; si la tarea no esta ahi, la etiqueta sale
+    // del data-type con el que ya se filtra, asi ninguna queda sin clasificar.
+    let cats = CATS[id];
+    if (!cats) {
+      const t = TYPE_CAT[row.dataset.type];
+      if (!t) return;
+      cats = [t];
+    }
     const catArr = Array.isArray(cats) ? cats : [cats];
     const firstSpan = initiative.querySelector('.t-en');
     catArr.forEach(cat => {
-      const label = isEs ? (CAT_ES[cat]||cat) : cat;
-      const col = CAT_COLORS[cat]||'#94A3B8';
+      const col = CAT_COLORS[cat] || '#94A3B8';
       const badge = document.createElement('span');
       badge.className = 'cat-badge'; badge.setAttribute('data-cat', cat);
       badge.style.cssText = `display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;color:${col};background:${col}1a;border:1px solid ${col}33`;
-      badge.textContent = label;
+      // Bilingue de verdad: antes se fijaba el idioma al pintar y ya no cambiaba.
+      badge.innerHTML = `<span class="t-en">${cat}</span><span class="t-es">${CAT_ES[cat] || cat}</span>`;
       if (firstSpan && firstSpan.nextSibling) initiative.insertBefore(badge, firstSpan.nextSibling);
       else initiative.appendChild(badge);
     });
