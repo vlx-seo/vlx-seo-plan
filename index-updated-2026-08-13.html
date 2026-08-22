@@ -85,7 +85,9 @@ body { font-family:'Rubik',system-ui,sans-serif; background:#0a0f1a; display:fle
 .task-row td { user-select:text; }
 .task-row { user-select:text; }
 .task-row.done td { opacity:.5; }
-.task-row.done .td-initiative { text-decoration:line-through; color:#4ADE80; }
+.task-row.done .td-initiative { text-decoration:line-through; color:#4ADE80; font-weight:400; }
+/* Sin la negrita, la etiqueta tematica vuelve a leerse sobre el verde de la fila hecha. */
+.task-row.done .cat-badge { font-weight:600; text-decoration:none; }
 .qw-badge { display:inline-flex; align-items:center; font-size:10px; font-weight:600; color:#22C55E; background:rgba(34,197,94,.1); border-radius:4px; padding:1px 5px; margin-left:4px; }
 .impact-critical { color:#EF4444 !important; font-weight:600; font-size:11px; }
 .impact-high { color:#F59E0B !important; font-weight:600; font-size:11px; }
