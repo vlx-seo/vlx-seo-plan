@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>VLX Homepage Animations — Three Decisions for Load Speed</title>
+<meta name="description" content="Side-by-side comparison of the three animation decisions on the vlx.ai homepage: scroll reveals, section dimming and the typewriter headline. Interactive before/after with live counters.">
+<style>
+  /* ═══════ TOKENS — inherited from vlx.ai tailwind.config.ts ═══════
+     Rubik is the production face; this page uses the system stack.
+     Semantic colours (critical / warning / ok) are deliberately separate
+     from the brand orange so severity never reads as branding. */
+  :root {
+    --ground: #ffffff;
+    --surface: #f5f8f9;
+    --surface-2: #edf2f4;
+    --ink: #172126;
+    --ink-2: #546e7a;
+    --ink-3: #7d8f99;
+    --rule: #dbe3e7;
+    --rule-strong: #b9c6cc;
+    --accent: #ff5722;
+    --critical: #b3261e;
+    --critical-bg: #fbeceb;
+    --warn: #8a6116;
+    --warn-bg: #fbf4e4;
+    --ok: #0f6e62;
+    --ok-bg: #e7f4f2;
+
+    --sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", "Roboto Mono", ui-monospace, monospace;
+
+    --step--1: 0.8125rem;
+    --step-0: 0.9688rem;
+    --step-1: 1.125rem;
+    --step-2: 1.375rem;
+    --step-3: 1.875rem;
+    --step-4: 2.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0f172a;
+      --surface: #17202f;
+      --surface-2: #1d2836;
+      --ink: #e9eef1;
+      --ink-2: #9daab4;
+      --ink-3: #7a8894;
+      --rule: #2a3644;
+      --rule-strong: #3c4b5b;
+      --accent: #ff7043;
+      --critical: #ff8f7d;
+      --critical-bg: #2c1a18;
+      --warn: #e2b657;
+      --warn-bg: #2a2317;
+      --ok: #57d4c1;
+      --ok-bg: #14282a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0f172a;
+    --surface: #17202f;
+    --surface-2: #1d2836;
+    --ink: #e9eef1;
+    --ink-2: #9daab4;
+    --ink-3: #7a8894;
+    --rule: #2a3644;
+    --rule-strong: #3c4b5b;
+    --accent: #ff7043;
+    --critical: #ff8f7d;
+    --critical-bg: #2c1a18;
+    --warn: #e2b657;
+    --warn-bg: #2a2317;
+    --ok: #57d4c1;
+    --ok-bg: #14282a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 64rem; margin: 0 auto; padding: 0 1.5rem 6rem; }
+
+  /* ── masthead ── */
+  .masthead {
+    border-top: 3px solid var(--accent);
+    padding-top: 1.75rem;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .masthead-meta {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
+    font-family: var(--mono); font-size: var(--step--1); color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .masthead-meta a { color: var(--ink-3); }
+  h1 {
+    font-size: var(--step-4); line-height: 1.1; font-weight: 700;
+    letter-spacing: -0.02em; margin: 0; text-wrap: balance; max-width: 24ch;
+  }
+  .standfirst { font-size: var(--step-1); color: var(--ink-2); margin: 0; max-width: 62ch; line-height: 1.55; }
+
+  p { max-width: 68ch; margin: 0 0 1rem; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  code {
+    font-family: var(--mono); font-size: 0.875em; background: var(--surface-2);
+    padding: 0.1em 0.35em; border-radius: 2px; word-break: break-word;
+  }
+  strong { font-weight: 650; }
+
+  /* ── correction callout ── */
+  .correction {
+    margin-top: 2.25rem; border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--warn); background: var(--warn-bg);
+    padding: 1.1rem 1.25rem;
+  }
+  .correction h2 { font-size: var(--step-1); margin: 0 0 0.5rem; font-weight: 650; }
+  .correction p { margin: 0 0 0.6rem; }
+  .correction p:last-child { margin: 0; }
+  .correction ul { margin: 0 0 0.6rem; padding-left: 1.15rem; max-width: 68ch; }
+  .correction li { margin-bottom: 0.3rem; }
+
+  /* ── bench ── */
+  .bench { margin-top: 3.5rem; }
+  .bench-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 0.75rem; margin-bottom: 1.25rem; }
+  .bench-num {
+    font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 0.35rem;
+  }
+  .bench h2 { font-size: var(--step-3); line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 0.5rem; font-weight: 700; text-wrap: balance; }
+  .bench-sub { color: var(--ink-2); margin: 0; max-width: 70ch; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem;
+    padding: 0.75rem 0.9rem; background: var(--surface); border: 1px solid var(--rule);
+    margin-bottom: 1rem;
+  }
+  .controls-label {
+    font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink-3);
+  }
+  .seg { display: flex; border: 1px solid var(--rule-strong); background: var(--ground); }
+  .seg button {
+    font-family: var(--mono); font-size: var(--step--1); padding: 0.35rem 0.7rem;
+    background: transparent; color: var(--ink-2); border: 0; cursor: pointer;
+    border-right: 1px solid var(--rule);
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .seg button:focus-visible, .btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn {
+    font-family: var(--mono); font-size: var(--step--1); padding: 0.35rem 0.8rem;
+    background: var(--ground); color: var(--ink); border: 1px solid var(--rule-strong);
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  @media (max-width: 46rem) { .panes { grid-template-columns: 1fr; } }
+
+  .pane { background: var(--ground); display: flex; flex-direction: column; min-width: 0; }
+  .pane-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem;
+    padding: 0.55rem 0.8rem; background: var(--surface); border-bottom: 1px solid var(--rule);
+  }
+  .pane-name { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .pane-today .pane-name { color: var(--critical); }
+  .pane-prop .pane-name { color: var(--ok); }
+  .pane-note { font-size: 0.6875rem; color: var(--ink-3); font-family: var(--mono); }
+
+  .scroller {
+    height: 22rem; overflow-y: auto; overscroll-behavior: contain;
+    padding: 0.9rem; scrollbar-width: thin;
+  }
+  .fake-section {
+    border: 1px solid var(--rule); background: var(--surface);
+    padding: 0.9rem; margin-bottom: 0.75rem;
+  }
+  .fake-section h4 { margin: 0 0 0.4rem; font-size: var(--step-0); font-weight: 650; }
+  .fake-section p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: none; }
+  .fake-bar { height: 6px; background: var(--accent); opacity: 0.25; margin-top: 0.6rem; }
+  .spacer-note {
+    font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-3);
+    text-align: center; padding: 0.5rem 0 1.5rem;
+  }
+
+  /* reveal states */
+  .reveal-js { opacity: 0; transform: translateY(24px); }
+  .reveal-css { opacity: 0; transform: translateY(24px); transition: opacity .5s ease-out, transform .5s ease-out; }
+  .reveal-css.shown { opacity: 1; transform: none; }
+
+  /* ── counters ── */
+  .meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-top: 0; }
+  .meter { background: var(--surface); padding: 0.6rem 0.8rem; display: flex; flex-direction: column; gap: 0.1rem; }
+  .meter dt { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0; }
+  .meter dd { margin: 0; font-family: var(--mono); font-size: var(--step-1); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .m-bad dd { color: var(--critical); }
+  .m-ok dd { color: var(--ok); }
+
+  /* ── typewriter bench ── */
+  .tw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .tw-card { background: var(--ground); padding: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .tw-label { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+  .tw-card.is-today .tw-label { color: var(--critical); }
+  .tw-headline {
+    font-size: var(--step-2); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em;
+    min-height: 3.4em;
+  }
+  .tw-word { color: var(--accent); display: block; white-space: nowrap; }
+  .tw-clip { display: inline-block; overflow: hidden; vertical-align: bottom; white-space: nowrap; }
+  .caret { display: inline-block; width: 3px; height: 0.85em; background: var(--accent); vertical-align: middle; margin-left: 2px; }
+  .caret.blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  .tw-word.fade { transition: opacity .28s ease; }
+  .tw-meter { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .tw-meter b { color: var(--ink); font-weight: 600; }
+  .tw-verdict { font-size: var(--step--1); color: var(--ink-2); margin: 0; max-width: none; }
+
+  /* ── verdict rows ── */
+  .verdict { border: 1px solid var(--rule); border-top: 0; }
+  .verdict-row { display: grid; grid-template-columns: 10rem 1fr; gap: 0 1rem; padding: 0.7rem 0.9rem; border-top: 1px solid var(--rule); }
+  .verdict-row:first-child { border-top: 0; }
+  .verdict-row dt { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); }
+  .verdict-row dd { margin: 0; font-size: var(--step--1); }
+  @media (max-width: 34rem) { .verdict-row { grid-template-columns: 1fr; gap: 0.2rem; } }
+
+  .chip {
+    display: inline-block; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.04em;
+    padding: 0.1rem 0.4rem; border-radius: 2px; white-space: nowrap; border: 1px solid transparent;
+  }
+  .chip-bad { color: var(--critical); background: var(--critical-bg); border-color: rgba(179, 38, 30, .3); }
+  .chip-warn { color: var(--warn); background: var(--warn-bg); border-color: rgba(138, 97, 22, .3); }
+  .chip-ok { color: var(--ok); background: var(--ok-bg); border-color: rgba(15, 110, 98, .3); }
+
+  /* ── final table ── */
+  .tbl-scroll { overflow-x: auto; margin: 1.25rem 0; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; font-size: var(--step--1); min-width: 34rem; }
+  th, td { text-align: left; padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-3); font-weight: 500; background: var(--surface);
+    border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .footnote { margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); font-size: var(--step--1); color: var(--ink-2); }
+  .footnote p { max-width: 74ch; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-css { transition: none; }
+    .caret.blink { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="masthead-meta">
+      <span>Design review</span>
+      <span>24 Aug 2026</span>
+      <span>Laura · Abe · Hans</span>
+      <span><a href="../">← VLX SEO plan</a></span>
+    </div>
+    <h1>Three animation decisions</h1>
+    <p class="standfirst">
+      Each block below puts what the homepage does today next to what I'm proposing. They're interactive —
+      scroll them and watch, don't just read. There's a decision table at the end.
+    </p>
+  </header>
+
+  <div class="correction">
+    <h2>Before we decide: I got something wrong</h2>
+    <p>
+      In the earlier summary I said these animations were delaying how fast the main content appears. I went to
+      verify it in order to build these demos, and <strong>that isn't true</strong>:
+    </p>
+    <ul>
+      <li>Measured live on the homepage at 375×812, the <code>&lt;h1&gt;</code> sits 216 px from the top at full
+        opacity. <strong>The hero waits for nothing.</strong></li>
+      <li>Of the four elements below opacity 1 above the fold, two are the hidden mega-menu panel and one is the
+        cookie banner. The first real content that animates in ("Trusted by") is at 950 px —
+        <strong>below the fold</strong>.</li>
+      <li>The hero's <code>hero-fade-in</code> animation doesn't touch opacity at all; it's translate-only. That
+        was stripped deliberately in the June SEO audit so crawlers never see the H1 at zero opacity.</li>
+    </ul>
+    <p>
+      <strong>So this is not an LCP decision</strong>, and there's no need to rush it. What is genuinely at stake
+      is <strong>INP</strong> — how responsive the page feels to touch, currently 244 ms — and bundle weight:
+      92 scroll-animated elements on the homepage, 366 across the site, and two animations that never stop.
+    </p>
+  </div>
+
+  <!-- ══════ BENCH 1 ══════ -->
+  <section class="bench">
+    <div class="bench-head">
+      <p class="bench-num">Decision 1 · affects 366 sites across 87 files</p>
+      <h2>The scroll reveals</h2>
+      <p class="bench-sub">
+        Every section fades in and slides up 24 px. Today framer-motion drives that, recalculating the style from
+        JavaScript on every frame. The browser can do exactly the same thing for free if you ask it in CSS.
+      </p>
+    </div>
+
+    <div class="controls">
+      <span class="controls-label">Right pane</span>
+      <div class="seg" id="seg-b1" role="group" aria-label="Right pane variant">
+        <button type="button" data-mode="css" aria-pressed="true">IntersectionObserver + CSS</button>
+        <button type="button" data-mode="none" aria-pressed="false">No animation</button>
+      </div>
+      <button class="btn" type="button" id="reset-b1">Reset</button>
+      <span class="controls-label" style="margin-left:auto">Both panes scroll together</span>
+    </div>
+
+    <div class="panes">
+      <div class="pane pane-today">
+        <div class="pane-head"><span class="pane-name">Today · framer-motion</span><span class="pane-note">JS per frame</span></div>
+        <div class="scroller" id="s1a"></div>
+      </div>
+      <div class="pane pane-prop">
+        <div class="pane-head"><span class="pane-name" id="b1-right-name">Proposed · CSS</span><span class="pane-note" id="b1-right-note">browser animates</span></div>
+        <div class="scroller" id="s1b"></div>
+      </div>
+    </div>
+
+    <dl class="meters">
+      <div class="meter m-bad"><dt>JS writes · today</dt><dd id="m1a">0</dd></div>
+      <div class="meter m-ok"><dt>JS writes · proposed</dt><dd id="m1b">0</dd></div>
+      <div class="meter"><dt>Difference</dt><dd id="m1r">—</dd></div>
+    </dl>
+
+    <dl class="verdict">
+      <div class="verdict-row"><dt>Visible change</dt><dd><span class="chip chip-ok">none</span> The fade and the slide are identical. What changes is who executes them.</dd></div>
+      <div class="verdict-row"><dt>What it saves</dt><dd>The per-frame JavaScript work across 92 elements on the homepage. It also lets us pull framer-motion out of the sections near the fold, which is what drags it into the critical path in the first place.</dd></div>
+      <div class="verdict-row"><dt>Recommendation</dt><dd><strong>Change it.</strong> This is the one of the three where nothing is lost: same effect, no cost. The "no animation" option is there only so you can see how much the effect actually contributes.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ══════ BENCH 2 ══════ -->
+  <section class="bench">
+    <div class="bench-head">
+      <p class="bench-num">Decision 2 · homepage only</p>
+      <h2>Dimming sections as they leave the screen</h2>
+      <p class="bench-sub">
+        <code>SectionFade</code> drops each section to 0.4 opacity as it scrolls off the top. It's tied to the
+        exact scroll position, so it recalculates continuously while the finger is moving. This one does look
+        different, which is why the call is yours and not mine.
+      </p>
+    </div>
+
+    <div class="controls">
+      <button class="btn" type="button" id="reset-b2">Reset counters</button>
+      <span class="controls-label" style="margin-left:auto">Scroll either pane</span>
+    </div>
+
+    <div class="panes">
+      <div class="pane pane-today">
+        <div class="pane-head"><span class="pane-name">Today · dims to 0.4</span><span class="pane-note">scroll-linked</span></div>
+        <div class="scroller" id="s2a"></div>
+      </div>
+      <div class="pane pane-prop">
+        <div class="pane-head"><span class="pane-name">Proposed · no dimming</span><span class="pane-note">nothing to recalculate</span></div>
+        <div class="scroller" id="s2b"></div>
+      </div>
+    </div>
+
+    <dl class="meters">
+      <div class="meter m-bad"><dt>Recalculations · today</dt><dd id="m2a">0</dd></div>
+      <div class="meter m-ok"><dt>Recalculations · proposed</dt><dd id="m2b">0</dd></div>
+      <div class="meter"><dt>Sections affected</dt><dd>10</dd></div>
+    </dl>
+
+    <dl class="verdict">
+      <div class="verdict-row"><dt>Visible change</dt><dd><span class="chip chip-warn">yes, noticeable</span> Today the content you've already passed sits dimmed. Without the effect it stays crisp until it leaves the screen.</dd></div>
+      <div class="verdict-row"><dt>What it saves</dt><dd>Ten position calculations per scroll event on the homepage, on the main thread, precisely while the user is swiping.</dd></div>
+      <div class="verdict-row"><dt>Recommendation</dt><dd><strong>Your call — no lean from me.</strong> If you like the effect we can keep it and limit it to large screens, disabling it on mobile where it actually hurts. If you're indifferent, removing it is free.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ══════ BENCH 3 ══════ -->
+  <section class="bench">
+    <div class="bench-head">
+      <p class="bench-num">Decision 3 · the homepage H1</p>
+      <h2>The headline that types itself</h2>
+      <p class="bench-sub">
+        Today the H1 rewrites itself character by character with a React state update every 40–60 ms, in an
+        infinite loop, whether the user is looking at it or scrolled past it long ago. The three alternatives are
+        running live below: check first whether you can tell them apart, then look at the counters.
+      </p>
+    </div>
+
+    <div class="controls">
+      <button class="btn" type="button" id="reset-b3">Reset counters</button>
+      <span class="controls-label" style="margin-left:auto">Running since you opened the page</span>
+    </div>
+
+    <div class="tw-grid">
+      <div class="tw-card is-today">
+        <span class="tw-label">Today</span>
+        <div class="tw-headline">The platform for<br><span class="tw-word" id="tw-a"></span></div>
+        <div class="tw-meter"><b id="c-a">0</b> updates</div>
+        <p class="tw-verdict">One <code>setState</code> per letter. It never stops.</p>
+      </div>
+
+      <div class="tw-card">
+        <span class="tw-label">Option A · same effect</span>
+        <div class="tw-headline">The platform for<br><span class="tw-word"><span class="tw-clip" id="tw-b"></span><span class="caret blink"></span></span></div>
+        <div class="tw-meter"><b id="c-b">0</b> updates</div>
+        <p class="tw-verdict">Identical to look at. The browser animates it, not React, and it pauses when it scrolls out of view.</p>
+      </div>
+
+      <div class="tw-card">
+        <span class="tw-label">Option B · word swap</span>
+        <div class="tw-headline">The platform for<br><span class="tw-word fade" id="tw-c"></span></div>
+        <div class="tw-meter"><b id="c-c">0</b> updates</div>
+        <p class="tw-verdict">The whole word cross-fades. More restrained, and almost free.</p>
+      </div>
+
+      <div class="tw-card">
+        <span class="tw-label">Option C · static</span>
+        <div class="tw-headline">The platform for<br><span class="tw-word">Inspections</span></div>
+        <div class="tw-meter"><b>0</b> updates</div>
+        <p class="tw-verdict">No animation. Zero cost, and the headline always reads complete.</p>
+      </div>
+    </div>
+
+    <dl class="verdict">
+      <div class="verdict-row"><dt>Visible change</dt><dd><span class="chip chip-ok">A: none</span> <span class="chip chip-warn">B and C: yes</span> Option A is indistinguishable from what ships today.</dd></div>
+      <div class="verdict-row"><dt>What it saves</dt><dd>The loop never stops: as long as someone has the tab open, the H1 keeps rebuilding itself. That's constant main-thread work and battery drain on mobile.</dd></div>
+      <div class="verdict-row"><dt>SEO note</dt><dd>Whichever option wins, two things that are already handled correctly must survive: the server HTML always ships a complete word, and the effect stops under <code>prefers-reduced-motion</code>. Both are in the current code and neither should be touched.</dd></div>
+      <div class="verdict-row"><dt>Recommendation</dt><dd><strong>Option A</strong> if you want to keep the effect exactly as it is, which is what I'd do. B and C are on the table in case you wanted to simplify the hero anyway.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ══════ DECISION TABLE ══════ -->
+  <section class="bench">
+    <div class="bench-head">
+      <p class="bench-num">To close in the meeting</p>
+      <h2>What we decide</h2>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Decision</th><th>Recommendation</th><th>Noticeable?</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr><td>Scroll reveals → CSS</td><td><span class="chip chip-ok">change</span></td><td>No</td><td>1 day</td></tr>
+          <tr><td>Section dimming</td><td><span class="chip chip-warn">to decide</span></td><td>Yes</td><td>2 h</td></tr>
+          <tr><td>Typewriter → option A</td><td><span class="chip chip-ok">change</span></td><td>No</td><td>0.5 day</td></tr>
+          <tr><td>Infinite hero shimmer</td><td><span class="chip chip-ok">remove</span></td><td>No — it runs at 3–5% opacity</td><td>1 h</td></tr>
+          <tr><td>Pull framer-motion out of the near-fold sections</td><td><span class="chip chip-ok">change</span></td><td>No</td><td>1 day</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      If everything but the dimming is approved, that's roughly <strong>2.5–3 days</strong> of work and not a
+      single page changes how it looks.
+    </p>
+  </section>
+
+  <div class="footnote">
+    <p>
+      <strong>About the counters.</strong> They count the style writes this page's own JavaScript makes, which is
+      a stand-in for the work React does on the real site — useful for comparing the options against each other,
+      not as a measurement of vlx.ai. The site figures (INP 244 ms, 92 animated elements on the homepage, 366
+      across the site) are measured, and live in
+      <code>docs/performance/PERF-AUDIT-PLAN-2026-08-18.md</code>.
+    </p>
+    <p>
+      <strong>One detail about the demo.</strong> The reveals in decision 1 are triggered here with a scroll
+      handler rather than <code>IntersectionObserver</code>, which is what the real implementation would use, so
+      they behave the same in any context. What's being compared is <em>who runs the animation</em> — a
+      JavaScript calculation per frame versus a single class change — not what triggers it, and the trigger is
+      the same in both panes, so the comparison is fair.
+    </p>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ─── shared fake content ─────────────────────────────────────────── */
+  var SECTIONS = [
+    ['Inspection workflows', 'Templates with conditional logic, required photos and per-field validation.'],
+    ['Field evidence', 'GPS and timestamped photos, captured offline and synced afterwards.'],
+    ['Branded reports', 'PDF output carrying the customer identity, generated when the inspection closes.'],
+    ['AI validation', 'KYPiT reviews every report and flags suspicious or recycled evidence.'],
+    ['Integrations', 'Connects to the asset management systems the team already runs.'],
+    ['Collaboration', 'Third parties invited by email complete their section without taking a seat.'],
+    ['Compliance', 'Full trace of who did what and when, exportable for audit.'],
+    ['Analytics', 'Time per inspection, rejection rates and bottlenecks by team.']
+  ];
+
+  function buildSections(host, className) {
+    var frag = document.createDocumentFragment();
+    var lead = document.createElement('p');
+    lead.className = 'spacer-note';
+    lead.textContent = '▼ scroll ▼';
+    frag.appendChild(lead);
+    SECTIONS.forEach(function (s) {
+      var el = document.createElement('div');
+      el.className = 'fake-section' + (className ? ' ' + className : '');
+      var h = document.createElement('h4');
+      h.textContent = s[0];
+      var p = document.createElement('p');
+      p.textContent = s[1];
+      var bar = document.createElement('div');
+      bar.className = 'fake-bar';
+      el.appendChild(h); el.appendChild(p); el.appendChild(bar);
+      frag.appendChild(el);
+    });
+    var tail = document.createElement('p');
+    tail.className = 'spacer-note';
+    tail.textContent = '— end —';
+    frag.appendChild(tail);
+    host.appendChild(frag);
+  }
+
+  /* Mirror scrolling between two panes. Whichever pane the user actually
+     touches becomes the driver for a moment, so the echo scroll event from the
+     pane being written to cannot bounce back. Driven by setTimeout rather than
+     rAF: a pane in a tab that never gets a frame would otherwise latch the
+     guard on forever. */
+  function mirror(a, b) {
+    var driver = null;
+    var release = 0;
+    function sync(from, to) {
+      if (driver && driver !== from) return;
+      driver = from;
+      clearTimeout(release);
+      release = setTimeout(function () { driver = null; }, 120);
+      var max = from.scrollHeight - from.clientHeight;
+      var ratio = max > 0 ? from.scrollTop / max : 0;
+      to.scrollTop = ratio * (to.scrollHeight - to.clientHeight);
+    }
+    a.addEventListener('scroll', function () { sync(a, b); }, { passive: true });
+    b.addEventListener('scroll', function () { sync(b, a); }, { passive: true });
+  }
+
+  function fmt(n) { return n.toLocaleString('en'); }
+
+  /* ─── BENCH 1 — scroll reveals ────────────────────────────────────── */
+  var s1a = document.getElementById('s1a');
+  var s1b = document.getElementById('s1b');
+  var m1a = document.getElementById('m1a');
+  var m1b = document.getElementById('m1b');
+  var m1r = document.getElementById('m1r');
+  var count1a = 0, count1b = 0;
+
+  function renderMeters1() {
+    m1a.textContent = fmt(count1a);
+    m1b.textContent = fmt(count1b);
+    if (count1a === 0) { m1r.textContent = '—'; return; }
+    if (count1b === 0) { m1r.textContent = 'no comparison'; return; }
+    m1r.textContent = '×' + (count1a / count1b).toFixed(1) + ' more';
+  }
+
+  /* "Today": a JS-driven tween that writes inline styles every frame,
+     the way a motion library does. */
+  var running1 = [];
+  function tweenIn(el) {
+    var start = null;
+    var DUR = reduced ? 1 : 500;
+    function step(ts) {
+      if (start === null) start = ts;
+      var t = Math.min(1, (ts - start) / DUR);
+      var e = 1 - Math.pow(1 - t, 3);
+      el.style.opacity = String(e);
+      el.style.transform = 'translateY(' + (24 * (1 - e)) + 'px)';
+      count1a += 1;
+      renderMeters1();
+      if (t < 1) running1.push(requestAnimationFrame(step));
+    }
+    running1.push(requestAnimationFrame(step));
+  }
+
+  /* Enter-detection runs off the scroller's own scroll event rather than
+     IntersectionObserver. IO is what the real proposal uses, but it does not
+     deliver callbacks in every embedding context, and the point of this bench
+     is *who runs the animation* — a JS tween per frame versus one class toggle
+     — not what triggers it. Same trigger on both sides keeps it fair. */
+  function watchEnter(scroller, selector, onEnter) {
+    var pending = Array.prototype.slice.call(scroller.querySelectorAll(selector));
+    var queued = false;
+    function check() {
+      queued = false;
+      var host = scroller.getBoundingClientRect();
+      pending = pending.filter(function (el) {
+        var r = el.getBoundingClientRect();
+        var visible = Math.min(r.bottom, host.bottom) - Math.max(r.top, host.top);
+        if (visible > r.height * 0.15) { onEnter(el); return false; }
+        return true;
+      });
+      if (!pending.length) scroller.removeEventListener('scroll', schedule);
+    }
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(check);
+    }
+    scroller.addEventListener('scroll', schedule, { passive: true });
+    /* The first pass runs synchronously rather than through rAF: a tab that is
+       still in the background never gets a frame, and the panes would sit blank
+       until it was focused. */
+    check();
+    return function stop() { scroller.removeEventListener('scroll', schedule); pending = []; };
+  }
+
+  var stop1a = null, stop1b = null;
+
+  function wireBench1() {
+    if (stop1a) stop1a();
+    if (stop1b) { stop1b(); stop1b = null; }
+    s1a.innerHTML = ''; s1b.innerHTML = '';
+    running1.forEach(cancelAnimationFrame); running1 = [];
+    buildSections(s1a, 'reveal-js');
+    var mode = document.querySelector('#seg-b1 button[aria-pressed="true"]').dataset.mode;
+    buildSections(s1b, mode === 'css' ? 'reveal-css' : '');
+
+    stop1a = watchEnter(s1a, '.reveal-js', tweenIn);
+
+    if (mode === 'css') {
+      stop1b = watchEnter(s1b, '.reveal-css', function (el) {
+        /* one class toggle — the browser runs the transition itself */
+        el.classList.add('shown');
+        count1b += 1;
+        renderMeters1();
+      });
+    }
+    renderMeters1();
+  }
+
+  document.getElementById('seg-b1').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button');
+    if (!btn) return;
+    this.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+    var css = btn.dataset.mode === 'css';
+    document.getElementById('b1-right-name').textContent = css ? 'Proposed · CSS' : 'Proposed · no animation';
+    document.getElementById('b1-right-note').textContent = css ? 'browser animates' : 'nothing to animate';
+    count1a = 0; count1b = 0;
+    wireBench1();
+  });
+  document.getElementById('reset-b1').addEventListener('click', function () {
+    count1a = 0; count1b = 0; wireBench1();
+  });
+
+  wireBench1();
+  mirror(s1a, s1b);
+
+  /* ─── BENCH 2 — SectionFade ───────────────────────────────────────── */
+  var s2a = document.getElementById('s2a');
+  var s2b = document.getElementById('s2b');
+  var m2a = document.getElementById('m2a');
+  var m2b = document.getElementById('m2b');
+  var count2a = 0;
+
+  buildSections(s2a, 'fade-out');
+  buildSections(s2b, '');
+  mirror(s2a, s2b);
+
+  var faders = Array.prototype.slice.call(s2a.querySelectorAll('.fade-out'));
+  var ticking = false;
+  function applyFade() {
+    var h = s2a.clientHeight;
+    var host = s2a.getBoundingClientRect();
+    faders.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      var top = r.top - host.top;
+      /* progress 0 at the bottom edge, 1 once fully past the top —
+         the same mapping SectionFade uses on the real homepage */
+      var p = 1 - (top + r.height) / (h + r.height);
+      var op = 1;
+      if (p > 0.85) op = 1 - ((p - 0.85) / 0.15) * 0.6;
+      el.style.opacity = String(Math.max(0.4, Math.min(1, op)));
+      count2a += 1;
+    });
+    m2a.textContent = fmt(count2a);
+    m2b.textContent = '0';
+    ticking = false;
+  }
+  s2a.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(applyFade);
+  }, { passive: true });
+  applyFade();
+  document.getElementById('reset-b2').addEventListener('click', function () {
+    count2a = 0; m2a.textContent = '0';
+  });
+
+  /* ─── BENCH 3 — typewriter variants ───────────────────────────────── */
+  var WORDS = ['Inspections', 'Compliance', 'Audits', 'Verifications', 'Quality'];
+  var TYPE = 60, DEL = 40, HOLD = 2000, GAP = 400;
+
+  var cA = 0, cB = 0, cC = 0;
+  var elA = document.getElementById('tw-a');
+  var elB = document.getElementById('tw-b');
+  var elC = document.getElementById('tw-c');
+  var outA = document.getElementById('c-a');
+  var outB = document.getElementById('c-b');
+  var outC = document.getElementById('c-c');
+
+  document.getElementById('reset-b3').addEventListener('click', function () {
+    cA = 0; cB = 0; cC = 0;
+    outA.textContent = '0'; outB.textContent = '0'; outC.textContent = '0';
+  });
+
+  /* Variant "today": one DOM write per character, forever.
+     Stands in for a React setState per character. */
+  (function todayTypewriter() {
+    var caret = document.createElement('span');
+    caret.className = 'caret blink';
+    var text = document.createTextNode('');
+    elA.appendChild(text);
+    elA.appendChild(caret);
+
+    var i = 0, n = 0, phase = 'hold';
+    function tick() {
+      var w = WORDS[i];
+      if (phase === 'type') {
+        if (n < w.length) { n += 1; text.nodeValue = w.slice(0, n); cA += 1; outA.textContent = fmt(cA); setTimeout(tick, TYPE); }
+        else { phase = 'hold'; setTimeout(tick, HOLD); }
+      } else if (phase === 'hold') {
+        phase = 'del'; setTimeout(tick, 0);
+      } else if (phase === 'del') {
+        if (n > 0) { n -= 1; text.nodeValue = w.slice(0, n); cA += 1; outA.textContent = fmt(cA); setTimeout(tick, DEL); }
+        else { i = (i + 1) % WORDS.length; phase = 'type'; setTimeout(tick, GAP); }
+      }
+    }
+    text.nodeValue = WORDS[0];
+    n = WORDS[0].length;
+    setTimeout(tick, HOLD);
+  })();
+
+  /* Option A: identical look, driven by the browser. One JS write per word to
+     set the target width, then a stepped animation the browser runs on its own. */
+  (function browserTypewriter() {
+    var i = 0;
+    var current = null;
+    var span = document.createElement('span');
+    elB.appendChild(span);
+
+    /* A filling animation outranks an inline style in the cascade, so the
+       previous cycle has to be cancelled before the natural width can be
+       read — otherwise every measurement after the first returns 0. */
+    function measure(word) {
+      if (current) { current.cancel(); current = null; }
+      span.textContent = word;
+      elB.style.width = 'auto';
+      return elB.getBoundingClientRect().width;
+    }
+
+    function cycle() {
+      var w = WORDS[i];
+      var full = measure(w);
+      cB += 1; outB.textContent = fmt(cB);
+
+      if (reduced) {
+        elB.style.width = full + 'px';
+        setTimeout(function () { i = (i + 1) % WORDS.length; cycle(); }, HOLD * 2);
+        return;
+      }
+
+      var typeMs = w.length * TYPE;
+      var delMs = w.length * DEL;
+      var total = typeMs + HOLD + delMs + GAP;
+      var steps = 'steps(' + w.length + ', end)';
+
+      current = elB.animate(
+        [
+          { width: '0px', offset: 0, easing: steps },
+          { width: full + 'px', offset: typeMs / total, easing: 'linear' },
+          { width: full + 'px', offset: (typeMs + HOLD) / total, easing: steps },
+          { width: '0px', offset: (typeMs + HOLD + delMs) / total, easing: 'linear' },
+          { width: '0px', offset: 1 }
+        ],
+        { duration: total, fill: 'forwards' }
+      );
+      current.onfinish = function () { i = (i + 1) % WORDS.length; cycle(); };
+    }
+
+    elB.style.display = 'inline-block';
+    elB.style.overflow = 'hidden';
+
+    /* Start only once the text can actually be measured. Running cycle()
+       straight away measured 0 before the font settled, so the first pass
+       animated from nothing to nothing for a full 3.6s. */
+    function start(attempt) {
+      span.textContent = WORDS[0];
+      elB.style.width = 'auto';
+      if (elB.getBoundingClientRect().width > 0 || attempt > 20) { cycle(); return; }
+      requestAnimationFrame(function () { start(attempt + 1); });
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { start(0); });
+    } else {
+      requestAnimationFrame(function () { start(0); });
+    }
+  })();
+
+  /* Option B: swap the whole word with a fade. Two writes per word. */
+  (function wordFade() {
+    var i = 0;
+    elC.textContent = WORDS[0];
+    function cycle() {
+      elC.style.opacity = '0';
+      cC += 1; outC.textContent = fmt(cC);
+      setTimeout(function () {
+        i = (i + 1) % WORDS.length;
+        elC.textContent = WORDS[i];
+        elC.style.opacity = '1';
+        cC += 1; outC.textContent = fmt(cC);
+        setTimeout(cycle, HOLD + 600);
+      }, reduced ? 0 : 280);
+    }
+    setTimeout(cycle, HOLD);
+  })();
+})();
+</script>
+</body>
+</html>
