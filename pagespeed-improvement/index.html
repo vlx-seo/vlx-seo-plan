@@ -120,18 +120,6 @@
   }
   strong { font-weight: 650; }
 
-  /* ── correction callout ── */
-  .correction {
-    margin-top: 2.25rem; border: 1px solid var(--rule-strong);
-    border-left: 3px solid var(--warn); background: var(--warn-bg);
-    padding: 1.1rem 1.25rem;
-  }
-  .correction h2 { font-size: var(--step-1); margin: 0 0 0.5rem; font-weight: 650; }
-  .correction p { margin: 0 0 0.6rem; }
-  .correction p:last-child { margin: 0; }
-  .correction ul { margin: 0 0 0.6rem; padding-left: 1.15rem; max-width: 68ch; }
-  .correction li { margin-bottom: 0.3rem; }
-
   /* ── bench ── */
   .bench { margin-top: 3.5rem; }
   .bench-head { border-bottom: 1px solid var(--rule-strong); padding-bottom: 0.75rem; margin-bottom: 1.25rem; }
@@ -282,27 +270,6 @@
     </p>
   </header>
 
-  <div class="correction">
-    <h2>Before we decide: I got something wrong</h2>
-    <p>
-      In the earlier summary I said these animations were delaying how fast the main content appears. I went to
-      verify it in order to build these demos, and <strong>that isn't true</strong>:
-    </p>
-    <ul>
-      <li>Measured live on the homepage at 375×812, the <code>&lt;h1&gt;</code> sits 216 px from the top at full
-        opacity. <strong>The hero waits for nothing.</strong></li>
-      <li>Of the four elements below opacity 1 above the fold, two are the hidden mega-menu panel and one is the
-        cookie banner. The first real content that animates in ("Trusted by") is at 950 px —
-        <strong>below the fold</strong>.</li>
-      <li>The hero's <code>hero-fade-in</code> animation doesn't touch opacity at all; it's translate-only. That
-        was stripped deliberately in the June SEO audit so crawlers never see the H1 at zero opacity.</li>
-    </ul>
-    <p>
-      <strong>So this is not an LCP decision</strong>, and there's no need to rush it. What is genuinely at stake
-      is <strong>INP</strong> — how responsive the page feels to touch, currently 244 ms — and bundle weight:
-      92 scroll-animated elements on the homepage, 366 across the site, and two animations that never stop.
-    </p>
-  </div>
 
   <!-- ══════ BENCH 1 ══════ -->
   <section class="bench">
