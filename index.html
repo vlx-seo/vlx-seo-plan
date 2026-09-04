@@ -1589,11 +1589,13 @@ function recordMove(htmlId, newId, phase) {
 function applyMoves() {
   const m = loadMoves();
   Object.keys(m).forEach(htmlId => {
-    const { id: newId, phase } = m[htmlId];
-    const row = document.getElementById('task-' + htmlId) || document.getElementById('task-' + newId);
+    // Solo se relee la FASE. El id guardado se ignora a proposito: las entradas
+    // anteriores a este arreglo traen ids inventados (L14..L18) que no existen en
+    // el HTML, y volver a aplicarlos reintroduciria el mismo fallo.
+    const { phase } = m[htmlId];
+    const row = document.getElementById('task-' + htmlId);
     const tbody = document.querySelector('#' + phase + ' tbody');
     if (!row || !tbody) return;
-    if (row.id !== 'task-' + newId) applyTaskId(row, newId);
     if (row.parentElement !== tbody) tbody.appendChild(row);
     row.dataset.phase = phase;
   });
@@ -1701,45 +1703,35 @@ async function reclassifyMovedRows() {
       if (row.id.startsWith('task-c')) return;              // tareas propias del modal
       if (!row.dataset.phase) { row.dataset.phase = slideId; return; }
       if (row.dataset.phase === slideId) return;             // no se movio de fase
-      const oldId = row.id.replace('task-','');
-      const newId = nextFreeId(prefix);
-      applyTaskId(row, newId);
+      // El id NUNCA cambia. Antes se inventaba uno nuevo con el prefijo de la fase
+      // destino (nextFreeId): el estado se mudaba a ese id en Supabase y se borraba
+      // el del id viejo, pero el mapa viejo->nuevo vivia solo en localStorage. Result:
+      // quien arrastro veia su marca y el resto del equipo veia la fila en blanco.
+      // Lo que cambia de fase es un dato de la tarea (phase_id), no su nombre.
+      const id = row.id.replace('task-','');
       row.dataset.phase = slideId;
-      recordMove(oldId, newId, slideId);
-      moved.push({ oldId, newId, phase: slideId, row });
+      recordMove(id, id, slideId);
+      moved.push({ id, phase: slideId, row });
     });
   });
   if (!moved.length) return;
-  for (const m of moved) console.log('Reclasificada: ' + m.oldId + ' -> ' + m.newId + ' (' + m.phase + ')');
-  if (supa) { try { await persistRename(moved); } catch (e) { supaOk = false; setSyncBadge(); console.log('No se pudo mudar el estado:', e && e.message); } }
+  for (const m of moved) console.log('Reclasificada: ' + m.id + ' -> fase ' + m.phase + ' (el id no cambia)');
+  if (supa) { try { await persistPhase(moved); } catch (e) { supaOk = false; setSyncBadge(); console.log('No se pudo guardar la fase:', e && e.message); } }
 }
 
-// En la base: el id nuevo tiene que existir en el catalogo antes de poder
-// guardarle estado (task_state.task_id es clave foranea a tasks.id).
-async function persistRename(moved) {
+// Cambiar de fase ya no crea una tarea nueva: solo actualiza phase_id de la que
+// existe. Nada de altas en `tasks`, nada de mudar ni borrar filas de `task_state`.
+async function persistPhase(moved) {
   for (const m of moved) {
-    const cat = await supa.from('tasks').select('*').eq('id', m.oldId).maybeSingle();
-    const base = (cat && cat.data) ? cat.data : { id: m.oldId };
-    const fila = Object.assign({}, base, { id: m.newId, phase_id: m.phase });
-    const ins = await supa.from('tasks').upsert(fila, { onConflict: 'id' });
-    if (ins.error) throw ins.error;
-    const st = await supa.from('task_state').select('*').eq('task_id', m.oldId).maybeSingle();
-    if (st && st.data) {
-      const nuevo = Object.assign({}, st.data, { task_id: m.newId, updated_at: new Date().toISOString() });
-      const up = await supa.from('task_state').upsert(nuevo, { onConflict: 'task_id' });
-      if (up.error) throw up.error;
-      await supa.from('task_state').delete().eq('task_id', m.oldId);
-    }
+    const up = await supa.from('tasks').update({ phase_id: m.phase }).eq('id', m.id);
+    if (up.error) throw up.error;
   }
 }
 
-function renumberPhase(tbody) {
-  const slide = tbody.closest('.slide');
-  const prefix = getPhasePrefix(slide);
-  if (!prefix) return;
-  const rows = [...tbody.querySelectorAll('tr.task-row')].filter(r => !r.id.startsWith('task-c'));
-  rows.forEach((row, i) => applyTaskId(row, prefix + (i + 1)));
-}
+// renumberPhase() eliminada: renumeraba la fase entera reescribiendo el id de cada
+// fila, incluidas las que nadie movio. El estado se guarda por id, asi que borraba
+// marcas ajenas. Quedaba sin usar desde el 21-ago; se quita para que no se vuelva a
+// cablear. El id de una tarea no se toca nunca.
 
 function renameTaskId(row, newPrefix) {
   const oldId = row.id.replace('task-','');
