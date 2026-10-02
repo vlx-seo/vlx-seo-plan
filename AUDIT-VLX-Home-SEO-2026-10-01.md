@@ -1,7 +1,7 @@
 # SEO On-Page / Technical Audit — VLX Home
 
 - **Audited URL:** `https://dev.vlx.ai/vlx-home/`
-- **Date:** 2026-10-01 (rev. 2 — corrects the primary keyword and adds the defined keyword map)
+- **Date:** 2026-10-02 (rev. 4 — full live check of every guideline + correct URL `/digital-inspections-software/home/`)
 - **Environment:** DEV (behind Cognito login). Accessed via an authenticated browser session.
 - **Author:** lceballos-seo
 - **Scope:** single-page on-page and technical audit of the "Early Access" landing page.
@@ -36,6 +36,7 @@ The page currently live at `/vlx-home/` is **not** the version previously docume
 3. **Reinstate the defined keyword map** (primary + secondaries + sub-service hub) — see §1.
 4. Keyword coverage: "home inspection" appears **2 times in 884 words** (~0.2%). Insufficient.
 5. Resolve cannibalization with `/home-inspectors/` (Option A: VLX Home keeps "home inspection software", `/home-inspectors/` is re-focused).
+6. **Change the URL** from `https://vlx.ai/vlx-home/` to **`https://vlx.ai/digital-inspections-software/home/`** (+ 301 + canonical + og:url) — see §5.2.
 
 **P1 — high impact**
 6. Hero image uses `loading="lazy"` → the LCP image must not be lazy.
@@ -44,7 +45,7 @@ The page currently live at `/vlx-home/` is **not** the version previously docume
 9. Add secondaries to 2-3 H2s.
 10. Recover the sub-service hub (9 specialties, inert "Page coming" links) — the vehicle for the long-tail keywords.
 11. Add `offers` (price) to the `SoftwareApplication` schema.
-12. Decide URL architecture (`/vlx-home/` vs `/digital-inspections-software/app/vlx-home/`).
+12. Add a **visible breadcrumb** (today only the schema exists, not the element).
 
 **P2 — improvements**
 13. Hero `alt` with the primary keyword.
@@ -92,33 +93,67 @@ The rebuild **removed** the inspection-types hub. It must be rebuilt as a card s
 
 Each card carries its keyword in the **title, description and anchor** ("Explore <kw> →"). Inert links (`data-href`, `aria-disabled`, "Page coming" badge) until the sub-pages exist. The compliance forms (OIR-B1-1802, Citizens 4-Point, TREC REI 7-6) already appear in the reports section → good, reinforce with the CSV secondaries.
 
-> **Architecture note:** the CSV uses `/digital-inspections-software/home/…` but the v3 wireframes recommend the `/digital-inspections-software/app/…` pattern (the one that ranks best per GSC). Reconcile before building the real sub-pages.
+> **Architecture (resolved):** the core page lives at **`/digital-inspections-software/home/`** (§5.2) and the 9 sub-pages nest under it (`/digital-inspections-software/home/<kw>-software/`), exactly as the CSV scheme. This yields a coherent silo: hub → core → specialties.
 
 ---
 
-## 1-bis. Rank Math guideline check — LIVE (exact keyword `home inspection software`) — `P0`
+## 1-bis. FULL guideline check — LIVE (2026-10-02)
 
-Verified against the live page on **2026-10-02**. With the correct keyword, the page **fails almost the entire Basic SEO block**:
+Measured against the live page with focus keyword **`home inspection software`**. Legend: ✅ pass · ❌ fail · ⚠️ weak/risk · 🟡 adapt · ⚪ optional.
 
-| Guideline (Rank Math) | Result | Detail (measured) |
+### A. Basic SEO
+| Rank Math test | Result | Measured detail |
 |---|---|---|
-| KW in **Title** | ❌ FAIL | title = "residential inspection software" (wrong keyword) |
-| KW in **Meta description** | ❌ FAIL | meta contains neither "home inspection software" nor even "home inspection" |
-| KW in **URL** | ❌ FAIL | `/vlx-home/` (does not contain the phrase) |
-| KW in **first 10%** of content | ❌ FAIL | exact phrase first appears at **87.7%**; only the partial "home inspection" is in the first 10% (via H1) |
-| KW in an **H2** | ❌ FAIL | **0 of 9 H2s** contain it (not even the partial "home inspection") |
-| KW in an **H3** | ❌ FAIL | 0 H3s contain it |
-| KW in **image alt** | ❌ FAIL | 0 alts with the exact phrase (2 alts have incidental "Home Inspection" from brand/service, not the focus KW) |
-| KW in **content body** | ⚠️ WEAK | exact phrase **1 time**; "home inspection" 2 times |
-| Keyword **density** | ❌ FAIL | **0.11%** (target 1–1.5%) |
-| Content **length** | 🟡 | 884 words (acceptable for a landing; ideal 900–1,300) |
-| **URL ≤75 chars** | ✅ PASS | short |
-| **Internal links** | ✅ PASS | hub + `/home-inspectors/` + apps |
-| **Short paragraphs** (<120 words) | ✅ PASS | 2–3 lines |
-| **Media use (≥4)** | ✅ PASS | 46 images (report mockups, job board…) |
-| **KW uniqueness** | ⚠️ RISK | "home inspection software" is currently owned by `/home-inspectors/` → see §5.1 |
+| Focus KW in **Title** | ❌ FAIL | title = "residential inspection software" (wrong keyword) |
+| Focus KW in **Meta description** | ❌ FAIL | meta contains neither the exact phrase nor the partial "home inspection" |
+| Focus KW in **URL** | ❌ FAIL | `/vlx-home/` (does not contain the phrase) |
+| Focus KW in **first 10%** | ❌ FAIL | first exact appearance at **87.7%**; only the partial "home inspection" in the first 10% (H1) |
+| Focus KW in **Content** | ⚠️ WEAK | exact phrase **1 time** in the whole body |
+| **Content Length** | 🟡 | **884 words** (acceptable for a landing; ideal 900–1,300) |
 
-**The 3 Laura explicitly asked about:** KW in image ❌ · KW in H2 ❌ · KW in first 10% ❌ — **all three fail today**. How to fix them is in §1 (keyword map) and §2 (title/H1/meta/H2/alt). Method note: these checks are on the **exact phrase** `home inspection software`; the partial "home inspection" does appear in the H1 and in 2 alts, but Rank Math scores the exact focus keyword.
+### B. Additional SEO
+| Test | Result | Measured detail |
+|---|---|---|
+| Focus KW in **Subheadings (H2/H3)** | ❌ FAIL | **0 of 9 H2s** and **0 H3s** contain the phrase (not even the partial) |
+| Focus KW in **Image Alt** | ❌ FAIL | **0 alts** with the exact phrase; the 8 content images have descriptive alts but no focus keyword |
+| **Keyword Density** | ❌ FAIL | primary **0.11%** (target 1–1.5%); secondaries 0% |
+| **URL Length ≤75** | ✅ PASS | short |
+| **Linking to Internal Resources** | ✅ PASS | 81 internal links (hub, `/home-inspectors/`, apps, pricing) |
+| **Linking to External Sources** | ✅ PASS | 17 external links (Capterra, G2, NMSDC, socials) |
+| **External link DoFollow** | ✅ PASS | all 17 external are dofollow |
+| **Focus KW Uniqueness** | ⚠️ RISK | "home inspection software" is currently owned by `/home-inspectors/` → §5.1 |
+
+### C. Title Readability
+| Test | Result | Detail |
+|---|---|---|
+| Focus KW at **start of Title** | ❌ FAIL | title starts with the brand and the wrong keyword |
+| Sentiment / Power word / Number in title | ⚪ OPTIONAL | not critical for a product page |
+
+### D. Content Readability
+| Test | Result | Measured detail |
+|---|---|---|
+| **Short Paragraphs** (<120 words) | ✅ PASS | longest paragraph = 38 words (105 `<p>`) |
+| **Use of Media** (≥4) | ✅ PASS | 8 content images (46 `<img>` incl. icons) |
+| **Table of Contents** | ⚪ OPTIONAL | short landing, not needed |
+
+### E. Coverage of the DEFINED secondary keywords (the 8 in map §1.1)
+❌ **FAIL — all 8 appear 0 times as an exact phrase:** `home inspection business software` (0), `home inspection app` (0), `mobile home inspection software` (0), `home inspection report software` (0), `inspection scheduling software` (0), `inspection invoicing software` (0), `offline inspection app` (0), `photo authentication software` (0). The loose concepts exist (booking ×3, scheduling ×2, invoicing ×1, report ×16) but **no secondary keyword is built as such**. "offline" and "photo authentication"/KYPiT: **0 mentions**.
+
+### F. Sub-service hub (the 9 specialties §1.2)
+❌ **FAIL — the hub does not exist in this version.** Only `wind mitigation` (1) and `4-point` (1) are mentioned in the forms line. `roof`, `radon`, `mold`, `sewer scope`, `pool`, `termite/WDO`, `new construction` = **0 mentions**.
+
+### G. Technical (summary; detail in §4)
+| Item | Result |
+|---|---|
+| `robots` | ✅ `noindex,nofollow` correct on DEV (flip in prod = P0) |
+| Canonical | ⚠️ points to `/vlx-home/` → **must change** (see §5.2 / URL point) |
+| Hreflang | ✅ 6 entries paired with the canonical |
+| Schema | ✅ 5 blocks (Organization, WebSite, BreadcrumbList, SoftwareApplication, FAQPage) |
+| **Visible** breadcrumb | ❌ BreadcrumbList schema present but **no** visible breadcrumb on the page → add it (reinforces the silo under `/digital-inspections-software/home/`) |
+| `og:type` | ❌ absent |
+| `SoftwareApplication.offers` | ❌ absent (public price) |
+
+**Verdict:** with the correct keyword, the page **fails the entire Basic SEO block + the Additional KW checks + the full coverage of secondaries and sub-services**. It passes readability, linking and media use. The 3 you asked about (image ❌ · H2 ❌ · first 10% ❌) fail. The "how" is in §1 (map) and §2 (on-page).
 
 ---
 
@@ -186,8 +221,11 @@ Hero 1395×278 (`alt="VLX Home"`) with **`loading="lazy"` and no `fetchpriority`
 ### 4.1 Indexability — `P0`
 `noindex,nofollow` correct on DEV. **Launch item #1:** PROD must serve `index,follow` (`APP_ENV` gate) + 200 + be in the sitemap.
 
-### 4.2 Canonical — OK
-`canonical → https://vlx.ai/vlx-home/` (self-referential to PROD). Correct; confirm the final PROD route matches (see §5.2).
+### 4.2 Canonical — `P0` (must change with the URL)
+Today `canonical → https://vlx.ai/vlx-home/`. It is self-referential, but it points to the **wrong URL**: it must become **`https://vlx.ai/digital-inspections-software/home/`** together with the route change (§5.2). Same for `og:url`.
+
+### 4.2-bis Visible breadcrumb — `P1`
+There is a `BreadcrumbList` in the schema **but no visible breadcrumb** on the page. Add the visible breadcrumb (Home › Digital Inspections Software › Home Inspection) to reinforce the silo and match the schema.
 
 ### 4.3 Hreflang — OK (optional improvement `P3`)
 6 entries (en-US/en-CA/en-CO/en-MX/en/x-default) → same URL = canonical. Valid (passes the guard). Optional: reduce to `en` + `x-default`.
@@ -216,8 +254,23 @@ VLX Home's primary keyword is `home inspection software`. That term **is current
 - **Option A (the active one):** VLX Home keeps `home inspection software`; **re-focus `/home-inspectors/`** onto a different primary (e.g. `home inspection report software` or "…for firms/companies").
 - Until `/home-inspectors/` is re-focused, there is a cannibalization risk. This re-focus is a **prerequisite** for launching VLX Home on this keyword.
 
-### 5.2 URL architecture — `P1` (decision)
-Page at root `/vlx-home/`. Site GSC data: level-3 under `/digital-inspections-software/app/` ranks far better (COUNTiT pos ≈5.2; KYPiT ≈2.2) than level 1-2 (`/product/` 27-56). Prior recommendation: `/digital-inspections-software/app/vlx-home/`. If the goal is organic, move it (and update canonical/breadcrumb). Decide before launch to avoid a later 301.
+### 5.2 URL architecture — `P0` (DECIDED)
+**The URL must NOT be `https://vlx.ai/vlx-home/` (root).** It must be:
+
+> **`https://vlx.ai/digital-inspections-software/home/`**
+
+**Why:**
+- **Topical silo:** it hangs the page off the `/digital-inspections-software/` hub that already has authority; site GSC data shows level-3 routes under that hub rank far better (COUNTiT pos ≈5.2; KYPiT ≈2.2) than level 1-2 (`/product/` pos 27-56). A root `/vlx-home/` URL inherits none of that authority.
+- **Consistency with the sub-service hub:** the 9 specialties (§1.2) nest naturally under this route: `/digital-inspections-software/home/roof-inspection-software/`, `…/wind-mitigation-inspection-software/`, etc. With the root, the URL tree is disconnected.
+- **Real breadcrumb:** it enables a Home › Digital Inspections Software › Home Inspection breadcrumb that does not currently exist visibly (§1-bis.G).
+
+**How to do it:**
+1. Serve the page at `/digital-inspections-software/home/` (Next.js route) and **update the `canonical` and `og:url`** to that absolute PROD URL.
+2. **301** from `/vlx-home/` → `/digital-inspections-software/home/` (and any already-linked variant) to keep equity and avoid leaving the old URL indexable.
+3. Add the **visible breadcrumb** + keep the `BreadcrumbList` schema with the 3 levels.
+4. The hub sub-pages are created under this route (reconciles the CSV's provisional scheme).
+
+Decide/implement **before launch** to avoid chaining 301s later.
 
 ### 5.3 Internal linking — OK (improvement `P2`)
 84 links (mostly nav/footer). Links to KYPiT, COUNTiT, `/home-inspectors/`, overview and inspection-companies. Pricing mentions Spectora but **there is no `/vs-spectora` link** → add it (conquesting; Spectora ≈9,900/mo). The sub-service hub (§1.2) would add 9 keyword-rich internal links.
@@ -235,9 +288,10 @@ Page at root `/vlx-home/`. Site GSC data: level-3 under `/digital-inspections-so
 7. [ ] `SoftwareApplication.offers` with price; `aggregateRating` out.
 8. [ ] `og:type` + `og:image` PROD verified.
 9. [ ] `/home-inspectors/` re-focus confirmed (anti-cannibalization, Option A).
-10. [ ] URL architecture decided (root vs level 3).
-11. [ ] Validate all 5 schemas in Rich Results Test.
-12. [ ] Measure CWV in PSI/CrUX; `/vs-spectora` link.
+10. [ ] **URL = `/digital-inspections-software/home/`** (not `/vlx-home/`) + 301 + canonical + og:url.
+11. [ ] Visible breadcrumb added (Home › Digital Inspections Software › Home Inspection).
+12. [ ] Validate all 5 schemas in Rich Results Test.
+13. [ ] Measure CWV in PSI/CrUX; `/vs-spectora` link.
 
 ---
 
