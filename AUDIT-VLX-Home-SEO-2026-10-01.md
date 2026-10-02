@@ -96,6 +96,32 @@ Each card carries its keyword in the **title, description and anchor** ("Explore
 
 ---
 
+## 1-bis. Rank Math guideline check — LIVE (exact keyword `home inspection software`) — `P0`
+
+Verified against the live page on **2026-10-02**. With the correct keyword, the page **fails almost the entire Basic SEO block**:
+
+| Guideline (Rank Math) | Result | Detail (measured) |
+|---|---|---|
+| KW in **Title** | ❌ FAIL | title = "residential inspection software" (wrong keyword) |
+| KW in **Meta description** | ❌ FAIL | meta contains neither "home inspection software" nor even "home inspection" |
+| KW in **URL** | ❌ FAIL | `/vlx-home/` (does not contain the phrase) |
+| KW in **first 10%** of content | ❌ FAIL | exact phrase first appears at **87.7%**; only the partial "home inspection" is in the first 10% (via H1) |
+| KW in an **H2** | ❌ FAIL | **0 of 9 H2s** contain it (not even the partial "home inspection") |
+| KW in an **H3** | ❌ FAIL | 0 H3s contain it |
+| KW in **image alt** | ❌ FAIL | 0 alts with the exact phrase (2 alts have incidental "Home Inspection" from brand/service, not the focus KW) |
+| KW in **content body** | ⚠️ WEAK | exact phrase **1 time**; "home inspection" 2 times |
+| Keyword **density** | ❌ FAIL | **0.11%** (target 1–1.5%) |
+| Content **length** | 🟡 | 884 words (acceptable for a landing; ideal 900–1,300) |
+| **URL ≤75 chars** | ✅ PASS | short |
+| **Internal links** | ✅ PASS | hub + `/home-inspectors/` + apps |
+| **Short paragraphs** (<120 words) | ✅ PASS | 2–3 lines |
+| **Media use (≥4)** | ✅ PASS | 46 images (report mockups, job board…) |
+| **KW uniqueness** | ⚠️ RISK | "home inspection software" is currently owned by `/home-inspectors/` → see §5.1 |
+
+**The 3 Laura explicitly asked about:** KW in image ❌ · KW in H2 ❌ · KW in first 10% ❌ — **all three fail today**. How to fix them is in §1 (keyword map) and §2 (title/H1/meta/H2/alt). Method note: these checks are on the **exact phrase** `home inspection software`; the partial "home inspection" does appear in the H1 and in 2 alts, but Rank Math scores the exact focus keyword.
+
+---
+
 ## 2. On-page SEO
 
 ### 2.1 Title tag — `P0`
