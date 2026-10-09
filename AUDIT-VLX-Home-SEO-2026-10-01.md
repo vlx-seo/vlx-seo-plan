@@ -1,7 +1,7 @@
 # SEO On-Page / Technical Audit — VLX Home
 
 - **Audited URL:** `https://dev.vlx.ai/vlx-home/`
-- **Date:** 2026-10-02 (rev. 4 — full live check of every guideline + correct URL `/digital-inspections-software/home/`)
+- **Date:** 2026-10-09 (rev. 5 — decided URL updated to `/home-inspection-software/`)
 - **Environment:** DEV (behind Cognito login). Accessed via an authenticated browser session.
 - **Author:** lceballos-seo
 - **Scope:** single-page on-page and technical audit of the "Early Access" landing page.
@@ -36,7 +36,7 @@ The page currently live at `/vlx-home/` is **not** the version previously docume
 3. **Reinstate the defined keyword map** (primary + secondaries + sub-service hub) — see §1.
 4. Keyword coverage: "home inspection" appears **2 times in 884 words** (~0.2%). Insufficient.
 5. Resolve cannibalization with `/home-inspectors/` (Option A: VLX Home keeps "home inspection software", `/home-inspectors/` is re-focused).
-6. **Change the URL** from `https://vlx.ai/vlx-home/` to **`https://vlx.ai/digital-inspections-software/home/`** (+ 301 + canonical + og:url) — see §5.2.
+6. **Change the URL** from `https://vlx.ai/vlx-home/` to **`https://vlx.ai/home-inspection-software/`** (+ 301 + canonical + og:url) — see §5.2.
 
 **P1 — high impact**
 6. Hero image uses `loading="lazy"` → the LCP image must not be lazy.
@@ -81,19 +81,19 @@ The rebuild **removed** the inspection-types hub. It must be rebuilt as a card s
 
 | Sub-service | Primary keyword | Anchor | Provisional URL |
 |---|---|---|---|
-| Roof inspection | `roof inspection software` | Explore roof inspection software | `/digital-inspections-software/home/roof-inspection-software/` |
-| Wind mitigation | `wind mitigation inspection software` | Explore wind mitigation software | `…/home/wind-mitigation-inspection-software/` |
-| 4-point inspection | `4-point inspection software` | Explore 4-point inspection software | `…/home/4-point-inspection-software/` |
-| Radon testing | `radon inspection software` | Explore radon inspection software | `…/home/radon-inspection-software/` |
-| Mold inspection | `mold inspection software` | Explore mold inspection software | `…/home/mold-inspection-software/` |
-| Sewer scope | `sewer scope inspection software` | Explore sewer scope software | `…/home/sewer-scope-inspection-software/` |
-| Pool & spa | `pool inspection software` | Explore pool inspection software | `…/home/pool-inspection-software/` |
-| Termite / WDO | `termite inspection software` | Explore termite / WDO software | `…/home/termite-wdo-inspection-software/` |
-| New construction & pre-purchase | `new construction inspection software` | Explore new construction software | `…/home/new-construction-inspection-software/` |
+| Roof inspection | `roof inspection software` | Explore roof inspection software | `/home-inspection-software/roof/` |
+| Wind mitigation | `wind mitigation inspection software` | Explore wind mitigation software | `/home-inspection-software/wind-mitigation/` |
+| 4-point inspection | `4-point inspection software` | Explore 4-point inspection software | `/home-inspection-software/4-point/` |
+| Radon testing | `radon inspection software` | Explore radon inspection software | `/home-inspection-software/radon/` |
+| Mold inspection | `mold inspection software` | Explore mold inspection software | `/home-inspection-software/mold/` |
+| Sewer scope | `sewer scope inspection software` | Explore sewer scope software | `/home-inspection-software/sewer-scope/` |
+| Pool & spa | `pool inspection software` | Explore pool inspection software | `/home-inspection-software/pool/` |
+| Termite / WDO | `termite inspection software` | Explore termite / WDO software | `/home-inspection-software/termite-wdo/` |
+| New construction & pre-purchase | `new construction inspection software` | Explore new construction software | `/home-inspection-software/new-construction/` |
 
 Each card carries its keyword in the **title, description and anchor** ("Explore <kw> →"). Inert links (`data-href`, `aria-disabled`, "Page coming" badge) until the sub-pages exist. The compliance forms (OIR-B1-1802, Citizens 4-Point, TREC REI 7-6) already appear in the reports section → good, reinforce with the CSV secondaries.
 
-> **Architecture (resolved):** the core page lives at **`/digital-inspections-software/home/`** (§5.2) and the 9 sub-pages nest under it (`/digital-inspections-software/home/<kw>-software/`), exactly as the CSV scheme. This yields a coherent silo: hub → core → specialties.
+> **Architecture (resolved):** the core page lives at **`/home-inspection-software/`** (§5.2) and the 9 sub-pages nest under it (`/home-inspection-software/<specialty>/`). Coherent silo core → specialties, additionally linked from the hub `/digital-inspections-software/`.
 
 ---
 
@@ -106,7 +106,7 @@ Measured against the live page with focus keyword **`home inspection software`**
 |---|---|---|
 | Focus KW in **Title** | ❌ FAIL | title = "residential inspection software" (wrong keyword) |
 | Focus KW in **Meta description** | ❌ FAIL | meta contains neither the exact phrase nor the partial "home inspection" |
-| Focus KW in **URL** | ❌ FAIL | `/vlx-home/` (does not contain the phrase) |
+| Focus KW in **URL** | ❌ FAIL (today) | live `/vlx-home/` does not contain it; the **decided** URL `/home-inspection-software/` does (EMU) → will pass once implemented (§5.2) |
 | Focus KW in **first 10%** | ❌ FAIL | first exact appearance at **87.7%**; only the partial "home inspection" in the first 10% (H1) |
 | Focus KW in **Content** | ⚠️ WEAK | exact phrase **1 time** in the whole body |
 | **Content Length** | 🟡 | **884 words** (acceptable for a landing; ideal 900–1,300) |
@@ -149,7 +149,7 @@ Measured against the live page with focus keyword **`home inspection software`**
 | Canonical | ⚠️ points to `/vlx-home/` → **must change** (see §5.2 / URL point) |
 | Hreflang | ✅ 6 entries paired with the canonical |
 | Schema | ✅ 5 blocks (Organization, WebSite, BreadcrumbList, SoftwareApplication, FAQPage) |
-| **Visible** breadcrumb | ❌ BreadcrumbList schema present but **no** visible breadcrumb on the page → add it (reinforces the silo under `/digital-inspections-software/home/`) |
+| **Visible** breadcrumb | ❌ BreadcrumbList schema present but **no** visible breadcrumb on the page → add it (Home › Home Inspection Software) |
 | `og:type` | ❌ absent |
 | `SoftwareApplication.offers` | ❌ absent (public price) |
 
@@ -222,7 +222,7 @@ Hero 1395×278 (`alt="VLX Home"`) with **`loading="lazy"` and no `fetchpriority`
 `noindex,nofollow` correct on DEV. **Launch item #1:** PROD must serve `index,follow` (`APP_ENV` gate) + 200 + be in the sitemap.
 
 ### 4.2 Canonical — `P0` (must change with the URL)
-Today `canonical → https://vlx.ai/vlx-home/`. It is self-referential, but it points to the **wrong URL**: it must become **`https://vlx.ai/digital-inspections-software/home/`** together with the route change (§5.2). Same for `og:url`.
+Today `canonical → https://vlx.ai/vlx-home/`. It is self-referential, but it points to the **wrong URL**: it must become **`https://vlx.ai/home-inspection-software/`** together with the route change (§5.2). Same for `og:url`.
 
 ### 4.2-bis Visible breadcrumb — `P1`
 There is a `BreadcrumbList` in the schema **but no visible breadcrumb** on the page. Add the visible breadcrumb (Home › Digital Inspections Software › Home Inspection) to reinforce the silo and match the schema.
@@ -254,21 +254,23 @@ VLX Home's primary keyword is `home inspection software`. That term **is current
 - **Option A (the active one):** VLX Home keeps `home inspection software`; **re-focus `/home-inspectors/`** onto a different primary (e.g. `home inspection report software` or "…for firms/companies").
 - Until `/home-inspectors/` is re-focused, there is a cannibalization risk. This re-focus is a **prerequisite** for launching VLX Home on this keyword.
 
-### 5.2 URL architecture — `P0` (DECIDED)
-**The URL must NOT be `https://vlx.ai/vlx-home/` (root).** It must be:
+### 5.2 URL architecture — `P0` (DECIDED, updated 2026-10-09)
+**The URL must NOT be `https://vlx.ai/vlx-home/`.** It must be:
 
-> **`https://vlx.ai/digital-inspections-software/home/`**
+> **`https://vlx.ai/home-inspection-software/`**
 
 **Why:**
-- **Topical silo:** it hangs the page off the `/digital-inspections-software/` hub that already has authority; site GSC data shows level-3 routes under that hub rank far better (COUNTiT pos ≈5.2; KYPiT ≈2.2) than level 1-2 (`/product/` pos 27-56). A root `/vlx-home/` URL inherits none of that authority.
-- **Consistency with the sub-service hub:** the 9 specialties (§1.2) nest naturally under this route: `/digital-inspections-software/home/roof-inspection-software/`, `…/wind-mitigation-inspection-software/`, etc. With the root, the URL tree is disconnected.
-- **Real breadcrumb:** it enables a Home › Digital Inspections Software › Home Inspection breadcrumb that does not currently exist visibly (§1-bis.G).
+- **Exact keyword in the slug (EMU):** the URL contains the full primary keyword `home-inspection-software` → **it satisfies the "Focus KW in URL" check** (today ❌) with the strongest possible signal.
+- **Reinforces Option A:** a URL that literally claims "home inspection software" consolidates VLX Home as the owner of the head term (and requires re-focusing `/home-inspectors/`, §5.1).
+- **Short and clean:** 1 level, readable, easy to communicate and link to.
+- **Accepted trade-off:** being a root URL, it does not hang off the `/digital-inspections-software/` hub, so it does not inherit the silo's authority; this is offset by the exact slug + inbound internal links from the hub and sibling pages.
 
 **How to do it:**
-1. Serve the page at `/digital-inspections-software/home/` (Next.js route) and **update the `canonical` and `og:url`** to that absolute PROD URL.
-2. **301** from `/vlx-home/` → `/digital-inspections-software/home/` (and any already-linked variant) to keep equity and avoid leaving the old URL indexable.
-3. Add the **visible breadcrumb** + keep the `BreadcrumbList` schema with the 3 levels.
-4. The hub sub-pages are created under this route (reconciles the CSV's provisional scheme).
+1. Serve the page at `/home-inspection-software/` (Next.js route) and **update `canonical` and `og:url`** to `https://vlx.ai/home-inspection-software/`.
+2. **301** from `/vlx-home/` → `/home-inspection-software/` (and any already-linked variant) to keep equity and avoid leaving the old URL indexable.
+3. Add a **visible breadcrumb** (Home › Home Inspection Software) + keep the `BreadcrumbList` schema.
+4. The 9 specialty sub-pages nest under this route: `/home-inspection-software/roof/`, `/home-inspection-software/wind-mitigation/`, etc. (confirm the child-slug pattern; the CSV's provisional scheme relocates here).
+5. Link the page **from the hub** `/digital-inspections-software/` to preserve topical linking.
 
 Decide/implement **before launch** to avoid chaining 301s later.
 
@@ -288,7 +290,7 @@ Decide/implement **before launch** to avoid chaining 301s later.
 7. [ ] `SoftwareApplication.offers` with price; `aggregateRating` out.
 8. [ ] `og:type` + `og:image` PROD verified.
 9. [ ] `/home-inspectors/` re-focus confirmed (anti-cannibalization, Option A).
-10. [ ] **URL = `/digital-inspections-software/home/`** (not `/vlx-home/`) + 301 + canonical + og:url.
+10. [ ] **URL = `/home-inspection-software/`** (not `/vlx-home/`) + 301 + canonical + og:url.
 11. [ ] Visible breadcrumb added (Home › Digital Inspections Software › Home Inspection).
 12. [ ] Validate all 5 schemas in Rich Results Test.
 13. [ ] Measure CWV in PSI/CrUX; `/vs-spectora` link.
