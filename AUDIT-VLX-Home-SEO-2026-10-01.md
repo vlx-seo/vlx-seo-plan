@@ -1,12 +1,37 @@
 # SEO On-Page / Technical Audit — VLX Home
 
 - **Audited URL:** `https://dev.vlx.ai/vlx-home/`
-- **Date:** 2026-10-09 (rev. 5 — decided URL updated to `/home-inspection-software/`)
+- **Date:** 2026-10-14 (rev. 6 — implementation status added; most recommendations shipped to `dev`)
 - **Environment:** DEV (behind Cognito login). Accessed via an authenticated browser session.
 - **Author:** lceballos-seo
 - **Scope:** single-page on-page and technical audit of the "Early Access" landing page.
 
-> **Primary keyword (defined):** **`home inspection software`**. All on-page signals must align to this term. The page must **not** target "residential inspection software" (which is what the title targets today).
+> **Primary keyword (defined):** **`home inspection software`**. All on-page signals align to this term.
+
+---
+
+## ✅ Implementation status — rev. 6 (2026-10-14)
+
+The audit's recommendations were implemented in VLX-Marketing and merged to `dev` (prod release pending). The page now serves at **`/home-inspection-software/`**. What shipped:
+
+**Shipped (PR #146 → `dev`, plus PR #148 for the H1):**
+- **URL:** moved from `/vlx-home/` to the exact-match **`/home-inspection-software/`** (route renamed). 301s added: `/vlx-home`, `/vlx/home`, `/vlx-home-early-access`, and `/home` → new URL. Canonical, `og:url`, hreflang, sitemap, breadcrumb, Footer, the `/faqs` link and `LINKS.vlxHome` updated. → **"KW in URL" now passes (EMU).**
+- **Title:** `Home Inspection Software for Inspectors | VLX Home` (keyword-first, `title.absolute`).
+- **H1 (PR #148):** `Home inspection software, powered by AI.` — primary keyword at the very start (was mid-phrase).
+- **Meta / OG / Twitter:** lead with the keyword; `og:type: website` added.
+- **Keyword coverage:** now present in the first paragraph, the hero image `alt`, the `SoftwareApplication` schema description, and the "What is VLX Home?" FAQ. Added to two H2s (AI, Reports) plus the new hub H2. → **KW in first 10%, in H2, and in an image alt all now pass.**
+- **Sub-service hub:** the 9-specialty inert "Inspection types" hub was reinstated (roof, wind mitigation, 4-point, radon, mold, sewer scope, pool, termite/WDO, new construction), each a "Page coming" placeholder.
+- **De-cannibalization:** `/digital-inspections-software/home-inspectors/` re-focused from "home inspection software" to **"home inspector software"** (1,300/mo, difficulty 20 — same volume, lower difficulty per the Ranki research). Its title, meta, OG, H1, subtitle, hero alt, pain-points H2, Service schema, and the `/faqs` anchor were updated. Final split: `/home-inspection-software/` = "home inspection software"; `/home-inspectors/` = "home inspector software".
+
+**Deliberately NOT changed (sound documented decisions kept):**
+- No `offers` in the `SoftwareApplication` schema (no self-serve purchase yet).
+- No visible breadcrumb (the page is intentionally top-level).
+
+**Flagged for review (not an error):** `/home` → product page is a topical mismatch on ~2,309 "homepage"-intent impressions; one-line revert available in `redirects/legacy-flat-urls.ts`.
+
+**Release flow:** #146 merged to `dev`; #148 (H1) pending merge to `dev`; #147 (`dev → master`) is the prod release and auto-includes both once #148 is in `dev`. Order: merge #148 → `dev`, then #147 → `master`.
+
+> The sections below are the **original DEV audit** (state before implementation). The live pass/fail in §1-bis is now **superseded** by the status above.
 
 ---
 
