@@ -119,8 +119,8 @@ Track on **both** domains:
 | **P0** | Don't block old domain in robots.txt; avoid redirect chains |
 | **P1** | Add new GSC/Bing property; submit new sitemap; keep old property for monitoring |
 | **P1** | Update internal links (vlx.ai, blog) + canonicals/structured data to new domain |
-| **P2** | Update external citations (GMB, stores, directories, social); backlink outreach for top referrers |
-| **P2** | Post-migration monitoring of 404s, index coverage, traffic, rankings |
+| **P2** | Update external citations (stores, directories, social); backlink outreach for top referrers |
+| **P2** | Post-migration monitoring of 404s, index coverage, and organic traffic |
 
 ---
 
