@@ -76,7 +76,6 @@ Every link to `app.visualogyx.com` from properties **you control** should be upd
 
 These pass link equity and/or brand citations; update the high-value ones even though the 301 preserves most equity:
 
-- **Google Business Profile (GMB)** — website/app link.
 - **App Store & Play Store** listings — any web links in the description.
 - **Directories & review sites:** G2, Capterra, Trustpilot, etc. (keep NAP/brand citations consistent).
 - **Social profiles & bios:** LinkedIn, X/Twitter, Facebook, YouTube.
@@ -107,7 +106,6 @@ Track on **both** domains:
 - **404 / crawl errors** (GSC → Pages, *Not found*, *Redirect error*).
 - **Index coverage:** old URLs dropping, new URLs appearing.
 - **Organic traffic & impressions/clicks** (GA4 + GSC) — watch for drops beyond the normal migration dip.
-- **Rankings** for any keywords the app URLs ranked for (Ranki / GSC queries).
 - **Redirect health:** periodic check that every old URL still returns a single 301 to the correct new URL (redirects tend to silently break over time).
 - Confirm the **old domain is not being blocked** and the redirects remain live.
 
