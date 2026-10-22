@@ -32,20 +32,23 @@ The SEO impact of this migration depends heavily on **whether `app.visualogyx.co
 
 ## 2. Search Console & Bing Webmaster Tools
 
-- **Add and verify `app.vlx.ai`** as a new property in Google Search Console and Bing Webmaster Tools.
-- **Keep the old `app.visualogyx.com` property** active to monitor de-indexing of old URLs and catch errors during the transition.
-- **Change of Address tool:** Note this tool in GSC is designed for **root-domain** moves (`visualogyx.com → vlx.ai`). For a **subdomain** move it may not be available/applicable; in that case Google relies entirely on the 301s to transfer signals. Verify availability; if unavailable, the redirects do the work.
-- **Submit the new sitemap** (see §3) in both tools.
-- Monitor **Index Coverage / Pages** on both properties: old URLs should drop out as new URLs get indexed.
+**Goal: `app.vlx.ai` is the only property that needs to stay indexable.** The old `app.visualogyx.com` only has to serve redirects (§1) — it does **not** need to remain indexable, and letting its URLs drop out of the index is the desired outcome, not a problem to prevent.
+
+- **Add and verify `app.vlx.ai`** as a new property in Google Search Console and Bing Webmaster Tools, and treat it as the single indexable target.
+- **Submit the `app.vlx.ai` sitemap** (see §3) in both tools.
+- **Old `app.visualogyx.com` property:** keep it only to *confirm its old URLs de-index* over time — no Change of Address effort and no attempt to preserve its indexing is required. Once the old URLs have dropped out, it can be ignored.
+- Monitor **Index Coverage / Pages** on the new property to confirm `app.vlx.ai` is indexed correctly.
 
 ---
 
 ## 3. Sitemaps & robots.txt
 
-- Generate/update the XML sitemap for `app.vlx.ai` with the **new canonical URLs** (only for publicly indexable pages — don't list auth-gated URLs).
-- Submit the new sitemap in GSC/Bing.
-- Ensure `app.vlx.ai/robots.txt` is correct and does **not** accidentally disallow pages that should be indexed.
-- Leave the **old sitemap reachable** for a while so Google re-crawls the old URLs and processes the redirects.
+**Only `app.vlx.ai` should be indexable; the old subdomain just redirects.**
+
+- Generate the XML sitemap for `app.vlx.ai` with its **canonical URLs** (only publicly indexable pages — don't list auth-gated URLs), and submit it in GSC/Bing.
+- Ensure `app.vlx.ai/robots.txt` allows those pages to be indexed and does **not** accidentally disallow them.
+- **Old domain:** no sitemap needs to be created or maintained for `app.visualogyx.com`. Its only job is to redirect.
+- **Important caveat:** do **not** block `app.visualogyx.com` in its `robots.txt` to "de-index" it. Blocking it stops Google from crawling the old URLs and *seeing* the 301s, which freezes the old URLs in the index. De-indexing of the old domain happens **through the redirects**, not through a robots block.
 
 ---
 
