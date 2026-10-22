@@ -4,6 +4,11 @@
 **Nota:** GSC/GA4 por MCP no estuvo disponible (seo-server caído) → todo verificado con curl / navegador.
 Las métricas de ranking/impresiones provienen del trabajo previo (Ranki + GSC export).
 
+> **🔄 Re-validación en vivo 2026-10-22:** marcadas ✅ las ya corregidas desde la auditoría →
+> A1 (404 fuera del sitemap), L13 (CollectionPage `/blog/`), S5 (alt de logos), S8 (H1 de industrias).
+> **Siguen pendientes:** redirect "mold" (B5), doble H1 en `/blog/` (A2), schema de `/pricing/` (O6),
+> y el H1 de `/quality/` (aún "Digital Quality Inspection Software").
+
 ---
 
 ## Veredicto técnico
@@ -17,7 +22,7 @@ La **canibalización de las páginas de servicio** sigue **resuelta y desplegada
 
 ## A. Nuevos problemas detectados en esta auditoría
 
-1. **🔴 URL muerta en el sitemap** — `/blog/digital-inspection-app-ai-human-review/` devuelve **404** (confirmado con Googlebot y Chrome) y **está listada en el sitemap**, sin equivalente vivo. → Quitar de `sitemap.ts` y servir 410; o republicar si el post debía existir.
+1. **✅ HECHO (2026-10-22)** — ~~URL muerta en el sitemap~~ `/blog/digital-inspection-app-ai-human-review/` **ya NO está en el sitemap**. La URL suelta todavía devuelve 404 (servir 410 en lugar de 404 queda como opcional).
 2. **🟡 `/blog/` tiene 2 `<h1>` idénticos** ("Insights & Updates") — duplicación responsive; uno debería ser `<p>` o estar visually-hidden. Menor.
 3. **🟢 `lastmod` del sitemap estancado** — casi todas las entradas en 2026-06-18; debilita la señal de frescura. → Emitir `lastmod` real por página.
 4. **🟢 Redirect apex con puerto explícito** — `http://vlx.ai` → 301 → `https://vlx.ai:443/`. Funciona, pero el `:443` es cosmético y conviene limpiarlo.
@@ -39,7 +44,7 @@ La **canibalización de las páginas de servicio** sigue **resuelta y desplegada
 
 ## E. Schema (pendiente)
 
-11. **🟠 O6** — `/pricing/` sin `SoftwareApplication`/`AggregateOffer` (0 en vivo). · **L13** — `/blog/` con `CollectionPage` limitado por `.slice(0,12)` sin corregir.
+11. **🟠 O6 (PENDIENTE)** — `/pricing/` sin `SoftwareApplication`/`AggregateOffer` (0 en vivo). · **✅ L13 HECHO (2026-10-22)** — `/blog/` CollectionPage ya emite 14 `ListItem` (ya no capado a 12); confirmar en código que se quitó el `.slice(0,12)`.
 
 ---
 
@@ -62,14 +67,14 @@ La **canibalización de las páginas de servicio** sigue **resuelta y desplegada
 - 🔴 T4 integrar GTM · S27 montar contenedor GTM + cutover *(medición: congelada por decisión de Laura)*.
 - 🔴 S22 LCP image · S23 sin CDN · S25 64 imágenes 500 (rama lista, sin PR) · S26 ops PR#89 (NEXT_PUBLIC_SITE_URL dev + rotar draft secret).
 - S29 `seoTitle` viejo al renombrar post (revisar 116) · S31 verificar noindex en dev.vlx.ai · S24 ISR *(probablemente cerrable)*.
-- S18 7 páginas con lista rota · S17 limpieza de contenido migrado (CMS) · S5 alt text de logos → nombres de empresa · S7 CTAs en 22 meta descriptions · S8 H1 de industrias sin keyword · S3 re-encode 2 imágenes blog >1MB a WebP.
+- S18 7 páginas con lista rota · S17 limpieza de contenido migrado (CMS) · **✅ S5 HECHO** (alt de logos ya con nombre de empresa) · S7 CTAs en 22 meta descriptions · **✅ S8 HECHO** (H1 de industrias ya keyword-first) · S3 re-encode 2 imágenes blog >1MB a WebP.
 - C1 2 imágenes case-study 403 (CloudFront) · C4 2 páginas con jerarquía de headings rota · C5 3 posts sin contenido · C6 2 posts con CTA roto · C7 1 tabla incompleta + 1 display roto (dev).
 - S2 CRO checklist→free trial · S30 botón primario falla contraste · S32 congelar scope de los 3 nuevos servicios.
 - S1 ASO keywords/screenshots · S19 reindexar en GSC · S20 añadir canal YouTube a GSC.
 - S9 test AI Mentions (5 plataformas) · S13 AI Overviews · S12 GMB local pack · S10 disavow ~120 spam · S15 outreach (wifitalents/gitnux/zipdo/xenia) · A11 backlinks (G2/Capterra) · S37 enviar emails de outreach.
 
 **Fase 2 — Optimization (0/14)**
-- 🟠 O6 schema SoftwareApplication+AggregateOffer en `/pricing/` (confirmado pendiente) · L13 CollectionPage `/blog/`.
+- 🟠 O6 schema SoftwareApplication+AggregateOffer en `/pricing/` (confirmado pendiente) · **✅ L13 CollectionPage `/blog/` HECHO (2026-10-22)**.
 - O7 keyword remapping desde GSC (canibalización) · O14 re-priorizar keywords por volumen real · O10 sprint de enlazado interno.
 - O2 brc audit checklist (pos 10.2) · O3 apartment inspection checklist (pos 12–16) · O4 homeowners insurance checklist (pos 11) · O1 home insurance checklist (pos 29, rebuild) · O5 rebuild oil-and-gas (pos 22).
 - O9 title+meta striking-distance · O12 listicle "Best Digital Inspection Software 2026" · O13 rework 3 product landings · O15 revisar posts que alimentan las 3 product pages · O11 programmatic (mapear 17 SuperTemplate → gaps).
@@ -82,9 +87,14 @@ La **canibalización de las páginas de servicio** sigue **resuelta y desplegada
 
 ---
 
-## Quick wins técnicos sugeridos (esfuerzo bajo, impacto alto)
-1. Quitar la URL 404 del sitemap (A1) + corregir el redirect "mold" (B5).
+## Quick wins técnicos
+
+**✅ Ya hechos (validado en vivo 2026-10-22):** URL 404 fuera del sitemap (A1) · CollectionPage `/blog/` (L13) · alt text de logos (S5) · H1 de industrias con keyword (S8).
+
+**⏳ Pendientes — las 4 de código van por PR a VLX-Marketing (`dev` protegida, solo por PR):**
+1. Corregir el redirect "mold" (B5).
 2. Arreglar el doble H1 en `/blog/` (A2).
-3. Inyectar schema `SoftwareApplication`+`AggregateOffer` en `/pricing/` (O6) y corregir `CollectionPage` en `/blog/` (L13).
-4. Alt text de logos (S5), CTAs en 22 meta descriptions (S7), H1 de industrias sin keyword (S8).
-5. Fusionar duplicados 7-modern (B6) y supply-chain (B7).
+3. Inyectar schema `SoftwareApplication`+`AggregateOffer` en `/pricing/` (O6).
+4. Quitar el "Digital" del H1 de `/quality/` para unificar con title/desc (residual de canibalización).
+
+**⏳ Pendientes de contenido (CMS, sin PR salvo páginas de servicio):** CTAs en 22 meta descriptions (S7) · fusionar duplicados 7-modern (B6) y supply-chain (B7).
