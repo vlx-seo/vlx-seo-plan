@@ -94,5 +94,48 @@ Publish technical/compliance content in Spanish where Mitti only has English.
 
 ---
 
-## Suggested next step
-Crawl VLX's own sitemaps and quantify the exact gap (current VLX checklist / app / comparison counts vs. Mitti's 1,399 / 849 / 766) to size the content-production backlog with real numbers.
+## Quick wins
+Low effort, no new content production, shippable in days — mostly template/schema changes applied to pages VLX already has.
+
+| # | Quick win | Effort | Impact |
+|---|---|---|---|
+| QW1 | Add `WebSite` schema with `SearchAction` + complete the `Organization` block (logo, sameAs, contactPoint, foundingDate) — one global change | Low | Sitelinks search box + richer brand entity |
+| QW2 | Add `FAQPage` + `BreadcrumbList` schema to existing `/checklists/` and key blog pages | Low | Rich results / SERP real estate |
+| QW3 | Reformat existing checklist titles to the proven pattern `Free [X] Template \| PDF \| Visualogyx` | Low | Higher CTR on template queries |
+| QW4 | Add contextual internal links + visible breadcrumbs inside existing clusters (fixes the recurring "almost no internal linking") | Low | Authority distribution, crawl depth |
+| QW5 | Decide and set the AI-bot policy in `robots.txt` (GPTBot / ClaudeBot / PerplexityBot), aligned with the ALB bot handling | Low | Deliberate AEO / LLM-citation posture |
+| QW6 | Reshape the ~0-click commercial pages into the comparison template (table + pricing + FAQ) — reuse existing copy, no net-new research | Medium | Convert high-intent queries already targeted |
+| QW7 | Serve WebP/AVIF + confirm lazy-loading on existing images | Low | Core Web Vitals / LCP, beats Mitti on page experience |
+
+---
+
+## Work plan (phased roadmap)
+Owners are placeholders — assign in the kickoff. Each phase is independently shippable.
+
+### Phase 0 — Baseline & quick wins (Week 1–2)
+- **Size the gap:** crawl VLX's own sitemaps and count current checklist / app / comparison URLs vs. Mitti's 1,399 / 849 / 766 to quantify the backlog with real numbers.
+- Ship **QW1–QW5 and QW7** (schema, titles, internal linking, robots, images).
+- Define the **page templates** (checklist, "best software", comparison) with the required H2 skeleton and schema baked in, so future pages are consistent by default.
+- *Exit:* measured gap + reusable templates + schema/linking fixes live.
+
+### Phase 1 — Checklist/template engine (Week 3–8)
+- Build the **nested taxonomy** `/checklists/{category}/{slug}` with breadcrumbs.
+- Produce a first batch (target ~20–30 pages) of **long-form checklist pages** (2,000–4,000+ words) each with a downloadable PDF template, prioritized by the keyword data already in the Ranki/GSC sheet.
+- Interlink every new page into its category hub (hub-and-spoke).
+- *Exit:* repeatable production pipeline + first batch indexed.
+
+### Phase 2 — Commercial / bottom-funnel layer (Week 6–10, overlaps Phase 1)
+- Ship **QW6** plus net-new **"best X software"** listicles and **"{competitor}-alternative"** pages for VLX's top commercial targets.
+- Comparison table + pricing section + `FAQPage` schema on each.
+- *Exit:* the 0-click commercial queries covered by the proven format.
+
+### Phase 3 — Scale + Spanish advantage (Week 10+)
+- Scale checklist/topic production in batches toward a meaningful share of Mitti's footprint (prioritize by volume × intent, not raw count).
+- Publish **Spanish-language** technical/compliance content where Mitti only offers English — a SERP VLX can own.
+- Add **topic hub guides** (`/topics/{category}/{topic}` equivalent) around the service clusters.
+- *Exit:* compounding content moat + ES coverage.
+
+### Ongoing
+- Measure in GSC per cluster; re-optimize underperformers.
+- Keep sitemaps segmented with fresh `lastmod`.
+- Maintain performance discipline (don't inherit Mitti's script bloat).
