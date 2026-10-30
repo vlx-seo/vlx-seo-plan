@@ -4,6 +4,7 @@
 **Head term supporting it:** `ai home inspection software` — 70/mo, KD 14, commercial intent, CPC $19.22, +40% YoY; SERP shows AI Overview + People Also Ask.
 **Prepared:** 2026-10-29 · **Author:** lceballos-seo
 **Status:** Draft — verify competitor AI features/pricing and confirm blog canonical route (`/checklists/` vs `/blog/`) before publishing.
+**Target publish date (blog post):** Thursday, November 12, 2026.
 
 This document has two parts:
 1. **On-page implementation** of the keyword on the existing page `/home-inspection-software/`.
@@ -62,6 +63,7 @@ The keyword is a conversational, comparison-intent question, so the best placeme
 - **Meta description (~155 chars):** `AI home inspection platforms promise speed — but which keep the inspector in control? Compare VLX Home, Spectora, HomeGauge & more, then book a demo.`
 - **Suggested slug:** `ai-home-inspection-platforms-automation-inspector-control`
 - **Primary internal link / conversion target:** `/home-inspection-software/`
+- **Scheduled publish:** Thursday, November 12, 2026
 
 ---
 
@@ -167,6 +169,18 @@ Spectora is the more established all-in-one ecosystem; VLX Home is built around 
 
 **What should I test during a free trial?**
 How easily you can edit AI-drafted language, whether reports carry your branding, whether there's a clear approve-before-send gate, and whether your market's required forms are supported.
+
+---
+
+## Publishing plan
+
+**Go-live:** Thursday, November 12, 2026 (blog post).
+
+Before go-live:
+- Verify competitor AI features and pricing (figures marked "vendor-cited").
+- Confirm the blog canonical route and assign the final slug (`/checklists/` vs `/blog/`).
+- Ship the on-page changes in Part 1 (FAQ item + supporting sentence + FAQPage JSON-LD) on `/home-inspection-software/` so the post and the page launch aligned.
+- Add the internal link from the post to `/home-inspection-software/`.
 
 ---
 
