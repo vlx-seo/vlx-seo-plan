@@ -82,70 +82,99 @@ Single-day snapshot. One enterprise AI Mode query was blocked ("inspection and c
 | D6 | VLX Home general availability timing (affects claims: payments/invoicing "coming soon") | 2026-12-11 |
 | D7 | Ownership split: HeyDay (PR, communities, reviews, listings) vs SEO team (on-site, content, measurement) | 2026-11-25 |
 
-## 6. Dated work plan
+
+## 6. Overlap check against existing plans (2026-11-19)
+
+Every task below was checked against the other plans in this repo: the live dashboard (`index.html`, 99 tasks, status read from the dashboard on 2026-11-19), the post-launch plan (2026-07-22), the deep-audit backlog (2026-10-19), the June audit review, the Mitti/SafetyCulture audit, the content proposals, the VLX Home audit and the financial sub-pages proposal. Column **Prior plan**: 🔁 = already proposed elsewhere (execute it there, do not duplicate) · 🆕 = only in this plan.
+
+**Result:** 31 tasks → **22 already proposed** in other plans (execute them under their existing ID), **9 new**.
+
+| Already proposed (dashboard ID · status) | Covers |
+|---|---|
+| **S13** AI Overviews test · done, monthly | 1.1, 1.2, 2.7, 5.1, 5.2 |
+| **S9** AI mentions test · backlog | 1.2, 5.1 |
+| **A13** CountIt store rebrand · backlog · **S1** ASO · wip | 1.8 |
+| **A14** claim G2/Capterra/GetApp + real reviews · backlog | 1.8, 3.4 |
+| **P4** review acquisition · backlog · **P3** ASO reviews · backlog | 3.4 |
+| **S15** listicle outreach · backlog · **A11** backlinks · backlog · **S37** sends | 3.3 |
+| **G5** competitor audit + 5 comparison pages · backlog | 2.6 |
+| **G3** FAQ/AEO · backlog | 2.1 |
+| **G2** GEO hub + about copy · backlog · **O12** listicle · backlog · **O5** oil & gas | 4.6 |
+| **G6** 50-keyword benchmark · backlog | 5.2 |
+| **O13** / **O14** product landings & keyword targets · backlog | D2 |
+| **HCU1/HCU2** forums + experience-first content (post-launch audit, not in current dashboard) | 3.1, 3.2, 4.6 |
+| Content proposals Tier A/B, Mitti audit P0 | 4.1–4.3 |
+| Mitti audit QW1, June review S3 (`foundingDate`) | 1.6, 1.7 |
+| VLX Home audit / brief (hub, /vs pages, FAQ) | 2.1, 2.3–2.5, 4.4 |
+
+**New in this plan:** 1.3 decisions memo · 1.4 pricing-claim fix · 1.5 InterNACHI link · 1.9 rebrand overlap · 2.2 legal review of `/compare` and `/vs` · 3.5 video plan · 3.6 `VideoObject` · 4.5 TREC page · 5.3 quarterly review · plus the 2018-vs-2020 founding-year conflict (1.7) and the GSC Generative AI report (1.1).
+
+**Conflict to note:** `llms.txt` and `llms-full.txt` already exist (**A12**, **S11**, both done). This plan does not ask to remove them; it only recommends no further investment there.
+
+## 7. Dated work plan
 
 **Owners:** SEO = SEO team · DEV = web dev (VLX-Marketing, PR → dev → master) · HD = HeyDay · VLX = Laura / business · LEGAL
 **Calendar notes:** US Thanksgiving 2026-11-26/27. Code freeze assumed 2026-12-21 → 2027-01-04 (content can still be prepared).
 
 ### Phase 1 — Quick fixes & baseline (2026-11-23 → 2026-12-04)
 
-| ID | Task | Owner | Deliverable | Due |
-|---|---|---|---|---|
-| 1.1 | Confirm GSC *Search generative AI* = Include; export first Generative AI report (by page/country/device) | SEO | Baseline sheet (`data/gsc-generative-ai-baseline-2026-11.csv`) | 2026-11-24 |
-| 1.2 | Run AI Mode / AI Overview tests: 6 category queries + 4 untested specialty queries + 2 "VLX vs Spectora" (US, logged out, screenshots + cited sources) | SEO | Query-test log v1 | 2026-11-25 |
-| 1.3 | Decisions memo D1–D7 sent to VLX | SEO | 1-page memo | 2026-11-24 |
-| 1.4 | Correct the "savings vs Spectora" pricing claim on `/home-inspection-software/` to a fair annual-vs-annual comparison | SEO → DEV | PR to dev | 2026-11-25 |
-| 1.5 | Update InterNACHI post link to `/internachi/` (remove 308 hop) | SEO (CMS) | CMS edit | 2026-11-25 |
-| 1.6 | Add App Store, Capterra, Software Advice (and other verified profiles) to Organization `sameAs` | DEV | PR to dev | 2026-12-02 |
-| 1.7 | Apply founding year (after D1) to `/about-us/` and `foundingDate` | DEV | PR to dev | 2026-12-02 |
-| 1.8 | "Formerly Visualogyx" consistency pass (about, footer, press, App Store, Capterra, Software Advice, G2, LinkedIn, YouTube) | HD + SEO | Checklist of listings with old/new names, all updated | 2026-12-04 |
-| 1.9 | Rebrand overlap: choose primary URL (press vs blog), differentiate or canonicalize the other | SEO | Decision + CMS change | 2026-12-04 |
+| ID | Task | Owner | Deliverable | Due | Prior plan |
+|---|---|---|---|---|---|
+| 1.1 | Confirm GSC *Search generative AI* = Include; export first Generative AI report (by page/country/device) | SEO | Baseline sheet (`data/gsc-generative-ai-baseline-2026-11.csv`) | 2026-11-24 | 🔁 Extends **S13** (done, monthly) + dashboard KPI "AI Overview citations"; adds the GSC Generative AI report |
+| 1.2 | Run AI Mode / AI Overview tests: 6 category queries + 4 untested specialty queries + 2 "VLX vs Spectora" (US, logged out, screenshots + cited sources) | SEO | Query-test log v1 | 2026-11-25 | 🔁 Same as **S13** (done, monthly — 3 queries) and **S9** (backlog); run as next S13 cycle with the expanded query set |
+| 1.3 | Decisions memo D1–D7 sent to VLX | SEO | 1-page memo | 2026-11-24 | 🆕 (D2 overlaps **O13**/**O14**, backlog) |
+| 1.4 | Correct the "savings vs Spectora" pricing claim on `/home-inspection-software/` to a fair annual-vs-annual comparison | SEO → DEV | PR to dev | 2026-11-25 | 🆕 |
+| 1.5 | Update InterNACHI post link to `/internachi/` (remove 308 hop) | SEO (CMS) | CMS edit | 2026-11-25 | 🆕 |
+| 1.6 | Add App Store, Capterra, Software Advice (and other verified profiles) to Organization `sameAs` | DEV | PR to dev | 2026-12-02 | 🔁 Mitti audit QW1/P1 (complete Organization) — partly done (G2 already in `sameAs`) |
+| 1.7 | Apply founding year (after D1) to `/about-us/` and `foundingDate` | DEV | PR to dev | 2026-12-02 | 🔁 June review **S3** (`foundingDate` format) + Mitti QW1; the 2018-vs-2020 conflict is new |
+| 1.8 | "Formerly Visualogyx" consistency pass (about, footer, press, App Store, Capterra, Software Advice, G2, LinkedIn, YouTube) | HD + SEO | Checklist of listings with old/new names, all updated | 2026-12-04 | 🔁 **A13** (backlog, CountIt store rebrand), **S1** (wip, ASO), **A14** (backlog, claim G2/Capterra/GetApp) — do inside those |
+| 1.9 | Rebrand overlap: choose primary URL (press vs blog), differentiate or canonicalize the other | SEO | Decision + CMS change | 2026-12-04 | 🆕 |
 
 ### Phase 2 — Comparisons & on-page (2026-12-01 → 2026-12-18)
 
-| ID | Task | Owner | Deliverable | Due |
-|---|---|---|---|---|
-| 2.1 | Open/merge FAQ + FAQPage PR on `/home-inspection-software/` | SEO → DEV | Merged PR | 2026-12-03 |
-| 2.2 | Legal review of `/compare` enterprise pages and planned `/vs` pages (D3) | LEGAL | Approved claims list | 2026-12-04 |
-| 2.3 | Publish "Spectora alternative" post (VLX Home vs Spectora), cross-linked with the 2026-11-12 comparison post | SEO | Live post | 2026-12-01 |
-| 2.4 | Draft VLX Home vs HomeGauge page | SEO | MD + PDF draft | 2026-12-10 |
-| 2.5 | Draft VLX Home vs Home Inspector Pro page | SEO | MD + PDF draft | 2026-12-15 |
-| 2.6 | Refresh `/compare/vlx-vs-safetyculture/` and `/compare/vlx-vs-goaudits/`, remove noindex after legal sign-off | SEO → DEV | PR to dev | 2026-12-17 |
-| 2.7 | Monthly AI visibility report #1 (GSC Generative AI + query-test log v2) | SEO | Report MD | 2026-12-18 |
+| ID | Task | Owner | Deliverable | Due | Prior plan |
+|---|---|---|---|---|---|
+| 2.1 | Open/merge FAQ + FAQPage PR on `/home-inspection-software/` | SEO → DEV | Merged PR | 2026-12-03 | 🔁 Branch `feat/vlx-home-faq-automation-inspector-control`; related **G3** (backlog, FAQ/AEO) |
+| 2.2 | Legal review of `/compare` enterprise pages and planned `/vs` pages (D3) | LEGAL | Approved claims list | 2026-12-04 | 🆕 |
+| 2.3 | Publish "Spectora alternative" post (VLX Home vs Spectora), cross-linked with the 2026-11-12 comparison post | SEO | Live post | 2026-12-01 | 🔁 Post drafted 2026-11-19; VLX Home audit (2026-10-01) P2 "/vs-spectora link" |
+| 2.4 | Draft VLX Home vs HomeGauge page | SEO | MD + PDF draft | 2026-12-10 | 🔁 VLX Home brief §18 (/vs-homegauge) |
+| 2.5 | Draft VLX Home vs Home Inspector Pro page | SEO | MD + PDF draft | 2026-12-15 | 🔁 VLX Home brief §18 (/vs-home-inspector-pro) |
+| 2.6 | Refresh `/compare/vlx-vs-safetyculture/` and `/compare/vlx-vs-goaudits/`, remove noindex after legal sign-off | SEO → DEV | PR to dev | 2026-12-17 | 🔁 **G5** (backlog, 5 comparison pages); June review E1 (/compare/vlx-vs-gocanvas) |
+| 2.7 | Monthly AI visibility report #1 (GSC Generative AI + query-test log v2) | SEO | Report MD | 2026-12-18 | 🔁 **S13** monthly cycle |
 
 ### Phase 3 — Mentions, reviews & video setup (2026-12-01 → 2027-01-15)
 
-| ID | Task | Owner | Deliverable | Due |
-|---|---|---|---|---|
-| 3.1 | Join InterNACHI forum with an official VLX profile; first genuine participation | HD | Profile + activity log | 2026-12-11 |
-| 3.2 | Community presence plan for r/homeinspectors and Inspector Outlet (within each platform's rules) | HD | Plan | 2026-12-11 |
-| 3.3 | Pitch list of inspector-software roundups/lists (home) and enterprise listings already cited for "inspection audit software" | HD + SEO | Target list (URL, contact, angle) | 2026-12-18 |
-| 3.4 | Review-invitation program (D5): process + first wave of invites per category (Capterra, G2, Software Advice, App Store) | HD + VLX | Policy + invite wave 1 | 2027-01-08 |
-| 3.5 | Video plan: 1 video per priority category (e.g., VLX Home walkthrough, inspection audit workflow) | HD + SEO | Video brief list | 2027-01-08 |
-| 3.6 | Embed published videos on matching pages with `VideoObject` schema | DEV | PR to dev | 2027-01-15 |
+| ID | Task | Owner | Deliverable | Due | Prior plan |
+|---|---|---|---|---|---|
+| 3.1 | Join InterNACHI forum with an official VLX profile; first genuine participation | HD | Profile + activity log | 2026-12-11 | 🔁 **HCU1** forum strategy (post-launch audit 2026-07-22; not in current dashboard) |
+| 3.2 | Community presence plan for r/homeinspectors and Inspector Outlet (within each platform's rules) | HD | Plan | 2026-12-11 | 🔁 **HCU1** (Reddit, industry forums) |
+| 3.3 | Pitch list of inspector-software roundups/lists (home) and enterprise listings already cited for "inspection audit software" | HD + SEO | Target list (URL, contact, angle) | 2026-12-18 | 🔁 **S15** (backlog, listicle outreach), **A11** (backlog), **S37** (outreach sends) |
+| 3.4 | Review-invitation program (D5): process + first wave of invites per category (Capterra, G2, Software Advice, App Store) | HD + VLX | Policy + invite wave 1 | 2027-01-08 | 🔁 **A14** + **P4** (backlog, review acquisition), **P3** (ASO review responses), June review A3 (`aggregateRating`) |
+| 3.5 | Video plan: 1 video per priority category (e.g., VLX Home walkthrough, inspection audit workflow) | HD + SEO | Video brief list | 2027-01-08 | 🆕 (only **S20**, done, linked YouTube to GSC) |
+| 3.6 | Embed published videos on matching pages with `VideoObject` schema | DEV | PR to dev | 2027-01-15 | 🆕 |
 
 ### Phase 4 — Expert content in chosen categories (2027-01-05 → 2027-02-12)
 
 Scope depends on D2. Rule from the report: **few, first-hand, expert pages — no mass production.**
 
-| ID | Task | Owner | Deliverable | Due |
-|---|---|---|---|---|
-| 4.1 | Select first 6 templates/checklists from the in-app library to publish as web pages (priority by Ranki gap: SOP, fire extinguisher inspection, incident report, vehicle inspection checklist, RCA, risk assessment) | SEO + VLX | Shortlist + briefs | 2027-01-08 |
-| 4.2 | Publish templates batch 1 (3 pages) | SEO | Live pages | 2027-01-22 |
-| 4.3 | Publish templates batch 2 (3 pages) | SEO | Live pages | 2027-02-05 |
-| 4.4 | VLX Home specialty page: wind mitigation inspection software (activate hub link) | SEO → DEV | Live page | 2027-01-29 |
-| 4.5 | VLX Home specialty page: TREC inspection software (Texas) — if D2 includes Texas | SEO → DEV | Live page | 2027-02-12 |
-| 4.6 | Enterprise pillar refresh for "inspection audit software" / "field inspection software" with first-hand customer examples | SEO | Updated pages | 2027-02-12 |
+| ID | Task | Owner | Deliverable | Due | Prior plan |
+|---|---|---|---|---|---|
+| 4.1 | Select first 6 templates/checklists from the in-app library to publish as web pages (priority by Ranki gap: SOP, fire extinguisher inspection, incident report, vehicle inspection checklist, RCA, risk assessment) | SEO + VLX | Shortlist + briefs | 2027-01-08 | 🔁 `CONTENT-PROPOSALS-VLX-keyword-optimized-EN.md` Tier A/B + Mitti audit P0 |
+| 4.2 | Publish templates batch 1 (3 pages) | SEO | Live pages | 2027-01-22 | 🔁 Same (Tier A briefs A1/A3/A4/A5) |
+| 4.3 | Publish templates batch 2 (3 pages) | SEO | Live pages | 2027-02-05 | 🔁 Same |
+| 4.4 | VLX Home specialty page: wind mitigation inspection software (activate hub link) | SEO → DEV | Live page | 2027-01-29 | 🔁 VLX Home specialty hub (VLX Home audit 2026-10-01, §F) |
+| 4.5 | VLX Home specialty page: TREC inspection software (Texas) — if D2 includes Texas | SEO → DEV | Live page | 2027-02-12 | 🆕 (TREC only planned as a report form, not as a page) |
+| 4.6 | Enterprise pillar refresh for "inspection audit software" / "field inspection software" with first-hand customer examples | SEO | Updated pages | 2027-02-12 | 🔁 **G2** (backlog, GEO hub + about), **O12** (backlog, listicle), **HCU2** (experience-first content), **O5** (oil & gas) |
 
 ### Phase 5 — Measurement cadence (ongoing)
 
-| ID | Task | Owner | Due |
-|---|---|---|---|
-| 5.1 | Monthly AI visibility report #2 | SEO | 2027-01-15 |
-| 5.2 | Monthly AI visibility report #3 + full re-test of all queries; compare vs 2026-11-12 snapshot | SEO | 2027-02-15 |
-| 5.3 | Quarterly review: keep/adjust categories, decide next content wave | SEO + VLX + HD | 2027-02-26 |
+| ID | Task | Owner | Due | Prior plan |
+|---|---|---|---|---|
+| 5.1 | Monthly AI visibility report #2 | SEO | 2027-01-15 | 🔁 **S13**/**S9** (monthly) |
+| 5.2 | Monthly AI visibility report #3 + full re-test of all queries; compare vs 2026-11-12 snapshot | SEO | 2027-02-15 | 🔁 **S13** + **G6** (backlog, 50-kw benchmark) |
+| 5.3 | Quarterly review: keep/adjust categories, decide next content wave | SEO + VLX + HD | 2027-02-26 | 🆕 |
 
-## 7. Milestones
+## 8. Milestones
 
 | Date | Milestone |
 |---|---|
@@ -156,7 +185,7 @@ Scope depends on D2. Rule from the report: **few, first-hand, expert pages — n
 | 2027-02-12 | First expert content wave live (6 templates + 1–2 specialty pages) |
 | 2027-02-15 | Re-test vs baseline: is VLX named in any category AI answer? |
 
-## 8. Success metrics
+## 9. Success metrics
 
 - **Primary:** VLX named/cited in AI Mode or AI Overview for ≥ 2 of the 6 tracked category queries by 2027-02-15 (directional; answers vary by day and location).
 - GSC Generative AI impressions: month-over-month growth from the November baseline.
@@ -164,5 +193,5 @@ Scope depends on D2. Rule from the report: **few, first-hand, expert pages — n
 - Reviews: new verified reviews per category per month (target set with D5).
 - Zero naming inconsistencies across listings (founding year, "formerly Visualogyx").
 
-## 9. Out of scope (per Google guidance)
+## 10. Out of scope (per Google guidance)
 `llms.txt` · special "AI schema" · content chunking for AI · paid mention schemes · mass-produced pages.
