@@ -65,7 +65,7 @@ Single-day snapshot. One enterprise AI Mode query was blocked ("inspection and c
 | 02 Genuine mentions | — | InterNACHI forum, r/homeinspectors, inspector lists; enterprise review/listing pages |
 | 03 Expert first-hand pages | Template/checklist engine (`CONTENT-PROPOSALS-VLX-keyword-optimized-EN.md`, SafetyCulture gap at KD≈0); VLX Home specialty hub (wind mitigation, 4-point, TREC…); FAQ + FAQPage on `/home-inspection-software/` | Keep volume low, first-hand quality |
 | 04 Reviews | — | Review-invitation program per category |
-| 05 Fair comparisons | AI home inspection platforms comparison (published 2026-11-12); "Spectora alternative" post drafted 2026-11-19; `/compare/` enterprise pages exist (noindex); missing /vs-homegauge and /vs-home-inspector-pro | Legal review gate; fair pricing comparisons (annual vs annual) |
+| 05 Fair comparisons | AI home inspection platforms comparison (published 2026-11-12); "Spectora alternative" post drafted 2026-11-19; `/compare/` enterprise pages exist (noindex); missing /vs-homegauge and /vs-home-inspector-pro | Legal review only for `/compare` and `/vs` pages (blog posts excluded); fair pricing comparisons (annual vs annual) |
 | 06 Video | — | Expand YouTube per category + embed with `VideoObject` |
 | 07 Naming/technical | `alternateName` already live; InterNACHI page now live | Founding year, `sameAs`, listing names, rebrand overlap, internal link hop |
 | 08 Measure in GSC | GSC already used for SEO | AI control check + monthly Generative AI report |
@@ -76,7 +76,7 @@ Single-day snapshot. One enterprise AI Mode query was blocked ("inspection and c
 |---|---|---|
 | D1 | Correct founding year (2018 or 2020) | 2026-11-25 |
 | D2 | Target categories and US states (VLX Home, enterprise or both — separate tracks) | 2026-11-30 |
-| D3 | Legal review of comparison content (Home + enterprise) | 2026-12-04 |
+| D3 | Legal review of comparison pages (`/compare` enterprise + `/vs` VLX Home; blog posts excluded) | 2026-12-04 |
 | D4 | Plan for retiring "Visualogyx" (how long to keep "formerly Visualogyx") | 2026-12-04 |
 | D5 | Review-invitation policy | 2026-12-04 |
 | D6 | VLX Home general availability timing (affects claims: payments/invoicing "coming soon") | 2026-12-11 |
@@ -106,8 +106,8 @@ Single-day snapshot. One enterprise AI Mode query was blocked ("inspection and c
 | ID | Task | Owner | Deliverable | Due |
 |---|---|---|---|---|
 | 2.1 | Open/merge FAQ + FAQPage PR on `/home-inspection-software/` | SEO → DEV | Merged PR | 2026-12-03 |
-| 2.2 | Legal review of: Spectora alternative post, /compare enterprise pages, planned /vs pages (D3) | LEGAL | Approved claims list | 2026-12-04 |
-| 2.3 | Publish "Spectora alternative" post (VLX Home vs Spectora), cross-linked with the 2026-11-12 comparison post | SEO | Live post | 2026-12-08 |
+| 2.2 | Legal review of `/compare` enterprise pages and planned `/vs` pages (D3) | LEGAL | Approved claims list | 2026-12-04 |
+| 2.3 | Publish "Spectora alternative" post (VLX Home vs Spectora), cross-linked with the 2026-11-12 comparison post | SEO | Live post | 2026-12-01 |
 | 2.4 | Draft VLX Home vs HomeGauge page | SEO | MD + PDF draft | 2026-12-10 |
 | 2.5 | Draft VLX Home vs Home Inspector Pro page | SEO | MD + PDF draft | 2026-12-15 |
 | 2.6 | Refresh `/compare/vlx-vs-safetyculture/` and `/compare/vlx-vs-goaudits/`, remove noindex after legal sign-off | SEO → DEV | PR to dev | 2026-12-17 |
