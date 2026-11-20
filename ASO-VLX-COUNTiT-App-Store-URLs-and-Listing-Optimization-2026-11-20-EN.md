@@ -2,7 +2,7 @@
 
 _November 20, 2026. Based on the public US listings in both stores; every URL was checked live._
 
-**Status:** the App Store step-by-step (sections 1.1 and 1.2) is ready. The Google Play step-by-step is **pending**; the proposed Google Play copy is in sections 5 and 6.
+**Status:** the App Store step-by-step (sections 1.1 and 1.2) and the VLX privacy link on Google Play (section 1.3) are ready. The rest of the Google Play step-by-step is **pending**; the proposed Google Play copy is in sections 5 and 6.
 
 **Contents**
 
@@ -103,9 +103,23 @@ Two things to do in COUNTiT: **(A)** change the URLs and **(B)** replace the des
 - When done: **Save**, then **Add for Review**. The description, keywords and the step A.2 URLs go live when Apple approves 1.3.3.1.
 - The new name and subtitle (section 4) are changed under *App Information* and go live with this same version.
 
-### 1.3 Google Play (no link changes; step-by-step pending)
+### 1.3 VLX (Visualogyx), Google Play: change the privacy policy link
 
-The Google Play listings only need the copy optimization in sections 5 and 6. One thing to check: the **public** VLX listing on Google Play (`com.visualogyx.app`) still shows the privacy policy `https://www.visualogyx.com/privacy-policy`, and that domain no longer responds. If it was already changed in Play Console, it just needs to go live. If not, it should be changed to `https://app.vlx.ai/privacy-policy`: Google can remove an app whose privacy policy link is broken.
+The VLX privacy policy link in Play Console still points to `https://www.visualogyx.com/privacy-policy`. That domain no longer responds, so the link is broken, and Google can remove an app whose privacy policy link doesn't work.
+
+![Play Console: Monitor and improve → Policy and programs → App content](apps-review/img/vlx-google-play-app-content-menu.png)
+
+**Where:** *Monitor and improve → Policy and programs → **App content***. In the list, open **Privacy policy** and click **Manage**.
+
+![Play Console: App content → Privacy policy for VLX](apps-review/img/vlx-google-play-privacy-policy.png)
+
+| Field | Current link (remove) | **New link (add)** |
+|---|---|---|
+| Privacy policy | `https://www.visualogyx.com/privacy-policy` | **`https://app.vlx.ai/privacy-policy`** |
+
+- It's the same link used in the App Store for VLX and COUNTiT. It returns 200.
+- Click **Save**. This change doesn't need a new app release; Google reviews it with the next batch of changes sent for review (*Publishing overview*).
+- The other Google Play step-by-step instructions (title, short and full description) are still pending; the copy is ready in sections 5 and 6.
 
 ---
 
