@@ -2,7 +2,7 @@
 
 _November 20, 2026. Based on the public US listings in both stores; every URL was checked live._
 
-**Status:** the App Store step-by-step (sections 1.1 and 1.2) and the VLX privacy link on Google Play (section 1.3) are ready. The rest of the Google Play step-by-step is **pending**; the proposed Google Play copy is in sections 5 and 6.
+**Status:** the App Store step-by-step (sections 1.1 and 1.2) and the VLX privacy link on Google Play (section 1.3) are ready. The COUNTiT privacy link on Google Play is already updated in Play Console and pending publishing (section 1.4). The rest of the Google Play step-by-step is **pending**; the proposed Google Play copy is in sections 5 and 6.
 
 **Contents**
 
@@ -120,6 +120,10 @@ The VLX privacy policy link in Play Console still points to `https://www.visualo
 - It's the same link used in the App Store for VLX and COUNTiT. It returns 200.
 - Click **Save**. This change doesn't need a new app release; Google reviews it with the next batch of changes sent for review (*Publishing overview*).
 - The other Google Play step-by-step instructions (title, short and full description) are still pending; the copy is ready in sections 5 and 6.
+
+### 1.4 COUNTiT, Google Play: privacy policy link
+
+**Status: already updated in Play Console, pending publishing.** No action needed beyond publishing the pending changes. Once they are published, the COUNTiT listing on Google Play will show the new privacy policy link.
 
 ---
 
